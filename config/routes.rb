@@ -1,4 +1,8 @@
 TTraining::Application.routes.draw do
+  get "pages/home"
+
+  get "pages/why_register"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
