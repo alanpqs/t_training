@@ -33,6 +33,14 @@ describe PagesController do
               :content => @base_title + " | Why Register"
       )
     end
+    
+    it "should redirect to the signup page" do
+      # Add detail
+    end
+    
+    it "should redirect to the 'Find training' page" do
+      #Add detail 
+    end
   end
   
   describe "GET 'about'" do

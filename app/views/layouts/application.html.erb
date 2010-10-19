@@ -3,10 +3,39 @@
   <head>
     <title><%= title %></title>
     <%= csrf_meta_tag %>
+    <!--[if lt IE9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
     <%= stylesheet_link_tag 'blueprint/screen', :media => 'screen' %>
     <%= stylesheet_link_tag 'blueprint/print',  :media => 'print' %>
+    <!--[if lt IE 8]><%= stylesheet_link_tag 'blueprint/ie' %><![endif]-->
+    <%= stylesheet_link_tag 'custom', :media => 'screen' %>
   </head>
   <body>
-    <%= yield %>
+    <div class="container">
+      <header>
+        <div class="span-24">
+          <%= image_tag("logo.png", :alt => "Tickets for Training", :class => "round") %>
+          <nav class="round">
+            <ul>
+              <li><%= link_to "Home", '#' %></li>
+              <li><%= link_to "Help", '#' %></li>
+              <li><%= link_to "Sign In", '#' %></li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+      <section class="round">
+        <div class="span-4">
+          <p></p>
+        </div>
+        <div class="span-16">
+          <%= yield %>
+        </div>
+        <div class="span-4 last">
+          <p></p>
+        </div>
+      </section>
+    </div>
   </body>
 </html>
