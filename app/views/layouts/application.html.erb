@@ -16,20 +16,41 @@
       <header>
         <div class="span-24">
           <%= image_tag("logo.png", :alt => "Tickets for Training", :class => "round") %>
-          <nav class="round">
+          <nav class="round" >
             <ul>
               <li><%= link_to "Home", '#' %></li>
+              <li><%= link_to "Find training", '#' %></li>
+              <li><%= link_to "About us", '#' %></li>
+              <li><%= link_to "Why register", '#' %></li>
               <li><%= link_to "Help", '#' %></li>
-              <li><%= link_to "Sign In", '#' %></li>
+              <li><%= link_to "Sign Up", '#' %></li>
+              <li><%= link_to "Log In", '#' %></li>
             </ul>
           </nav>
         </div>
       </header>
-      <section class="round">
-        <div class="span-4">
-          <p></p>
+      <div class="span-5">
+        <div id = "loginfo"">
+          <p>You are not logged in but you can still use our search tools to find 
+             training events and materials.
+          </p>
         </div>
-        <div class="span-16">
+        <div id="menubox" class="round">
+          <span class="title">
+            <p>Benefits of Registration </p>        
+          </span>
+          <ul>
+            <li><%= link_to "Introduction", "#" %></li>
+            <li><%= link_to "Buying training", "#" %></li>
+            <li><%= link_to "Selling training", "#" %></li>
+            <li><%= link_to "Becoming an affiliate", "#" %></li>
+            <li><%= link_to "Terms and Conditions", "#" %></li>
+            
+          </ul>  
+        </div>
+      </div>
+      <section class="round">
+        <div class="span-15">
           <%= yield %>
         </div>
         <div class="span-4 last">

@@ -34,25 +34,30 @@ a {
   text-decoration: none;
 }
 
-a:hover {
-  color: #069;
-  text-decoration: underline;
-}
-
 a:visited {
   color: #069;
+}
+
+a:hover {
+  color: #dc0800;
+  text-decoration: underline;
 }
 
 /* Navigation */
 
 nav {
   float: right;
+  margin-right: 170px;
 }
 
 nav {
-  background-color: #DDD;
+  margin-top: 20px;
   padding: 0 0.7em;
   white-space: nowrap;
+  background: transparent url(../images/button.png);
+  border: 1px solid #ddd;
+  border-top: 0px;
+  padding:3px 10px;    
 }
 
 nav ul {
@@ -80,6 +85,62 @@ nav ul li a:hover {
   color: #dc0800;
 }
 
+/* Boxes */
+
+#loginfo {
+  padding: 20px; 
+  font-size: 100%; 
+  color: #888;
+}
+
+
+#menubox {
+  margin-top: 0em;
+  height: 200px;
+  width:  160px;
+  background: transparent url(../images/wg-bg.png);
+  color : black;
+  border: 1px solid #ddd;
+  padding:2px 8px;
+  margin-bottom:0px;  
+}
+
+#menubox .title {
+  color: #666;
+  font-weight: bold;
+  font-size: 140%;
+  text-align: center; 
+}
+
+#menubox ul {
+  margin: 10px;
+  padding: 0;     
+}
+
+#menubox ul li {
+  list-style-type: none;
+  padding: 0.2em 0;    
+}
+
+#action_button {
+  background: transparent url(../images/button.png);
+  border: 1px solid #ddd;
+  border-top: 0;
+  padding:5px 10px;    
+}
+
+#ticker {
+  /* float: right;
+  margin-right: 170px; */
+  margin-top: 70px;
+ /* max-width: 600px; */ 
+  /* display: inline-block; */
+  background: transparent url(../images/ticker.png);
+  border: 1px solid #ddd;
+  border-top: 0;
+  padding:1px 5px;       
+}
+
 /* Round corners */
 
 .round {
@@ -87,6 +148,9 @@ nav ul li a:hover {
   -webkit-border-radius: 10px;
   border-radius:         10px;
 }
+
+/* Positioning */
+
 
 /* Effects */
 
