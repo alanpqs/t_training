@@ -51,7 +51,7 @@ nav {
 }
 
 nav {
-  margin-top: 20px;
+  margin-top: 0;
   padding: 0 0.7em;
   white-space: nowrap;
   background: transparent url(../images/button.png);
@@ -92,6 +92,7 @@ nav ul li a:hover {
 /* Boxes */
 
 #loginfo {
+  margin-top: 0;
   padding: 20px; 
   font-size: 100%; 
   color: #888;
@@ -113,6 +114,7 @@ nav ul li a:hover {
   color: #666;
   font-weight: bold;
   font-size: 140%;
+  width: 160px;
   text-align: center; 
 }
 
