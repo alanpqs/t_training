@@ -47,16 +47,17 @@ a:hover {
 nav {
   float: right;
   margin-right: 170px;
+  display: inline;    /* line added to fix IE 6 problem */
 }
 
 nav {
   margin-top: 20px;
   padding: 0 0.7em;
   white-space: nowrap;
-  /* background: transparent url(../images/button.png);
+  background: transparent url(../images/button.png);
   border: 1px solid #ddd;
   border-top: 0px;
-  padding:3px 10px; */    
+  padding:3px 10px; 
 }
 
 nav ul {
