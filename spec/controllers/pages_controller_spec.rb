@@ -5,10 +5,6 @@ describe PagesController do
 
   before(:each) do
     @base_title = "Tickets for Training"
-    
-    it "should have a left-hand menu_col with a 'widebox'" do
-    #content  
-    end
   end
 
   describe "GET 'home'" do
