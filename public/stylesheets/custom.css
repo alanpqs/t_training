@@ -115,6 +115,7 @@ nav ul li a:hover {
   font-weight: bold;
   font-size: 140%;
   width: 160px;
+  margin: 0 auto;
   text-align: center; 
 }
 
