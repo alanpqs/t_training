@@ -12,11 +12,12 @@ header {
 
 header img {
   margin: 0;
-  background: #fff;
+  background: #eee;
   width: 150px;
   border: none;
   background-repeat: no-repeat;
-}
+  float: left;
+} 
 
 section {
   margin-top: 1em;

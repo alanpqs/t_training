@@ -15,8 +15,8 @@
     <div class="container">
       <header>
         <div class="span-24">
-
-          <nav>
+          <%= image_tag("logo.png", :alt => "Tickets for Training", :class => "round") %>
+          <nav class = "round">
             <ul>
               <li><%= link_to "Home", '#' %></li>
               <li><%= link_to "Find training", '#' %></li>
@@ -35,10 +35,10 @@
              training events and materials.
           </p>
         </div>
-        <div id="menubox">
-          <span class="title">
+        <div id="menubox" class="round">
+          <div class="title">
             <p>Benefits of Registration </p>        
-          </span>
+          </div>
           <ul>
             <li><%= link_to "Introduction", "#" %></li>
             <li><%= link_to "Buying training", "#" %></li>
