@@ -11,7 +11,9 @@ header {
 }
 
 header img {
+  margin: 0 auto;
   background: #fff;
+  width: 150px;
 }
 
 section {
