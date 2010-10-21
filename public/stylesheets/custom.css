@@ -12,7 +12,7 @@ header {
 
 header img {
   margin: 0;
-  background: #eee;
+  background: #fff;
   width: 150px;
   border: none;
   background-repeat: no-repeat;
@@ -20,7 +20,7 @@ header img {
 } 
 
 section {
-  margin-top: 1em;
+  /* margin-top: 1em; */
   font-size: 120%;
   padding: 20px;
   background: #fff;
@@ -56,7 +56,7 @@ nav {
 }
 
 nav {
-  margin-top: 0;
+  margin-top: 20px;
   padding: 0 0.7em;
   white-space: nowrap;
   background: transparent url(../images/button.png);
