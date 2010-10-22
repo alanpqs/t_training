@@ -1,14 +1,15 @@
 <div class="span-24">
-  <%= image_tag("logo.png", :alt => "Tickets for Training", :class => "round") %>
+  <% logo = image_tag("logo.png", :alt => "Tickets for Training", :class => "round") %>
+  <%= link_to logo, root_path %>
   <nav class = "round">
     <ul>
-      <li><%= link_to "Home", '#' %></li>
-      <li><%= link_to "Find training", '#' %></li>
-      <li><%= link_to "About us", '#' %></li>
-      <li><%= link_to "Why register", '#' %></li>
-      <li><%= link_to "FAQs", '#' %></li>
-      <li><%= link_to "Sign Up", '#' %></li>
-      <li><%= link_to "Log In", '#' %></li>
+      <li><%= link_to "Home", root_path %></li>
+      <li><%= link_to "Find training", find_training_path %></li>
+      <li><%= link_to "About us", about_path %></li>
+      <li><%= link_to "Why register", why_register_path %></li>
+      <li><%= link_to "FAQs", faqs_path %></li>
+      <li><%= link_to "Sign Up", signup_path %></li>
+      <li><%= link_to "Log In", login_path %></li>
     </ul>
   </nav>
 </div>

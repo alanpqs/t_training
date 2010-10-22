@@ -6,6 +6,10 @@ TTraining::Application.routes.draw do
   match '/find_training',   :to => 'pages#find_training'
   match '/login',           :to => 'pages#login'
   match '/signup',          :to => 'pages#signup'
+  match '/buyers',          :to => 'pages#buyers'
+  match '/sellers',         :to => 'pages#sellers'
+  match '/affiliates',      :to => 'pages#affiliates'
+  match '/terms',           :to => 'pages#terms'
   
   root :to => 'pages#home'
   

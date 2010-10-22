@@ -26,5 +26,20 @@ class PagesController < ApplicationController
   def login
     @title = "Login"
   end
-
+  
+  def buyers
+    @title = "Buyers"
+  end
+  
+  def sellers
+    @title = "Sellers"
+  end
+  
+  def affiliates
+    @title = "Affiliates"
+  end
+  
+  def terms
+    @title = "Terms"
+  end
 end
