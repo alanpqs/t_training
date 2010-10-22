@@ -33,7 +33,7 @@ describe "LayoutLinks" do
   
   it "should have a Login page at '/login'" do
     get '/login'
-    response.should have_selector('title', :content => "Login")
+    response.should have_selector('title', :content => "Log In")
   end
   
   it "should have a Buyers page at '/buyers'" do
@@ -54,5 +54,23 @@ describe "LayoutLinks" do
   it "should have a Terms page at '/terms'" do
     get '/terms'
     response.should have_selector('title', :content => "Terms")
+  end
+  
+  it "should have the right links on the layout" do
+    visit root_path
+    click_link "About"
+    response.should have_selector('title', :content => "About")
+    click_link "Home"
+    response.should have_selector('title', :content => "Home")
+    click_link "Why register"
+    response.should have_selector('title', :content => "Why Register")
+    click_link "FAQs"
+    response.should have_selector('title', :content => "FAQs")
+    click_link "Find training"
+    response.should have_selector('title', :content => "Find Training")
+    click_link "Sign up"
+    response.should have_selector('title', :content => "Sign Up")
+    click_link "Log in"
+    response.should have_selector('title', :content => "Log In")
   end
 end

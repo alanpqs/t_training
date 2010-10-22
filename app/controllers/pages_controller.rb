@@ -20,11 +20,11 @@ class PagesController < ApplicationController
   end
   
   def signup
-    @title = "Signup"
+    @title = "Sign Up"
   end
   
   def login
-    @title = "Login"
+    @title = "Log In"
   end
   
   def buyers
