@@ -1,9 +1,17 @@
 TTraining::Application.routes.draw do
-  get "pages/home"
-
-  get "pages/why_register"
   
-  get "pages/about"
+  match '/why_register',    :to => 'pages#why_register'
+  match '/about',           :to => 'pages#about'
+  match '/faqs',            :to => 'pages#faqs'
+  match '/find_training',   :to => 'pages#find_training'
+  match '/login',           :to => 'pages#login'
+  match '/signup',          :to => 'pages#signup'
+  
+  root :to => 'pages#home'
+  
+  #get "pages/home"
+  #get "pages/why_register"
+  #get "pages/about"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

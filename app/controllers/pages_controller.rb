@@ -10,5 +10,21 @@ class PagesController < ApplicationController
   def about
     @title = "About"
   end
+  
+  def faqs
+    @title = "FAQs"
+  end
+  
+  def find_training
+    @title = "Find Training"
+  end
+  
+  def signup
+    @title = "Signup"
+  end
+  
+  def login
+    @title = "Login"
+  end
 
 end
