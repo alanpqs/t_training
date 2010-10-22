@@ -3,59 +3,19 @@
   <head>
     <title><%= title %></title>
     <%= csrf_meta_tag %>
-    <!--[if lt IE 9]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <%= stylesheet_link_tag 'blueprint/screen', :media => 'screen' %>
-    <%= stylesheet_link_tag 'blueprint/print',  :media => 'print' %>
-    <!--[if lt IE 8]><%= stylesheet_link_tag 'blueprint/ie' %><![endif]-->
-    <%= stylesheet_link_tag 'custom', :media => 'screen' %>
+    <%= render 'layouts/stylesheets' %>
   </head>
   <body>
     <div class="container">
       <header>
-        <div class="span-24">
-          <%= image_tag("logo.png", :alt => "Tickets for Training", :class => "round") %>
-          <nav class = "round">
-            <ul>
-              <li><%= link_to "Home", '#' %></li>
-              <li><%= link_to "Find training", '#' %></li>
-              <li><%= link_to "About us", '#' %></li>
-              <li><%= link_to "Why register", '#' %></li>
-              <li><%= link_to "Help", '#' %></li>
-              <li><%= link_to "Sign Up", '#' %></li>
-              <li><%= link_to "Log In", '#' %></li>
-            </ul>
-          </nav>
-        </div>
+        <%= render 'layouts/header' %>
       </header>
-      <div class="span-5">
-        <div id = "loginfo"">
-          <p>You are not logged in but you can still use our search tools to find 
-             training events and materials.
-          </p>
-        </div>
-        <div id="menubox" class="round">
-          <div class="title">
-            Benefits of Registration        
-          </div>
-          <ul>
-            <li><%= link_to "Introduction", "#" %></li>
-            <li><%= link_to "Buying training", "#" %></li>
-            <li><%= link_to "Selling training", "#" %></li>
-            <li><%= link_to "Becoming an affiliate", "#" %></li>
-            <li><%= link_to "Terms and Conditions", "#" %></li>
-            
-          </ul>  
-        </div>
-      </div>
-      <section>
+      <%= render 'layouts/left_panel'%>
+      <section class="round">
         <div class="span-15">
           <%= yield %>
         </div>
-        <div class="span-4 last">
-          <p></p>
-        </div>
+        <%= render 'layouts/right_panel' %>
       </section>
     </div>
   </body>
