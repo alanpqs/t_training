@@ -1,6 +1,7 @@
 TTraining::Application.routes.draw do
   
-  get "users/new"
+  resources :users
+  
   match '/signup',          :to => 'users#new'
   match '/why_register',    :to => 'pages#why_register'
   match '/about',           :to => 'pages#about'

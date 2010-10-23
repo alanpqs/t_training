@@ -17,6 +17,9 @@
         </div>
         <%= render 'layouts/right_panel' %>
       </section>
+      <footer class="span-24">
+         <%= debug(params) if Rails.env.development? %>
+      </footer>
     </div>
   </body>
 </html>
