@@ -9,10 +9,14 @@
     <div class="container">
       <header>
         <%= render 'layouts/header' %>
+        </section>
       </header>
       <%= render 'layouts/left_panel'%>
       <section class="round">
         <div class="span-15">
+          <% flash.each do |key, value| %>
+            <div class="flash <%= key %>"><%= value %></div> 
+          <% end %>
           <%= yield %>
         </div>
         <%= render 'layouts/right_panel' %>

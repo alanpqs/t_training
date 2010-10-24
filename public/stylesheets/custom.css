@@ -134,13 +134,23 @@ nav ul li a:hover {
   padding: 0.2em 0;    
 }
 
-#action_button {
+/* #action_button {
   background: transparent url(../images/button.png);
   border: 1px solid #ddd;
   border-top: 0;
-  padding:5px 10px;    
-}
+  padding:5px 10px;
+} */
 
+.action_round {
+  -moz-border-radius:    10px;
+  -webkit-border-radius: 10px;
+  border-radius:         10px;    
+  color: #09c;
+  background: transparent url(../images/button.png);
+  border: 1px solid #ddd;
+  border-top: 0;
+  padding:5px 10px;  
+}
 /* Round corners */
 
 .round {
@@ -182,4 +192,52 @@ td.sidebar {
   border: 1px solid #999;
   margin-bottom: -15px;
 }
+
+div.field, div.actions {
+  margin-bottom: 10px;
+}
+
+/* Errors */
+
+.field_with_errors {
+  margin-top: 10px;
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+.field_with_errors label {
+  color: #fff;
+}
+
+#error_explanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#error_explanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#error_explanation p {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#error_explanation ul li {
+  font-size: 12px;
+  list-style: square;
+}
+
 
