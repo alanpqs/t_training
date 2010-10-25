@@ -1,5 +1,10 @@
-<div id = "loginfo"">
-  <p>You are not logged in but you can still use our search tools to find 
-     training events and materials.
-  </p>
+<div id="loginfo">
+  <% if logged_in? %>
+    <strong><%= current_user.name %></strong><br />
+    <strong>URL</strong>  <%= link_to user_path(current_user), current_user %>
+  <% else %>
+    <p>You are not logged in but you can still use our search tools to find 
+      training events and materials.
+    </p>
+  <% end %>
 </div>

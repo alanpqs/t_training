@@ -142,6 +142,11 @@ describe "LayoutLinks" do
                                           :content => "Terms and Conditions")
     end
     
+    it "should not have a current_user.name" do
+      visit root_path
+      response.should have_selector("div#loginfo", :content => "You are not logged in")
+    end
+    
   end
   
   describe "when logged in" do
@@ -226,10 +231,9 @@ describe "LayoutLinks" do
                                           :content => "Terms and Conditions")
     end
      
-    it "should have a profile link" do
+    it "should have a current_user.name" do
       visit root_path
-      response.should have_selector("a",  :href => user_path(@user),
-                                          :content => "Profile")
+      response.should have_selector("div#loginfo", :content => @user.name)
     end
     
   end
