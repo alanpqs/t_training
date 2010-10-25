@@ -1,13 +1,17 @@
 TTraining::Application.routes.draw do
   
+  get "sessions/new"
+
   resources :users
+  resources :sessions, :only => [:new, :create, :destroy]
   
   match '/signup',          :to => 'users#new'
+  match '/login',           :to => 'sessions#new'
+  match '/logout',          :to => 'sessions#destroy'
   match '/why_register',    :to => 'pages#why_register'
   match '/about',           :to => 'pages#about'
   match '/faqs',            :to => 'pages#faqs'
   match '/find_training',   :to => 'pages#find_training'
-  match '/login',           :to => 'pages#login'
   match '/buyers',          :to => 'pages#buyers'
   match '/sellers',         :to => 'pages#sellers'
   match '/affiliates',      :to => 'pages#affiliates'

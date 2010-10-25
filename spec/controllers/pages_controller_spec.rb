@@ -34,10 +34,6 @@ describe PagesController do
       )
     end
     
-    it "should redirect to the signup page" do
-      # Add detail
-    end
-    
     it "should redirect to the 'Find training' page" do
       #Add detail 
     end

@@ -1,4 +1,7 @@
 <div id="menubox" class="round">
+  <% if logged_in? %>
+  
+  <% else %>
   <div class="title">
     Benefits of Registration        
   </div>
@@ -7,6 +10,7 @@
     <li><%= link_to "Buying training", buyers_path %></li>
     <li><%= link_to "Selling training", sellers_path %></li>
     <li><%= link_to "Becoming an affiliate", affiliates_path %></li>
-    <li><%= link_to "Terms and Conditions", terms_path %></li> 
-  </ul>  
+    <li><%= link_to "Terms and Conditions", terms_path %></li>     
+  </ul>
+  <% end %>  
 </div>

@@ -19,14 +19,6 @@ class PagesController < ApplicationController
     @title = "Find Training"
   end
   
-  def signup
-    @title = "Sign Up"
-  end
-  
-  def login
-    @title = "Log In"
-  end
-  
   def buyers
     @title = "Buyers"
   end
