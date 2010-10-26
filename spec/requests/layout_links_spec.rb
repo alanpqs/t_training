@@ -147,6 +147,16 @@ describe "LayoutLinks" do
       response.should have_selector("div#loginfo", :content => "You are not logged in")
     end
     
+     it "should not have a users link" do
+      visit root_path
+      response.should_not have_selector("a",  :href => users_path,
+                                              :content => "Users")  
+    end
+    it "should not have a settings link" do
+      visit root_path
+      response.should_not have_selector("a", :content => "Settings")
+    end
+    
   end
   
   describe "when logged in" do
@@ -160,6 +170,18 @@ describe "LayoutLinks" do
       visit root_path
       response.should have_selector("a",  :href => logout_path,
                                           :content => "Log out")
+    end
+    
+    it "should have a users link" do
+      visit root_path
+      response.should have_selector("a",  :href => users_path,
+                                          :content => "Users")  
+    end
+    
+    it "should have a settings link" do
+      visit root_path
+      response.should have_selector("a",  :href => edit_user_path(@user),
+                                          :content => "Settings")
     end
     
     it "should not have a login link" do
