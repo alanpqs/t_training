@@ -2,7 +2,8 @@ class UsersController < ApplicationController
   
   before_filter :authenticate, :only => [:index, :edit, :update, :destroy]
   before_filter :correct_user, :only => [:edit, :update]
-  before_filter :admin_user,   :only => :destroy
+  before_filter :admin_user,   :only => [:index, :destroy]
+  
   
   def index
     @title = "All users"
@@ -65,6 +66,9 @@ class UsersController < ApplicationController
     end
     
     def admin_user
-      redirect_to(root_path) unless current_user.admin?
+      unless current_user.admin?
+        flash[:notice]="Permission denied"
+        redirect_to(root_path)
+      end
     end
 end

@@ -13,10 +13,10 @@ describe UsersController do
       end
     end
     
-    describe "for logged-in users" do
+    describe "for logged-in admins" do
       
       before(:each) do
-        @user = test_log_in(Factory(:user))
+        @user = test_log_in(Factory(:user, :admin => true))
         second =  Factory(:user, :email => "another@example.com")
         third =   Factory(:user, :email => "another@example.net")
         
@@ -26,32 +26,55 @@ describe UsersController do
         end
       end
       
-      it "should be successful" do
-        get :index
-        response.should be_success
-      end
+      describe "accessible to admins" do
+          
+        it "should be successful" do
+          get :index
+          response.should be_success
+        end
       
-      it "should have the right title" do
-        get :index
-        response.should have_selector("title", :content => "All users")
-      end
+        it "should have the right title" do
+          get :index
+          response.should have_selector("title", :content => "All users")
+        end
       
-      it "should have an element for each user" do
-        get :index
-        @users[0..2].each do |user|
-          response.should have_selector("li", :content => user.name)
+        it "should have an element for each user" do
+          get :index
+          @users[0..2].each do |user|
+            response.should have_selector("li", :content => user.name)
+          end
+        end
+      
+        it "should paginate users" do
+          get :index
+          response.should have_selector("div.pagination")
+          response.should have_selector("span.disabled", :content => "Previous")
+          response.should have_selector("a",    :href => "/users?page=2",
+                                                :content => "2")
+          response.should have_selector("a",    :href => "/users?page=2",
+                                                :content => "Next")
+        end        
+      end
+    end  
+      
+    describe "for logged-in non-admins" do
+        
+      before(:each) do
+        @user = test_log_in(Factory(:user, :admin => false))
+        second =  Factory(:user, :email => "another@example.com")
+        third =   Factory(:user, :email => "another@example.net")
+        
+        @users = [@user, second, third]
+        30.times do
+          @users << Factory(:user, :email => Factory.next(:email))
         end
       end
-      
-      it "should paginate users" do
+        
+      it "should not open index to a non-admin" do
         get :index
-        response.should have_selector("div.pagination")
-        response.should have_selector("span.disabled", :content => "Previous")
-        response.should have_selector("a",    :href => "/users?page=2",
-                                              :content => "2")
-        response.should have_selector("a",    :href => "/users?page=2",
-                                              :content => "Next")
-      end
+        response.should_not be_success
+        response.should redirect_to(root_path)
+      end      
     end 
   end
 
