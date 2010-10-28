@@ -159,7 +159,7 @@ describe "LayoutLinks" do
     
   end
   
-  describe "when logged in" do
+  describe "when logged in as a non-admin" do
     
     before(:each) do
       @user = Factory(:user)
@@ -172,9 +172,9 @@ describe "LayoutLinks" do
                                           :content => "Log out")
     end
     
-    it "should have a users link" do
+    it "should not have a users link" do
       visit root_path
-      response.should have_selector("a",  :href => users_path,
+      response.should_not have_selector("a",  :href => users_path,
                                           :content => "Users")  
     end
     
@@ -253,6 +253,21 @@ describe "LayoutLinks" do
     it "should have a current_user.name" do
       visit root_path
       response.should have_selector("div#loginfo", :content => @user.name)
+    end
+    
+  end
+  
+  describe "special links when logged in as an admin" do
+    
+    before(:each) do
+      @user = Factory(:user, :admin => true)
+      integration_log_in(@user)
+    end
+    
+    it "should have a users link" do
+      visit root_path
+      response.should have_selector("a",  :href => users_path,
+                                          :content => "Users")  
     end
     
   end
