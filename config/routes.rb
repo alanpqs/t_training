@@ -1,9 +1,17 @@
 TTraining::Application.routes.draw do
   
+  get "regions/index"
+
+  get "regions/new"
+
+  get "index/new"
+
   get "sessions/new"
 
   resources :users
   resources :sessions, :only => [:new, :create, :destroy]
+  resources :regions
+  
   
   match '/signup',          :to => 'users#new'
   match '/login',           :to => 'sessions#new'
