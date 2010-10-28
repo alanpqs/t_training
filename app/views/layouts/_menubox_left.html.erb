@@ -1,6 +1,18 @@
 <div id="menubox" class="round">
   <% if logged_in? %>
-  
+    <% if current_user.admin? %>
+      <div class="title">
+        Admin Tasks
+      </div>
+      <ul>
+        <li><%= link_to "Regions", "#" %></li>
+        <li><%= link_to "Curencies", "#" %></li>
+        <li><%= link_to "Countries", "#" %></li>
+        <li><%= link_to "Categories", "#" %></li>
+        <li><%= link_to "Formats", "#" %></li>
+        <li><%= link_to "Review questions", "#" %></li>
+      </ul>
+    <% end %>
   <% else %>
   <div class="title">
     Benefits of Registration        
