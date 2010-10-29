@@ -62,11 +62,20 @@ describe SessionsController do
   
   describe "DELETE 'destroy'" do
     
-    it "should log a user out" do
+    before(:each) do
       test_log_in(Factory(:user))
+    end
+    
+    it "should log a user out" do
       delete :destroy
       controller.should_not be_logged_in
       response.should redirect_to(root_path)
+    end
+    
+    it "should destroy any stored sessions" do
+      session[:return_to] = why_register_path
+      delete :destroy
+      session[:return_to].should == nil
     end
   end
 end

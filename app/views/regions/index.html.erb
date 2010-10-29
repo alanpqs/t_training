@@ -1,2 +1,7 @@
 <h1><%= @title %></h1>
-<p>Find me in app/views/regions/index.html.erb</p>
+<ul>
+  <% @regions.each do |region| %>
+    <li><%= region.region %></li> 
+  <% end %>
+</ul>
+
