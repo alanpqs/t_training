@@ -40,7 +40,6 @@ describe RegionsController do
         end
         
         it "should have an element for each user" do
-          
           @regions = Region.all
           @regions.each do |region|
             get :index

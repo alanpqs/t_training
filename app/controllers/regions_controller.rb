@@ -10,6 +10,11 @@ class RegionsController < ApplicationController
 
   def new
   end
+  
+  def edit
+    @title = "Edit region"
+    @region = Region.find(params[:id])
+  end
 
   private
   

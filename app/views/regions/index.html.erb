@@ -1,7 +1,7 @@
 <h1><%= @title %></h1>
 <ul>
   <% @regions.each do |region| %>
-    <li><%= region.region %></li> 
+    <li><%= link_to region.region, edit_region_path(region.id) %></li> 
   <% end %>
 </ul>
 
