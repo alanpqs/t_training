@@ -5,8 +5,9 @@
   <div class="field">
     <%= f.label :region %><br />
     <%= f.text_field :region %>
+    <%= f.hidden_field :updated_at %>
   </div>
   <div class="actions">
-     <%= submit_tag "Update", :class => "action_round" %>
+     <%= f.submit %>
   </div> 
 <% end %>

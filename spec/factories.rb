@@ -8,3 +8,7 @@ end
 Factory.sequence :email do |n|
   "person-#{n}@example.com"
 end
+
+Factory.define :region do |region|
+  region.region                 "Africa"
+end

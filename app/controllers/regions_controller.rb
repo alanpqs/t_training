@@ -9,11 +9,44 @@ class RegionsController < ApplicationController
   end
 
   def new
+    @title = "New region"
+    @region = Region.new
+  end
+  
+  def create
+    if @region = Region.create(params[:region])
+      flash[:success] = "Region created."
+      redirect_to regions_path
+    else
+      @title = "New region"
+      render 'new'
+    end
+  end
+  
+  def show
+    @title = "Region"
   end
   
   def edit
     @title = "Edit region"
     @region = Region.find(params[:id])
+  end
+  
+  def update
+    @region = Region.find(params[:id])
+    if @region.update_attributes(params[:region])
+      flash[:success] = "Region updated."
+      redirect_to regions_path
+    else
+      @title = "Edit region"
+      render 'edit'
+    end
+  end
+  
+  def destroy
+    Region.find(params[:id]).destroy
+    flash[:success] = "Region destroyed."
+    redirect_to(regions_path)
   end
 
   private

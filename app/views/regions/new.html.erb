@@ -1,2 +1,12 @@
-<h1>Regions#new</h1>
-<p>Find me in app/views/regions/new.html.erb</p>
+<h1><%= @title %></h1>
+
+<%= form_for(@region) do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  <div class="field">
+    <%= f.label :region %><br />
+    <%= f.text_field :region %>
+  </div>
+  <div class="actions">
+     <%= f.submit %>
+  </div> 
+<% end %>

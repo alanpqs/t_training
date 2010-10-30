@@ -1,7 +1,11 @@
 <h1><%= @title %></h1>
 <ul>
   <% @regions.each do |region| %>
-    <li><%= link_to region.region, edit_region_path(region.id) %></li> 
+    <li>
+      <%= link_to region.region, edit_region_path(region.id), :title => "Edit #{region.region}" %> | 
+      <small><%= link_to "delete", region, :method => :delete, :confirm => "You sure?",
+                                    :title => "Delete #{region.region}" %></small>
+    </li> 
   <% end %>
 </ul>
 

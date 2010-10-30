@@ -4,7 +4,7 @@ describe "Regions" do
 
   before(:each) do
     user = Factory(:user, :admin => true)
-    @attrs = ["Europe", "Asia", "America"]
+    @attrs = ["Africa", "Asia", "America"]
     @attrs.each do |attr|
       Region.create!(:region => attr)
     end
@@ -17,7 +17,7 @@ describe "Regions" do
     it "should redirect to the correct edit page when the Region is clicked" do
       @attrs.each do |attr|
         visit regions_path
-        click_link attr
+        click_link "Edit #{attr}"
         response.should have_selector("title", :content => "Edit region")
         response.should have_selector("input", :value => attr)
       end
