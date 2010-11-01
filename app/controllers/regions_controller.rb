@@ -6,7 +6,7 @@ class RegionsController < ApplicationController
   
   def index
     @title = "Regions"
-    @regions = Region.all
+    @regions = Region.all(:order => "region")
   end
 
   def new
