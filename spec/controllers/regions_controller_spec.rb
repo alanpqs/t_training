@@ -46,24 +46,165 @@ describe RegionsController do
             response.should have_selector("li", :content => region.region)
           end
         end
+        
+        it "should have a 'New region' link" do
+          get :index
+          response.should have_selector("a",    :href     => "/regions/new",
+                                                :content  => "New region")
+        end
       end
     end
   end
 
-  describe "GET 'new'" do
-    it "should not be successful for non-logged-in users" do
-      get 'new'
-      response.should_not be_success
+  
+  
+  describe "deny new/create permissions to non-logged-in and non-admin users" do
+    
+    before(:each) do
+      @user = Factory(:user)
+      @attr = { :region => "Some Region"}
+    end
+    
+    describe "for non-logged in users" do 
+      it "should deny access to 'New' to non-logged-in users" do
+        get 'new'
+        response.should_not be_success
+      end
+    
+      it "should redirect a non-logged-in user to the login path if 'New' is attempted" do
+        get 'new'
+        response.should redirect_to(login_path)
+      end
+    
+      it "should prevent a non-logged-in user from adding a new region" do
+        lambda do
+          post :create, :region => @attr
+        end.should_not change(Region, :count)   
+      end
+    
+      it "should redirect a non-logged-in user to the root path if a create is attempted" do
+        post :create, :region => @attr
+        response.should redirect_to(root_path)
+      end
+    
+      it "should display a 'Permission denied' notice when a non-logged-in user attempts 'Create'" do
+        post :create, :region => @attr
+        flash[:notice].should =~ /Permission denied/i
+      end
+    end
+    
+    describe "for logged-in non-admins" do
+     
+      before(:each) do
+        test_log_in(@user)
+      end 
+      
+      it "should deny access to 'New' to logged-in non-admins" do
+        get 'new'
+        response.should_not be_success
+      end
+    
+      it "should redirect a logged-in non-admin to the root path if 'New' is attempted" do
+        get 'new'
+        response.should redirect_to(root_path)
+      end
+    
+      it "should prevent a logged-in non-admin from adding a new region" do
+        lambda do
+          post :create, :region => @attr
+        end.should_not change(Region, :count)   
+      end
+    
+      it "should redirect a logged-in non-admin to the root path if a create is attempted" do
+        post :create, :region => @attr
+        response.should redirect_to(root_path)
+      end
+    
+      it "should display a 'Permission denied' notice when a logged-in non-admin attempts 'Create'" do
+        post :create, :region => @attr
+        flash[:notice].should =~ /Permission denied/i
+      end  
     end
   end
   
-  describe "edit/update permissions for non-logged-in users" do
+  
+  
+  describe "GET 'new' for logged-in admin users" do
+    
+    before(:each) do
+      @user = Factory(:user, :admin => true)
+      test_log_in(@user)
+    end
+  
+    it "should open successfully" do
+      get :new
+      response.should be_success
+    end
+    
+    it "should have the right title" do
+      get :new
+      response.should have_selector("title", :content => "New region")
+    end
+    
+  end
+  
+  describe "POST 'create' for logged-in admin users" do
+    
+    before(:each) do
+      @user = Factory(:user, :admin => true)
+      @attr_blank = { :region => "" }
+      @attr_good  = { :region => "New region"}
+      test_log_in(@user)
+    end
+    
+    describe "failure" do
+      
+      it "should not create a new region" do
+        lambda do
+          post :create, :region => @attr_blank
+        end.should_not change(Region, :count)
+      end
+      
+      it "should have the right title" do
+        post :create, :region => @attr_blank
+        response.should have_selector("title", :content => "New region")
+      end
+      
+      it "should redirect to the 'new' page" do
+        post :create, :region => @attr_blank
+        response.should render_template("new")
+      end
+    end
+    
+    describe "success" do
+      
+      it "should create a new region" do
+        lambda do
+          post :create, :region => @attr_good
+        end.should change(Region, :count).by(1)  
+      end
+      
+      it "should have a success message" do
+        post :create, :region => @attr_good
+        flash[:success].should =~ /Region created/i      
+      end
+      
+      it "should render the regions list" do
+        post :create, :region => @attr_good
+        response.should redirect_to(regions_path)
+      end
+    end
+    
+  end
+  
+  
+  
+  describe "deny edit/update permissions to non-logged-in and non-admin users" do
     
     before(:each) do
       @user = Factory(:user)
       @region = Factory(:region)
-      @region_old = @region.region
-      @region_new = "#{@region.region}_new"
+      @attr = { :region => "New Region" }
     end
     
     it "should be impossible for non-logged-in users to access 'edit'" do
@@ -72,9 +213,19 @@ describe RegionsController do
     end
     
     it "should be impossible for non-logged-in users to update a region" do
-      put :update, :id => @region
-      @region.region.should == @region_old
-      response.should redirect_to(login_path)
+      put :update, :id => @region, :region => @attr
+      @region.reload
+      @region.region.should_not == @attr[:region]
+    end
+    
+    it "should redirect non-logged-in users to the root path when Update is attempted" do
+      put :update, :id => @region, :region => @attr
+      response.should redirect_to(root_path)
+    end
+    
+    it "should display a 'Permission denied' notice when a non-logged-in user attempts 'Update'" do
+      put :update, :id => @region, :region => @attr
+      flash[:notice].should =~ /Permission denied/i
     end
     
     it "should be impossible for logged-in non-admin users to access 'edit'" do
@@ -85,20 +236,30 @@ describe RegionsController do
     
     it "should be impossible for logged-in non-admin users to update a region" do
       test_log_in(@user)
-      put :update, :id => @region
-      @region.region.should == @region_old
+      put :update, :id => @region, :region => @attr
+      @region.reload
+      @region.region.should_not == @attr[:region] 
+    end
+    
+    it "should redirect logged-in non-admin users to the root path when Update is attempted" do
+      test_log_in(@user)
+      put :update, :id => @region, :region => @attr
       response.should redirect_to(root_path)
-      
+    end
+    
+    it "should display a 'Permission denied' notice when a logged-in non-admin attempts 'Update'" do
+      put :update, :id => @region, :region => @attr
+      flash[:notice].should =~ /Permission denied/i
     end
   end
+  
+  
   
   describe "edit and update actions for logged-in admin users" do
     
     before(:each) do
       @user = Factory(:user, :admin => true)
       @region = Factory(:region)
-      @region_old = @region.region
-      @region_new = "#{@region.region}_new"
       test_log_in(@user)
     end
     
@@ -115,6 +276,8 @@ describe RegionsController do
       end
     end
     
+    
+    
     describe "PUT 'update'" do
       
       describe "failure" do
@@ -124,16 +287,48 @@ describe RegionsController do
         end
         
         it "should render the edit page" do
-          put :update, :id => @region, :region => ""
+          put :update, :id => @region, :region => @attr
           response.should render_template('edit')
+        end
+        
+        it "should have the right title" do
+          put :update, :id => @region, :region => @attr
+          response.should have_selector("title", :content => "Edit region")
+        end
+      
+        it "should not change the region's attributes" do
+          put :update, :id => @region, :user => @attr
+          @region.reload
+          @region.region.should_not == @attr[:region]
         end
       end
       
       describe "success" do
         
+        before(:each) do
+          @attr = { :region => "New Region" }
+        end
+      
+        it "should change the user's attributes" do
+          put :update, :id => @region, :region => @attr
+          @region.reload
+          @region.region.should == @attr[:region]
+        end
+      
+        it "should redirect to the Region index page" do
+          put :update, :id => @region, :region => @attr
+          response.should redirect_to(regions_path)
+        end
+      
+        it "should have a flash message" do
+          put :update, :id => @region, :region => @attr
+          flash[:success].should =~ /updated/
+        end
       end
     end
   end
+  
+  
   
   describe "DELETE 'destroy'" do
     

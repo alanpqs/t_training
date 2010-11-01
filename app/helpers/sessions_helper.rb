@@ -31,6 +31,10 @@ module SessionsHelper
     redirect_to login_path, :notice => "Please log in to access this page."
   end
   
+  def legality_warning
+    redirect_to root_path, :notice => "Permission denied"
+  end
+  
   def store_location
     session[:return_to] = request.fullpath
   end

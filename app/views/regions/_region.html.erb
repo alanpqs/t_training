@@ -1,0 +1,10 @@
+<%= form_for(@region) do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  <div class="field">
+    <%= f.label :region %><br />
+    <%= f.text_field :region %>
+  </div>
+  <div class="actions">
+     <%= submit_tag @tag_name, :class => "action_round" %>
+  </div> 
+<% end %>

@@ -1,6 +1,7 @@
 class RegionsController < ApplicationController
   
-  before_filter :authenticate
+  before_filter :authenticate,    :except => [:create, :update]
+  before_filter :legality_check,  :only   => [:create, :update]
   before_filter :admin_user
   
   def index
@@ -11,10 +12,12 @@ class RegionsController < ApplicationController
   def new
     @title = "New region"
     @region = Region.new
+    @tag_name = "Create"
   end
   
   def create
-    if @region = Region.create(params[:region])
+    @region = Region.new(params[:region])
+    if @region.save
       flash[:success] = "Region created."
       redirect_to regions_path
     else
@@ -23,13 +26,10 @@ class RegionsController < ApplicationController
     end
   end
   
-  def show
-    @title = "Region"
-  end
-  
   def edit
     @title = "Edit region"
     @region = Region.find(params[:id])
+    @tag_name = "Confirm changes"
   end
   
   def update
@@ -53,6 +53,14 @@ class RegionsController < ApplicationController
   
     def authenticate
       deny_access unless logged_in?
+    end
+    
+    def legality_check
+      if logged_in?
+        legality_warning unless current_user.admin?
+      else
+        legality_warning
+      end
     end
     
     def admin_user

@@ -240,11 +240,11 @@ div.field, div.actions {
   list-style: square;
 }
 
-ul.users {
+ul.listing {
   margin-top: 1em;   
 }
 
-.users li {
+.listing li {
   list-style: none;    
 }
 
