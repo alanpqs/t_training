@@ -1,0 +1,10 @@
+<h1><%= @title %></h1>
+
+<ul class="listing">
+<% @s_currencies.each do |k, v| %>
+  <li><%= v[:iso_code] %>,  <%= v[:name] %> | <%= v[:symbol] unless v[:symbol].nil? %>
+      <%= v[:separator] %> <%= v[:subunit] %>, <%= v[:subunit_to_unit] %>  |   
+      <small>Priority: <%= v[:priority] %></small></li>
+<% end %>
+</ul>
+

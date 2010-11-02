@@ -1,8 +1,13 @@
 TTraining::Application.routes.draw do
 
+  get "currencies/index"
+
+  get "currencies/show"
+
   resources :users
   resources :sessions, :only => [:new, :create, :destroy]
   resources :regions
+  resources :currencies
   
   
   match '/signup',          :to => 'users#new'
