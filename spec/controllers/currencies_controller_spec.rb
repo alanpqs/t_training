@@ -16,16 +16,16 @@ describe CurrenciesController do
     end
   end
 
-  describe "GET 'show'" do
-    it "should be successful" do
-      get :show
-      response.should be_success
-    end
+  #describe "GET 'show'" do
+  #  it "should be successful" do
+  #    get :show
+  #    response.should be_success
+  #  end
     
-    it "should have the right title" do
-      get :show
-      response.should have_selector("title", :content => "Currency")
-    end
-  end
+  #  it "should have the right title" do
+  #    get :show
+  #    response.should have_selector("title", :content => "Currency")
+  #  end
+  #end
 
 end

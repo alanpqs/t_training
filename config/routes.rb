@@ -1,13 +1,19 @@
 TTraining::Application.routes.draw do
 
-  get "currencies/index"
-
-  get "currencies/show"
+  #get "countries/index"
+  #get "countries/new"
+  #get "countries/create"
+  #get "countries/edit"
+  #get "countries/update"
+  #get "countries/destroy"
+  #get "currencies/index"
+  #get "currencies/show"
 
   resources :users
-  resources :sessions, :only => [:new, :create, :destroy]
+  resources :sessions,    :only => [:new, :create, :destroy]
   resources :regions
-  resources :currencies
+  resources :currencies,  :only => :index
+  resources :countries
   
   
   match '/signup',          :to => 'users#new'

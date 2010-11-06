@@ -1,4 +1,5 @@
 require 'faker'
+require 'csv'
 
 namespace :db do
   desc "Fill database with sample data"
@@ -19,4 +20,9 @@ namespace :db do
                     :password_confirmation  => password)
     end
   end
+end
+
+desc "Imports a CSV file into an ActiveRecord table"
+task :csv_import, :filename, :model do |task,args|
+  puts :filename
 end

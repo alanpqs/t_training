@@ -10,10 +10,24 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101028112934) do
+ActiveRecord::Schema.define(:version => 20101106063223) do
+
+  create_table "countries", :force => true do |t|
+    t.string   "name"
+    t.string   "country_code"
+    t.string   "currency_code"
+    t.string   "phone_code"
+    t.integer  "region_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "countries", ["country_code"], :name => "index_countries_on_country_code", :unique => true
+  add_index "countries", ["name"], :name => "index_countries_on_name", :unique => true
 
   create_table "regions", :force => true do |t|
     t.string   "region"
+    t.string   "created_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

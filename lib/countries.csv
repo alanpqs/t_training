@@ -1,0 +1,242 @@
+"name","country_code","currency_code","phone_code","region_id"
+"Afghanistan","AFG","AFN","+93",2
+"Aland","ALA","EUR","+35-818",3
+"Albania","ALB","ALL","+355",3
+"Algeria","DZA","DZD","+213",2
+"American Samoa","ASM","USD","+1-684",5
+"Andorra","AND","EUR","+376",3
+"Angola","AGO","AOA","+244",7
+"Anguilla","AIA","XCD","+1-264",5
+"Antigua and Barbuda","ATG","XCD","+1-268",5
+"Argentina","ARG","ARS","+54",6
+"Armenia","ARM","AMD","+374",3
+"Aruba","ABW","AWG","+297",5
+"Ascension","ASC","SHP","+247",3
+"Australia","AUS","AUD","+61",8
+"Austria","AUT","EUR","+43",3
+"Azerbaijan","AZE","AZN","+994",2
+"Bahrain","BHR","BHD","+973",2
+"Bangladesh","BGD","BDT","+880",1
+"Barbados","BRB","BBD","+1-246",5
+"Belarus","BLR","BYR","+375",3
+"Belgium","BEL","EUR","+32",3
+"Belize","BLZ","BZD","+501",5
+"Benin","BEN","XOF","+229",7
+"Bermuda","BMU","BMD","+1-441",5
+"Bhutan","BTN","BTN","+975",1
+"Bolivia","BOL","BOB","+591",6
+"Bosnia & Herzegovina","BIH","BAM","+387",3
+"Botswana","BWA","BWP","+267",7
+"Brazil","BRA","BRL","+55",6
+"British Virgin Islands","VGB","USD","+1-284",5
+"Brunei","BRN","BND","+673",1
+"Bulgaria","BGR","BGN","+359",3
+"Burkina Faso","BFA","XOF","+226",7
+"Burundi","BDI","BIF","+257",7
+"Cambodia","KHM","KHR","+855",1
+"Cameroon","CMR","XAF","+237",7
+"Canada","CAN","CAD","+1",4
+"Cape Verde","CPV","CVE","+238",7
+"Cayman Islands","CYM","KYD","+1-345",5
+"Central African Republic","CAF","XAF","+236",7
+"Chad","TCD","XAF","+235",7
+"Chile","CHL","CLP","+56",6
+"Christmas Island","CXR","AUD","+61",8
+"Cocos (Keeling) Islands","CCK","AUD","+61",8
+"Colombia","COL","COP","+57",6
+"Comoros","COM","KMF","+269",7
+"Congo (Democratic Republic)","COD","CDF","+243",7
+"Congo (Republic)","COG","XAF","+242",7
+"Cook Islands","COK","NZD","+682",8
+"Costa Rica","CRI","CRC","+506",5
+"Cote d'Ivoire","CIV","XOF","+225",7
+"Croatia","HRV","HRK","+385",3
+"Cuba","CUB","CUP","+53",5
+"Cyprus","CYP","CYP","+357",3
+"Czech Republic","CZE","CZK","+420",3
+"Denmark","DNK","DKK","+45",3
+"Djibouti","DJI","DJF","+253",7
+"Dominica","DMA","XCD","+1-767",5
+"Dominican Republic","DOM","DOP","+1-809",5
+"Ecuador","ECU","USD","+593",6
+"Egypt","EGY","EGP","+20",2
+"El Salvador","SLV","USD","+503",5
+"Equatorial Guinea","GNQ","XAF","+240",7
+"Eritrea","ERI","ERN","+291",7
+"Estonia","EST","EEK","+372",3
+"Ethiopia","ETH","ETB","+251",7
+"Falkland Islands","FLK","FKP","+500",6
+"Faroe Islands","FRO","DKK","+298",3
+"Fiji","FJI","FJD","+679",8
+"Finland","FIN","EUR","+358",3
+"France","FRA","EUR","+33",3
+"French Guiana","GUF","EUR","+594",6
+"French Polynesia","PYF","XPF","+689",8
+"Gabon","GAB","XAF","+241",7
+"Georgia","GEO","GEL","+995",3
+"Germany","DEU","EUR","+49",3
+"Ghana","GHA","GHS","+233",7
+"Gibraltar","GIB","GIP","+350",3
+"Greece","GRC","EUR","+30",3
+"Greenland","GRL","DKK","+299",3
+"Grenada","GRD","XCD","+1-473",5
+"Guadeloupe","GLP","EUR","+590",5
+"Guam","GUM","USD","+1-671",5
+"Guatemala","GTM","GTQ","+502",5
+"Guernsey","GGY","GGP","+44",3
+"Guinea","GIN","GNF","+224",7
+"Guinea-Bissau","GNB","XOF","+245",7
+"Guyana","GUY","GYD","+592",6
+"Haiti","HTI","HTG","+509",5
+"Honduras","HND","HNL","+504",5
+"Hong Kong","HKG","HKD","+852",1
+"Hungary","HUN","HUF","+36",3
+"Iceland","ISL","ISK","+354",3
+"India","IND","INR","+91",1
+"Indonesia","IDN","IDR","+62",1
+"Iran","IRN","IRR","+98",2
+"Iraq","IRQ","IQD","+964",2
+"Ireland","IRL","EUR","+353",3
+"Isle of Man","IMN","IMP","+44",3
+"Israel","ISR","ILS","+972",3
+"Italy","ITA","EUR","+39",3
+"Jamaica","JAM","JMD","+1-876",5
+"Japan","JPN","JPY","+81",1
+"Jersey","JEY","JEP","+44",3
+"Jordan","JOR","JOD","+962",2
+"Kazakhstan","KAZ","KZT","+7",1
+"Kenya","KEN","KES","+254",7
+"Kiribati","KIR","AUD","+686",8
+"Kosovo","SCG","EUR","+381",3
+"Kuwait","KWT","KWD","+965",2
+"Kyrgyzstan","KGZ","KGS","+996",1
+"Laos","LAO","LAK","+856",1
+"Latvia","LVA","LVL","+371",3
+"Lebanon","LBN","LBP","+961",2
+"Lesotho","LSO","LSL","+266",7
+"Liberia","LBR","LRD","+231",7
+"Libya","LBY","LYD","+218",2
+"Liechtenstein","LIE","CHF","+423",3
+"Lithuania","LTU","LTL","+370",3
+"Luxembourg","LUX","EUR","+352",3
+"Macau","MAC","MOP","+853",1
+"Macedonia","MKD","MKD","+389",3
+"Madagascar","MDG","MGA","+261",7
+"Malawi","MWI","MWK","+265",7
+"Malaysia","MYS","MYR","+60",1
+"Maldives","MDV","MVR","+960",1
+"Mali","MLI","XOF","+223",7
+"Malta","MLT","MTL","+356",3
+"Marshall Islands","MHL","USD","+692",8
+"Martinique","MTQ","EUR","+596",5
+"Mauritania","MRT","MRO","+222",7
+"Mauritius","MUS","MUR","+230",7
+"Mayotte","MYT","EUR","+262",7
+"Mexico","MEX","MXN","+52",4
+"Micronesia","FSM","USD","+691",8
+"Moldova","MDA","MDL","+373",3
+"Monaco","MCO","EUR","+377",3
+"Mongolia","MNG","MNT","+976",1
+"Montenegro","MNE","EUR","+382",3
+"Montserrat","MSR","XCD","+1-664",5
+"Morocco","MAR","MAD","+212",2
+"Mozambique","MOZ","MZM","+258",7
+"Myanmar","MMR","MMK","+95",1
+"Namibia","NAM","NAD","+264",7
+"Nauru","NRU","AUD","+674",8
+"Nepal","NPL","NPR","+977",1
+"Netherlands","NLD","EUR","+31",3
+"Netherlands Antilles","ANT","ANG","+599",5
+"New Caledonia","NCL","XPF","+687",8
+"New Zealand","NZL","NZD","+64",8
+"Nicaragua","NIC","NIO","+505",5
+"Niger","NER","XOF","+227",7
+"Nigeria","NGA","NGN","+234",7
+"Niue","NIU","NZD","+683",8
+"Norfolk Island","NFK","AUD","+672",8
+"North Korea","PRK","KPW","+850",1
+"Northern Mariana Islands","MNP","USD","+1-670",5
+"Norway","NOR","NOK","+47",3
+"Oman","OMN","OMR","+968",2
+"Pakistan","PAK","PKR","+92",2
+"Palau","PLW","USD","+680",8
+"Palestine","PSE","ILS","+970",2
+"Panama","PAN","PAB","+507",5
+"Papua New Guinea","PNG","PGK","+675",8
+"Paraguay","PRY","PYG","+595",6
+"People's Republic of China","CHN","CNY","+86",1
+"Peru","PER","PEN","+51",6
+"Philippines","PHL","PHP","+63",1
+"Poland","POL","PLN","+48",3
+"Portugal","PRT","EUR","+351",3
+"Puerto Rico","PRI","USD","+1-787",5
+"Qatar","QAT","QAR","+974",2
+"Reunion","REU","EUR","+262",7
+"Romania","ROU","RON","+40",3
+"Russia","RUS","RUB","+7",3
+"Rwanda","RWA","RWF","+250",7
+"Saint Barthelemy","GLP","EUR","+590",5
+"Saint Helena","SHN","SHP","+290",3
+"Saint Kitts & Nevis","KNA","XCD","+1-869",5
+"Saint Lucia","LCA","XCD","+1-758",5
+"Saint Martin","GLP","EUR","+590",5
+"Saint Pierre & Miquelon","SPM","EUR","+508",4
+"Saint Vincent & the Grenadines","VCT","XCD","+1-784",5
+"Samoa","WSM","WST","+685",8
+"San Marino","SMR","EUR","+378",3
+"Sao Tome & Principe","STP","STD","+239",7
+"Saudi Arabia","SAU","SAR","+966",2
+"Senegal","SEN","XOF","+221",7
+"Serbia","SRB","RSD","+381",3
+"Seychelles","SYC","SCR","+248",7
+"Sierra Leone","SLE","SLL","+232",7
+"Singapore","SGP","SGD","+65",1
+"Slovakia","SVK","SKK","+421",3
+"Slovenia","SVN","EUR","+386",3
+"Solomon Islands","SLB","SBD","+677",8
+"Somalia","SOM","SOS","+252",2
+"South Africa","ZAF","ZAR","+27",7
+"South Korea","KOR","KRW","+82",1
+"Spain","ESP","EUR","+34",3
+"Sri Lanka","LKA","LKR","+94",1
+"Sudan","SDN","SDG","+249",7
+"Suriname","SUR","SRD","+597",6
+"Svalbard","SJM","NOK","+47",3
+"Swaziland","SWZ","SZL","+268",7
+"Sweden","SWE","SEK","+46",3
+"Switzerland","CHE","CHF","+41",3
+"Syria","SYR","SYP","+963",2
+"Taiwan","TWN","TWD","+886",1
+"Tajikistan","TJK","TJS","+992",1
+"Tanzania","TZA","TZS","+255",7
+"Thailand","THA","THB","+66",1
+"The Bahamas","BHS","BSD","+1-242",5
+"The Gambia","GMB","GMD","+220",7
+"Timor-Leste","TLS","USD","+670",8
+"Togo","TGO","XOF","+228",7
+"Tokelau","TKL","NZD","+690",8
+"Tonga","TON","TOP","+676",8
+"Trinidad & Tobago","TTO","TTD","+1-868",5
+"Tristan da Cunha","TAA","SHP","+290",3
+"Tunisia","TUN","TND","+216",2
+"Turkey","TUR","TRY","+90",2
+"Turkmenistan","TKM","TMM","+993",1
+"Turks & Caicos Islands","TCA","USD","+1-649",5
+"Tuvalu","TUV","AUD","+688",8
+"U.S. Virgin Islands","VIR","USD","+1-340",5
+"Uganda","UGA","UGX","+256",7
+"Ukraine","UKR","UAH","+380",3
+"United Arab Emirates","ARE","AED","+971",2
+"United Kingdom","GBR","GBP","+44",3
+"United States","USA","USD","+1",4
+"Uruguay","URY","UYU","+598",6
+"Uzbekistan","UZB","UZS","+998",1
+"Vanuatu","VUT","VUV","+678",8
+"Vatican City","VAT","EUR","+379",3
+"Venezuela","VEN","VEB","+58",6
+"Vietnam","VNM","VND","+84",1
+"Wallis & Futuna","WLF","XPF","+681",8
+"Western Sahara","ESH","MAD","+212",2
+"Yemen","YEM","YER","+967",2
+"Zambia","ZMB","ZMK","+260",7
+"Zimbabwe","ZWE","ZWD","+263",7
