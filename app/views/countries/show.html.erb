@@ -1,0 +1,44 @@
+<h1><%= 
+  @title %>   
+  <span class="header_link"><%= link_to "(Edit details)", edit_country_path(@country.id) %></span>
+</h1>
+
+<table class="profile" summary = "Country profile">
+  <tr>
+    <td class="two_col">
+      <div class="field">
+        <strong>Country code</strong><br />
+        <%= @country.country_code %>
+      </div>
+      <div class="field">
+        <strong>Currency</strong><br />
+        <%= @country.currency_name %><br />
+        Exchange-rate - <%= @country.currency_symbol %> to US$: 
+        <%= @country.exchange_rate %>
+      </div>
+      <div class="field">
+        <strong>International dialling</strong><br />
+        <%= @country.phone_code %>
+      </div>
+      <div class="field">
+        <strong>Region</strong><br />
+        <%= @country.region.region %>
+      </div>
+    </td>
+    <td class="two_col">
+      <div class="field">
+        <strong>Members:</strong><br />
+        <strong>Vendors:</strong><br />
+      </div>
+      <div class="field">
+        <strong>Tickets issued:</strong><br />
+        <strong>Value:</strong><br />
+      </div>
+      <div class="field">
+        <strong>Tickets purchased:</strong><br />
+        <strong>Value:</strong><br />
+      </div>
+    </td>
+  </tr>
+</table>    
+

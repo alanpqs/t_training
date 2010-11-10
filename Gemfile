@@ -10,6 +10,7 @@ gem 'gravatar_image_tag', '0.1.0'
 gem 'will_paginate', '3.0.pre2'
 gem 'money', '3.1.5'
 gem 'google_currency', '1.0.2'
+gem 'activerecord-import', '0.2.3'
 
 group :development do
   gem 'rspec-rails', '2.0.0.beta.18'

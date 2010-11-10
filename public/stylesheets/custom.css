@@ -31,6 +31,11 @@ section h1 {
   color: #dc0800;
 }
 
+.header_link {
+  font-size: 0.6em; 
+  padding-left: 10px;  
+}
+
 /* Links */
 
 a {
@@ -141,6 +146,10 @@ nav ul li a:hover {
   padding:5px 10px;
 } */
 
+.actions {
+    padding-top: 10px;
+}
+
 .action_round {
   -moz-border-radius:    10px;
   -webkit-border-radius: 10px;
@@ -149,7 +158,7 @@ nav ul li a:hover {
   background: transparent url(../images/button.png);
   border: 1px solid #ddd;
   border-top: 0;
-  padding:5px 10px;  
+  padding:5px 10px;
 }
 /* Round corners */
 
@@ -176,17 +185,26 @@ nav ul li a:hover {
   margin-bottom: 0;
 }
 
-/*td.main {
-  width: 70%;
+td.two_col {
+  width: 50%;
+  padding: 1em;
+  vertical-align: top;  
+}
+
+td.main {
+  width: 60%;
   padding: 1em;
 }
 
 td.sidebar {
-  width: 30%;
+  width: 40%;
   padding: 1em;
-  vertical-align: top;
-  background: #ffc;
-} */
+  /*vertical-align: top;*/
+  font-size: 0.9em;
+  color: #666666;
+  background: transparent url(../images/sea-bg.png);
+  border: 1px solid #ddd;
+}
 
 .profile img.gravatar {
   border: 1px solid #999;

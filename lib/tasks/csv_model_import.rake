@@ -6,8 +6,10 @@
     header = lines.shift.strip
     keys = header.split(',')
     lines.each do |line|
+      
       params = {}
       values = line.strip.split(',')
+      
       keys.each_with_index do |key,i|
         params[key] = values[i]
       end

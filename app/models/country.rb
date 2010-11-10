@@ -15,6 +15,7 @@
 
 class Country < ActiveRecord::Base
   
+  
   attr_accessible :name, :country_code, :currency_code, :phone_code, :region_id
   
   belongs_to    :region
@@ -35,5 +36,39 @@ class Country < ActiveRecord::Base
   validates :region_id,       :presence     => true,
                               :numericality => true
   
+  
+  def self.currency_list
+    @currencies = Money::Currency::TABLE.sort_by { |k,v| v[:name] }
+    a = []
+    @currencies.each do |k,v|
+      a << ["#{v[:name]} (#{v[:iso_code]})", "#{v[:iso_code]}"]
+    end
+    return a
+  end
+  
+  def currency_name
+    currency = Money.new(1000, self.currency_code).currency
+    currency.name
+  end
+
+  def currency_symbol
+    currency = Money.new(1000, self.currency_code).currency
+    unless currency.symbol.nil?
+      currency.symbol
+    else
+      currency.iso_code
+    end
+  end
+  
+  def exchange_rate
+    require 'money/bank/google_currency'
+    @code = self.currency_code
+    Money.default_bank = Money::Bank::GoogleCurrency.new
+    currency = Money.new(1000, @code).currency
+    n = 1.to_money(@code)
+    n.exchange_to(:USD)
+  rescue
+    "Unknown"
+  end
   
 end

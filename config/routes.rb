@@ -16,6 +16,7 @@ TTraining::Application.routes.draw do
   resources :countries
   
   
+  
   match '/signup',          :to => 'users#new'
   match '/login',           :to => 'sessions#new'
   match '/logout',          :to => 'sessions#destroy'

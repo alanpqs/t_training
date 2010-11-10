@@ -49,25 +49,4 @@ class RegionsController < ApplicationController
     redirect_to(regions_path)
   end
 
-  private
-  
-    def authenticate
-      deny_access unless logged_in?
-    end
-    
-    def legality_check
-      if logged_in?
-        legality_warning unless current_user.admin?
-      else
-        legality_warning
-      end
-    end
-    
-    def admin_user
-      unless current_user.admin?
-        flash[:notice]="Permission denied"
-        redirect_to(root_path)
-      end
-    end
-    
 end

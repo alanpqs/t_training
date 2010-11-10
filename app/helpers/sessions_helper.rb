@@ -35,6 +35,13 @@ module SessionsHelper
     redirect_to root_path, :notice => "Permission denied"
   end
   
+  def admin_user
+    unless current_user.admin?
+      flash[:notice]="Permission denied"
+      redirect_to(root_path)
+    end
+  end
+  
   def store_location
     session[:return_to] = request.fullpath
   end
@@ -55,5 +62,17 @@ module SessionsHelper
     
     def remember_token
       cookies.signed[:remember_token] || [nil, nil]
+    end
+    
+    def authenticate
+      deny_access unless logged_in?
+    end
+    
+    def legality_check
+      if logged_in?
+        legality_warning unless current_user.admin?
+      else
+        legality_warning
+      end
     end
 end
