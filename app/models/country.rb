@@ -53,11 +53,11 @@ class Country < ActiveRecord::Base
 
   def currency_symbol
     currency = Money.new(1000, self.currency_code).currency
-    unless currency.symbol.nil?
-      currency.symbol
-    else
-      currency.iso_code
-    end
+    currency.symbol
+    #  currency.iso_code
+    #else
+    #  currency.symbol
+    #end
   end
   
   def exchange_rate

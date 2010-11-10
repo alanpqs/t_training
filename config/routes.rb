@@ -12,7 +12,6 @@ TTraining::Application.routes.draw do
   resources :users
   resources :sessions,    :only => [:new, :create, :destroy]
   resources :regions
-  resources :currencies,  :only => :index
   resources :countries
   
   
