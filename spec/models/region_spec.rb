@@ -33,4 +33,5 @@ describe Region do
     duplicate_region = Region.new(@attr)
     duplicate_region.should_not be_valid
   end
+  
 end

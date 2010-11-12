@@ -31,11 +31,14 @@
   </div>
   <div class="field">
     <%= f.label :region_id %><br />
-    <%= collection_select(:country, :region_id, Region.all, :id, :region, :prompt => true) %>
+    <%= collection_select(:country, :region_id, @regions, :id, :region, :prompt => true) %>
   </div>
   <% unless @title == @country.name %>
     <div class="actions">
       <%= submit_tag @tag_name, :class => "action_round" %>
+    </div>
+    <div class="redirects">
+      <%= link_to "(drop changes)", country_path unless @title == "New country"%>
     </div>
   <% end %> 
 <% end %>

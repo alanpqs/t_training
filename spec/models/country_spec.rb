@@ -28,7 +28,7 @@ describe Country do
   end
   
   it "should not accept an empty Phone_code field" do
-    no_phone_code = Country.new(@attr.merge(:phone_code => ""))
+    no_phone_code = Country.new(@attr.merge(:currency_code => "GBP", :phone_code => ""))
     no_phone_code.should_not be_valid
   end
   
@@ -54,10 +54,10 @@ describe Country do
     long_curr_code_country = Country.new(@attr.merge(:currency_code => long_curr_code))
     long_curr_code_country.should_not be_valid
   end
-  
+
   it "should reject a long Phone_code" do
     long_phone_code = "+355-356"
-    long_phone_code_country = Country.new(@attr.merge(:currency_code => long_phone_code))
+    long_phone_code_country = Country.new(@attr.merge(:phone_code => long_phone_code))
     long_phone_code_country.should_not be_valid
   end
   

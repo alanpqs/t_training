@@ -2,9 +2,14 @@
 <ul class="listing">
   <% @regions.each do |region| %>
     <li>
-      <%= link_to region.region, edit_region_path(region.id), :title => "Edit #{region.region}" %> | 
-      <small><%= link_to "delete", region, :method => :delete, :confirm => "You sure?",
-                                    :title => "Delete #{region.region}" %></small>
+      <%= link_to region.region, edit_region_path(region.id), :title => "Edit #{region.region}" %> 
+      <% unless region.has_countries? %>
+        | <small><%= link_to "delete", region, 
+                                        :method => :delete, 
+                                        :confirm => "Deleting #{region.region}. You sure?",
+                                        :title => "Delete #{region.region}" %>
+          </small>
+      <% end %>
     </li> 
   <% end %>
 </ul>

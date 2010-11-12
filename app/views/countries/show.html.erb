@@ -1,6 +1,6 @@
 <h1><%= 
   @title %>   
-  <span class="header_link"><%= link_to "(Edit details)", edit_country_path(@country.id) %></span>
+  <span class="header_link"><%= link_to "(edit details)", edit_country_path(@country.id) %></span>
 </h1>
 
 <table class="profile" summary = "Country profile">
@@ -14,7 +14,7 @@
         <strong>Currency</strong><br />
         <%= @country.currency_name %><br />
         Exchange-rate - <%= @country.currency_symbol %> to US$: 
-        <%= @country.exchange_rate %>
+        <span class="rate"><%= @country.exchange_rate %></span>
       </div>
       <div class="field">
         <strong>International dialling</strong><br />

@@ -1,8 +1,8 @@
 class CountriesController < ApplicationController
   
-  before_filter :authenticate,    :only   => [:index, :edit, :show]
+  before_filter :authenticate,    :only   => [:index, :new, :edit, :show, :destroy]
   before_filter :legality_check,  :only   => [:create, :update]
-  before_filter :admin_user,      :only   => [:index, :edit, :show]  
+  before_filter :admin_user,      :only   => [:index, :edit, :new, :show, :destroy]  
   
   def index
     @title = "Countries"
@@ -18,16 +18,18 @@ class CountriesController < ApplicationController
   def new
     @title = "New country"
     @country = Country.new
+    @regions = Region.find(:all, :order => "region")
     @tag_name = "Create"
   end
 
   def create
     @country = Country.new(params[:country])
     if @country.save
-      flash[:success] = "Country created."
-      redirect_to countries_path
+      flash[:success] = "New country created."
+      redirect_to @country
     else
       @title = "New country"
+      @regions = Region.find(:all, :order => "region")
       @tag_name = "Create"
       render 'new'
     end
@@ -35,6 +37,7 @@ class CountriesController < ApplicationController
 
   def edit
     @country = Country.find(params[:id])
+    @regions = Region.find(:all, :order => "region")
     @title = "Edit #{@country.name}"
     @tag_name = "Confirm changes"
     #@currencies = Money::Currency::TABLE.sort_by { |k,v| v[:iso_code] }
@@ -46,11 +49,12 @@ class CountriesController < ApplicationController
       flash[:success] = "#{@country.name} updated."
       redirect_to country_path
     else
-      if @country.name.nil?
+      if @country.name.empty?
         @title = "Edit country"
       else
         @title = "Edit #{@country.name}"
       end
+      @regions = Region.find(:all, :order => "region")
       @tag_name = "Confirm changes"
       render 'edit'
     end

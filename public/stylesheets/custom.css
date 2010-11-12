@@ -148,6 +148,7 @@ nav ul li a:hover {
 
 .actions {
     padding-top: 10px;
+    float:left;
 }
 
 .action_round {
@@ -159,6 +160,12 @@ nav ul li a:hover {
   border: 1px solid #ddd;
   border-top: 0;
   padding:5px 10px;
+}
+
+.redirects {
+  float:right; 
+  padding-top: 14px; 
+  padding-right:40px;  
 }
 /* Round corners */
 

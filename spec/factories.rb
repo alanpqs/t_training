@@ -10,13 +10,13 @@ Factory.sequence :email do |n|
 end
 
 Factory.define :region do |region|
-  region.region                 "NLP"
+  region.region                 "S America"
 end
 
 Factory.define :country do |country|
   country.name                  "ABC"
   country.country_code          "A"
-  country.currency_code         "A"
+  country.currency_code         "JPY"
   country.phone_code            "+1-999"
   country.association :region
 end

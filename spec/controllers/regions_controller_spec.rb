@@ -52,6 +52,39 @@ describe RegionsController do
           response.should have_selector("a",    :href     => "/regions/new",
                                                 :content  => "New region")
         end
+        
+        before(:each) do
+          @country_attr = { :name => "AAA", :country_code => "AAA", :currency_code => "USD",
+                          :phone_code => "+567", :region_id => 1 }
+        end
+        
+        it "should have a delete link if no countries belong to the region" do
+          Country.create!(@country_attr)
+          @regions = Region.all
+          @regions.each do |region|
+            c_count = Country.count(:conditions => ["region_id = ?", region.id])
+            if c_count == 0
+              get :index
+              response.should have_selector("a",  :href => "/regions/#{region.id}",
+                                                  :content => "delete")
+            end
+          end
+        end
+        
+        it "should not have a delete link if any countries belong to the region" do
+          Country.create!(@country_attr)
+          @regions = Region.all
+          @regions.each do |region|
+            c_count = Country.count(:conditions => ["region_id = ?", region.id])
+            if c_count > 0
+              get :index
+              response.should_not have_selector("a",  :href => "/regions/#{region.id}",
+                                                      :content => "delete")
+            end
+          end 
+        end
+        
+        
       end
     end
   end
@@ -165,6 +198,11 @@ describe RegionsController do
         end.should_not change(Region, :count)
       end
       
+      it "should display an error message" do
+          post :create, :region => @attr_blank
+          response.should have_selector("div#error_explanation", :content => "There were problems")
+      end
+      
       it "should have the right title" do
         post :create, :region => @attr_blank
         response.should have_selector("title", :content => "New region")
@@ -189,7 +227,7 @@ describe RegionsController do
         flash[:success].should =~ /Region created/i      
       end
       
-      it "should render the regions list" do
+      it "should redirect to the regions list" do
         post :create, :region => @attr_good
         response.should redirect_to(regions_path)
       end
@@ -355,24 +393,67 @@ describe RegionsController do
     describe "for logged-in admins" do
       
       before(:each) do
+        @attr2 = { :region => "Asia"}
+        @country_attr = { :name => "India", :country_code => "IND", :currency_code => "IRP",
+                          :phone_code => "+091", :region_id => 1 }
         test_log_in(Factory(:user, :email => "user@example.info", :admin => true))
       end
       
-      it "should be successful if the region is not associated with any country" do
+      describe "success" do
+      
+        it "should delete the region if it is not associated with any country" do
+          Region.create!(@attr2)
+          Country.create!(@country_attr)
+          @region2 = Region.find_by_region("Asia")
+  
+          lambda do  
+            delete :destroy, :id => @region2
+            response.should redirect_to(regions_path)
+          end.should change(Region, :count).by(-1)
+        end
         
-        #to be completed when Countries are included
+        it "should display a success message" do
+          Region.create!(@attr2)
+          Country.create!(@country_attr)
+          @region2 = Region.find_by_region("Asia")
+          delete :destroy, :id => @region2
+          flash[:success].should == "Asia deleted."
+        end
         
-        lambda do  
-          delete :destroy, :id => @region
+        it "should redirect to the region 'index'" do
+          Region.create!(@attr2)
+          Country.create!(@country_attr)
+          @region2 = Region.find_by_region("Asia")
+          delete :destroy, :id => @region2
           response.should redirect_to(regions_path)
-        end.should change(Region, :count).by(-1)
+        end
+        
       end
       
+      describe "failure" do
       
-      it "should be unsuccessful if the region is associated with any country" do
+        it "should not delete the region if it is associated with any country" do
+          Region.create!(@attr2)
+          Country.create!(@country_attr)
+          
+          lambda do  
+            delete :destroy, :id => @region
+          end.should_not change(Region, :count)
+        end
         
-        #to be completed when Countries are included
+        it "should display a failure notice" do
+          Region.create!(@attr2)
+          Country.create!(@country_attr)
+          delete :destroy, :id => @region
+          flash[:error].should == "Cannot delete #{@region.region} - linked to countries."
+        end
         
+        it "should redirect to the region 'index'" do
+          Region.create!(@attr2)
+          Country.create!(@country_attr)
+          delete :destroy, :id => @region
+          response.should redirect_to(regions_path)
+        end
       end
     end
   end

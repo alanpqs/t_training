@@ -44,8 +44,14 @@ class RegionsController < ApplicationController
   end
   
   def destroy
-    Region.find(params[:id]).destroy
-    flash[:success] = "Region destroyed."
+    @region = Region.find(params[:id])
+    @name = @region.region
+    if @region.has_countries?
+      flash[:error] = "Cannot delete #{@name} - linked to countries."
+    else
+      @region.destroy
+      flash[:success] = "#{@name} deleted."
+    end
     redirect_to(regions_path)
   end
 
