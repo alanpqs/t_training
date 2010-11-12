@@ -46,6 +46,7 @@ GEM
       money (~> 3.1.5)
     gravatar_image_tag (0.1.0)
     i18n (0.4.1)
+    json (1.4.6)
     mail (2.2.7)
       activesupport (>= 2.3.6)
       mime-types
@@ -105,6 +106,7 @@ DEPENDENCIES
   faker (= 0.3.1)
   google_currency (= 1.0.2)
   gravatar_image_tag (= 0.1.0)
+  json
   money (= 3.1.5)
   rails (= 3.0.0)
   rspec (= 2.0.0.beta.18)
