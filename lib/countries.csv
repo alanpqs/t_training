@@ -52,7 +52,7 @@ Costa Rica,CRI,CRC,+506,5
 Cote d'Ivoire,CIV,XOF,+225,7
 Croatia,HRV,HRK,+385,3
 Cuba,CUB,CUP,+53,5
-Cyprus,CYP,CYP,+357,3
+Cyprus,CYP,EUR,+357,3
 Czech Republic,CZE,CZK,+420,3
 Denmark,DNK,DKK,+45,3
 Djibouti,DJI,DJF,+253,7
@@ -83,7 +83,7 @@ Grenada,GRD,XCD,+1-473,5
 Guadeloupe,GLP,EUR,+590,5
 Guam,GUM,USD,+1-671,5
 Guatemala,GTM,GTQ,+502,5
-Guernsey,GGY,GGP,+44,3
+Guernsey,GGY,GBP,+44,3
 Guinea,GIN,GNF,+224,7
 Guinea-Bissau,GNB,XOF,+245,7
 Guyana,GUY,GYD,+592,6
@@ -97,12 +97,12 @@ Indonesia,IDN,IDR,+62,1
 Iran,IRN,IRR,+98,2
 Iraq,IRQ,IQD,+964,2
 Ireland,IRL,EUR,+353,3
-Isle of Man,IMN,IMP,+44,3
+Isle of Man,IMN,GBP,+44,3
 Israel,ISR,ILS,+972,3
 Italy,ITA,EUR,+39,3
 Jamaica,JAM,JMD,+1-876,5
 Japan,JPN,JPY,+81,1
-Jersey,JEY,JEP,+44,3
+Jersey,JEY,GBP,+44,3
 Jordan,JOR,JOD,+962,2
 Kazakhstan,KAZ,KZT,+7,1
 Kenya,KEN,KES,+254,7

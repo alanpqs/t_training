@@ -20,7 +20,9 @@ class Country < ActiveRecord::Base
   
   belongs_to    :region
   
-  idd_regex = /[+]\d+([-])?\d+$/
+  has_many      :users
+  
+  idd_regex = /[+]\d+([-])?(\d+)?$/
   
   validates :name,            :presence     => true,
                               :length       => { :maximum => 35 },

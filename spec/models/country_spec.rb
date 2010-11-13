@@ -88,10 +88,10 @@ describe Country do
   end
   
   it "should accept valid international phone codes" do
-    country = %w[Abc Bcd]
-    phone = %w[+123 +123-45]
-    code = %w[ABC BCD]
-    seq = [0,1]
+    country = %w[Abc Bcd Efg]
+    phone = %w[+123 +123-45 +7]
+    code = %w[ABC BCD EFG]
+    seq = [0,1,2]
     seq.each do |n|
       valid_phone_code = Country.new(@attr.merge( :country => country[n], 
                                                   :country_code => code[n], :phone_code => phone[n]))
