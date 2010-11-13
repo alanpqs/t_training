@@ -82,9 +82,7 @@ describe RegionsController do
                                                       :content => "delete")
             end
           end 
-        end
-        
-        
+        end   
       end
     end
   end

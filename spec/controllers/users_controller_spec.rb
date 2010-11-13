@@ -131,6 +131,24 @@ describe UsersController do
       response.should have_selector("input[name = 'user[email]'][type='text']")
     end
     
+    it "should have an empty country select-box" do
+      get :new
+      response.should have_selector("select", :name => "country[name]",
+                                              :content => "")
+    end
+      
+    it "should have the correct options in the country select-box" do
+      @attr = { :name => "PQS", :country_code => "PQS", :currency_code => "USD",
+                :phone_code => "+1234", :region_id => 1 }
+      @country = Factory(:country)
+      Country.create!(@attr)
+      @countries = Country.find(all)
+      get :new
+      @countries.each do |c| 
+        response.should have_selector("option", :value => c)
+      end
+    end
+    
     it "should have a password field" do
       get :new
       response.should have_selector("input[name = 'user[password]'][type='password']")
