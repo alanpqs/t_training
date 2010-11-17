@@ -198,6 +198,13 @@ nav ul li a:hover {
 
 
 /* User show page */
+.mono { 
+  border: 1px solid gray;
+  background-color: ivory;
+    
+    
+}
+
 
 .profile {
   width: 100%;

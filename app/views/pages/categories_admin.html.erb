@@ -1,0 +1,38 @@
+<h1><%= @title %></h1>
+
+<p>Users can search for the training they want using a number of criteria - by keyword, by 
+    location, or by category.  For easier navigation, categories are further sub-divided into these 
+    five groupings:
+</p>
+
+<table class="mono">
+  <tr>
+    <td><%= link_to "Understanding the business",     categories_path(:id => 0) %></td>
+    <td><small>e.g. Banking, Healthcare, Construction</small></td>
+  </tr>
+  <tr>
+    <td><%= link_to "Getting better at the job",      categories_path(:id => 1) %></td>
+    <td><small>e.g. Accountancy, HR, Sales</small></td>
+  </tr>
+  <tr>
+    <td><%= link_to "Improving personal skills",  categories_path(:id => 2) %></td>
+    <td><small>e.g. English as a Foreign Language, Time Management, Programming</small></td>
+  </tr>
+  <tr>
+    <td><%= link_to "Understanding world issues",  categories_path(:id => 3) %></td>
+    <td><small>e.g. Environment, World Trade, Employment Issues</small></td>
+  </tr>
+  <tr>
+    <td><%= link_to "Having fun",                  categories_path(:id => 4) %></td>
+    <td><small>e.g. Playing Music, Fitness Training, Gardening</small></td>
+  </tr>
+</table>
+
+<p>Click on a group to see the current categories list, to add new categories, or to approve new
+    submissions from signed-up members.</p>
+    
+<p><small>(Vendors can propose new categories but these must be approved by an Admin before they will 
+    appear in the public listing.  Before approval, it's your job to check that the new category does 
+    not duplicate the meaning of an existing category and that it is spelt correctly.  Any additions 
+    made by an Admin are automatically approved.)</small></p>
+    

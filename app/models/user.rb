@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20101028112934
+# Schema version: 20101116103755
 #
 # Table name: users
 #
@@ -11,6 +11,7 @@
 #  encrypted_password :string(255)
 #  salt               :string(255)
 #  admin              :boolean
+#  country_id         :integer
 #
 
 class User < ActiveRecord::Base

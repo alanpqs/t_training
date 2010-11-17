@@ -1,5 +1,9 @@
 TTraining::Application.routes.draw do
 
+  get "categories/index"
+
+  get "categories/new"
+
   #get "countries/index"
   #get "countries/new"
   #get "countries/create"
@@ -13,20 +17,22 @@ TTraining::Application.routes.draw do
   resources :sessions,    :only => [:new, :create, :destroy]
   resources :regions
   resources :countries
+  resources :categories
   
   
   
-  match '/signup',          :to => 'users#new'
-  match '/login',           :to => 'sessions#new'
-  match '/logout',          :to => 'sessions#destroy'
-  match '/why_register',    :to => 'pages#why_register'
-  match '/about',           :to => 'pages#about'
-  match '/faqs',            :to => 'pages#faqs'
-  match '/find_training',   :to => 'pages#find_training'
-  match '/buyers',          :to => 'pages#buyers'
-  match '/sellers',         :to => 'pages#sellers'
-  match '/affiliates',      :to => 'pages#affiliates'
-  match '/terms',           :to => 'pages#terms'
+  match '/signup',            :to => 'users#new'
+  match '/login',             :to => 'sessions#new'
+  match '/logout',            :to => 'sessions#destroy'
+  match '/why_register',      :to => 'pages#why_register'
+  match '/about',             :to => 'pages#about'
+  match '/faqs',              :to => 'pages#faqs'
+  match '/find_training',     :to => 'pages#find_training'
+  match '/buyers',            :to => 'pages#buyers'
+  match '/sellers',           :to => 'pages#sellers'
+  match '/affiliates',        :to => 'pages#affiliates'
+  match '/terms',             :to => 'pages#terms'
+  match '/categories_admin',  :to => 'pages#categories_admin'
   
   root :to => 'pages#home'
   
