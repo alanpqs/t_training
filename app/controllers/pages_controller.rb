@@ -5,6 +5,11 @@ class PagesController < ApplicationController
   
   def home
     @title = "Home"
+    unless current_user.nil?
+      if current_user.admin?
+        redirect_to admin_home_path
+      end
+    end
   end
 
   def why_register

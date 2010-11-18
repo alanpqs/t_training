@@ -8,14 +8,14 @@ describe "AdminLinks" do
   end
     
   it "should have a users link" do
-    visit root_path
-    response.should have_selector("a",  :href => users_path,
+    visit admin_home_path
+    response.should have_selector("a",  :href => admin_users_path,
                                           :content => "Users")  
   end
     
   it "should have a Regions link" do
-    visit root_path
-    response.should have_selector("a",  :href => regions_path,
+    visit admin_home_path
+    response.should have_selector("a",  :href => admin_regions_path,
                                           :content => "Regions")
   end
     

@@ -8,16 +8,38 @@ describe PagesController do
   end
 
   describe "GET 'home'" do
-    it "should be successful" do
-      get 'home'
-      response.should be_success
-    end
     
-    it "should have the right title" do
-      get 'home'
-      response.should have_selector("title",
+    describe "for non-logged-in users" do
+      
+      it "should be successful" do
+        get 'home'
+        response.should be_success
+      end
+    
+      it "should have the right title" do
+        get 'home'
+        response.should have_selector("title",
               :content => @base_title + " | Home"
-      )
+        )
+      end
+    end
+  
+    describe "for logged-in admins" do
+      
+      before(:each) do
+        user = Factory(:user, :admin => true)
+        test_log_in(user)
+      end
+      
+      it "should not be successful" do
+        get :home
+        response.should_not be_success
+      end
+      
+      it "should redirect to the admin home page" do
+        get :home
+        response.should redirect_to(admin_home_path)
+      end
     end
   end
 

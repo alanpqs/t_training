@@ -98,7 +98,7 @@ describe "Links for users logged in but not admins" do
     
   it "should not have a Regions link" do
     visit root_path
-    response.should_not have_selector("a",  :href => regions_path,
+    response.should_not have_selector("a",  :href => admin_regions_path,
                                             :content => "Regions")
   end
 

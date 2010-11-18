@@ -1,6 +1,7 @@
 require 'spec_helper'
 
-describe RegionsController do
+describe Admin::RegionsController do
+
   render_views
 
   describe "GET 'index'" do
@@ -49,7 +50,7 @@ describe RegionsController do
         
         it "should have a 'New region' link" do
           get :index
-          response.should have_selector("a",    :href     => "/regions/new",
+          response.should have_selector("a",    :href     => "/admin/regions/new",
                                                 :content  => "New region")
         end
         
@@ -65,7 +66,7 @@ describe RegionsController do
             c_count = Country.count(:conditions => ["region_id = ?", region.id])
             if c_count == 0
               get :index
-              response.should have_selector("a",  :href => "/regions/#{region.id}",
+              response.should have_selector("a",  :href => "/admin/regions/#{region.id}",
                                                   :content => "delete")
             end
           end
@@ -78,7 +79,7 @@ describe RegionsController do
             c_count = Country.count(:conditions => ["region_id = ?", region.id])
             if c_count > 0
               get :index
-              response.should_not have_selector("a",  :href => "/regions/#{region.id}",
+              response.should_not have_selector("a",  :href => "admin/regions/#{region.id}",
                                                       :content => "delete")
             end
           end 
@@ -176,7 +177,6 @@ describe RegionsController do
       get :new
       response.should have_selector("title", :content => "New region")
     end
-    
   end
   
   describe "POST 'create' for logged-in admin users" do
@@ -208,7 +208,7 @@ describe RegionsController do
       
       it "should redirect to the 'new' page" do
         post :create, :region => @attr_blank
-        response.should render_template("new")
+        response.should render_template("admin/regions/new")
       end
     end
     
@@ -227,7 +227,7 @@ describe RegionsController do
       
       it "should redirect to the regions list" do
         post :create, :region => @attr_good
-        response.should redirect_to(regions_path)
+        response.should redirect_to(admin_regions_path)
       end
     end
     
@@ -353,7 +353,7 @@ describe RegionsController do
       
         it "should redirect to the Region index page" do
           put :update, :id => @region, :region => @attr
-          response.should redirect_to(regions_path)
+          response.should redirect_to(admin_regions_path)
         end
       
         it "should have a flash message" do
@@ -406,7 +406,7 @@ describe RegionsController do
   
           lambda do  
             delete :destroy, :id => @region2
-            response.should redirect_to(regions_path)
+            response.should redirect_to(admin_regions_path)
           end.should change(Region, :count).by(-1)
         end
         
@@ -423,7 +423,7 @@ describe RegionsController do
           Country.create!(@country_attr)
           @region2 = Region.find_by_region("Asia")
           delete :destroy, :id => @region2
-          response.should redirect_to(regions_path)
+          response.should redirect_to(admin_regions_path)
         end
         
       end
@@ -450,7 +450,7 @@ describe RegionsController do
           Region.create!(@attr2)
           Country.create!(@country_attr)
           delete :destroy, :id => @region
-          response.should redirect_to(regions_path)
+          response.should redirect_to(admin_regions_path)
         end
       end
     end

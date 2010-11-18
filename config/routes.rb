@@ -1,5 +1,13 @@
 TTraining::Application.routes.draw do
 
+  get "users/index"
+
+  get "regions/index"
+
+  get "regions/new"
+
+  get "pages/home"
+
   get "categories/index"
 
   get "categories/new"
@@ -13,12 +21,16 @@ TTraining::Application.routes.draw do
   #get "currencies/index"
   #get "currencies/show"
 
-  resources :users
+
+  namespace "admin" do
+    resources :regions, :countries, :categories
+    resources :users,     :only => [:index, :show, :edit, :update, :destroy]
+  end
+  
+  resources :users,       :except => :index
   resources :sessions,    :only => [:new, :create, :destroy]
-  resources :regions
   resources :countries
   resources :categories
-  
   
   
   match '/signup',            :to => 'users#new'
@@ -33,7 +45,8 @@ TTraining::Application.routes.draw do
   match '/affiliates',        :to => 'pages#affiliates'
   match '/terms',             :to => 'pages#terms'
   match '/categories_admin',  :to => 'pages#categories_admin'
-  
+  match '/admin_home',        :to => 'admin/pages#home'
+
   root :to => 'pages#home'
   
   #get "pages/home"

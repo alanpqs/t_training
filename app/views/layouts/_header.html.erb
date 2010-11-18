@@ -2,13 +2,18 @@
   <%= link_to logo, root_path %>
   <nav class = "round">
     <ul>
-      <li><%= link_to "Home", root_path %></li>
       <% if logged_in? %>
-        <li><%= link_to "Users", users_path if current_user.admin? %></li>
+        <% if current_user.admin? %>
+          <li><%= link_to "Home", admin_home_path %></li>
+          <li><%= link_to "Users", admin_users_path %></li>
+        <% else %>
+          <li><%= link_to "Home", root_path %></li>
+        <% end %>
         <li><%= link_to "Profile", current_user %></li>
         <li><%= link_to "Settings", edit_user_path(current_user) %>
         <li><%= link_to "Log out", logout_path, :method => :delete %></li>
       <% else %>
+         <li><%= link_to "Home", root_path %></li>
          <li><%= link_to "Find training", find_training_path %></li>
          <li><%= link_to "Why register", why_register_path %></li>
          <li><%= link_to "About us", about_path %></li>

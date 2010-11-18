@@ -1,4 +1,4 @@
-class RegionsController < ApplicationController
+class Admin::RegionsController < ApplicationController
   
   before_filter :authenticate,    :except => [:create, :update]
   before_filter :legality_check,  :only   => [:create, :update]
@@ -19,10 +19,11 @@ class RegionsController < ApplicationController
     @region = Region.new(params[:region])
     if @region.save
       flash[:success] = "Region created."
-      redirect_to regions_path
+      redirect_to "/admin/regions"
     else
       @title = "New region"
-      render 'new'
+      @tag_name = "Create"
+      render "new"
     end
   end
   
@@ -36,7 +37,7 @@ class RegionsController < ApplicationController
     @region = Region.find(params[:id])
     if @region.update_attributes(params[:region])
       flash[:success] = "Region updated."
-      redirect_to regions_path
+      redirect_to admin_regions_path
     else
       @title = "Edit region"
       render 'edit'
@@ -52,7 +53,7 @@ class RegionsController < ApplicationController
       @region.destroy
       flash[:success] = "#{@name} deleted."
     end
-    redirect_to(regions_path)
+    redirect_to(admin_regions_path)
   end
 
 end
