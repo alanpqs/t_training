@@ -311,6 +311,15 @@ describe Admin::CountriesController do
         response.should be_success
       end
       
+      it "should not fail if the currency selected is no longer in the 'Money' list" do
+        @region = Factory(:region, :region => "PQS")
+        @attr = { :name => "Bbb", :country_code => "BBB", :currency_code => "IMP", 
+                :phone_code => "+57", :region_id => @region.id }
+        @no_currcode_country = Factory(:country, @attr)
+        get :show, :id => @no_currcode_country
+        response.should be_success
+      end
+      
       it "should find the right country" do
         get :show, :id => @country
         assigns(:country).should == @country

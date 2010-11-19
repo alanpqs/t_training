@@ -51,6 +51,8 @@ class Country < ActiveRecord::Base
   def currency_name
     currency = Money.new(1000, self.currency_code).currency
     currency.name
+  rescue
+    "Currency code has changed"
   end
 
   def currency_symbol
@@ -60,6 +62,8 @@ class Country < ActiveRecord::Base
     #else
     #  currency.symbol
     #end
+  rescue
+    "None"
   end
   
   def exchange_rate
