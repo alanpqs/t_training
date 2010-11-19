@@ -1,4 +1,4 @@
-<%= form_for(@country) do |f| %>
+<%= form_for [:admin, @country] do |f| %>
   <%= render 'shared/error_messages', :object => f.object %>
   <div class="field">
     <%= f.label :name %><br />
@@ -38,7 +38,7 @@
       <%= submit_tag @tag_name, :class => "action_round" %>
     </div>
     <div class="redirects">
-      <%= link_to "(drop changes)", country_path unless @title == "New country"%>
+      <%= link_to "(drop changes)", admin_country_path(@country) unless @title == "New country"%>
     </div>
   <% end %> 
 <% end %>

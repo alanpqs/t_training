@@ -1,4 +1,4 @@
-class CountriesController < ApplicationController
+class Admin::CountriesController < ApplicationController
   
   before_filter :authenticate,    :only   => [:index, :new, :edit, :show, :destroy]
   before_filter :legality_check,  :only   => [:create, :update]
@@ -26,7 +26,7 @@ class CountriesController < ApplicationController
     @country = Country.new(params[:country])
     if @country.save
       flash[:success] = "New country created."
-      redirect_to @country
+      redirect_to admin_country_path(@country)
     else
       @title = "New country"
       @regions = Region.find(:all, :order => "region")
@@ -47,7 +47,7 @@ class CountriesController < ApplicationController
     @country = Country.find(params[:id])
     if @country.update_attributes(params[:country])
       flash[:success] = "#{@country.name} updated."
-      redirect_to country_path
+      redirect_to admin_country_path(@country)
     else
       if @country.name.empty?
         @title = "Edit country"
@@ -56,7 +56,7 @@ class CountriesController < ApplicationController
       end
       @regions = Region.find(:all, :order => "region")
       @tag_name = "Confirm changes"
-      render 'edit'
+      render "edit"
     end
   end
 
@@ -65,7 +65,7 @@ class CountriesController < ApplicationController
     @country_name = @country.name
     @country.destroy
     flash[:success] = "#{@country_name} deleted."
-    redirect_to(countries_path)
+    redirect_to(admin_countries_path)
   end
 
 end

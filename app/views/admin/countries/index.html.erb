@@ -11,13 +11,13 @@
   </tr>
   <% @countries.each do |country| %>
   <tr>
-    <td><%= link_to country.name, country_path(country.id),
+    <td><%= link_to country.name, admin_country_path(country),
                 :title => "Display #{country.name}" %></td>
     <td><%= country.country_code %></td>
     <td><%= country.currency_code %></td>
     <td><%= country.phone_code %></td>
     <td><%= country.region.region %></td>
-    <td><small><%= link_to "delete", country,  :method => :delete,
+    <td><small><%= link_to "delete", admin_country_path(country),  :method => :delete,
                                         :confirm => "You sure?",
                                         :title => "Delete #{country.name}" %>  </small></td> 
   </tr>
@@ -25,5 +25,5 @@
 </table>
 <%= will_paginate %>
 <div class="actions">
-  <%= link_to 'New country', new_country_path, :class => "action_round" %> 
+  <%= link_to 'New country', new_admin_country_path, :class => "action_round" %> 
 </div>

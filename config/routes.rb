@@ -1,5 +1,7 @@
 TTraining::Application.routes.draw do
 
+  get "countries/index"
+
   get "users/index"
 
   get "regions/index"

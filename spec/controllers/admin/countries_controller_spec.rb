@@ -1,49 +1,231 @@
 require 'spec_helper'
 
-describe CountriesController do
+describe Admin::CountriesController do
 
   render_views
   
-  
-  
-  describe "GET 'index'" do
+  describe "for non-logged-in users" do
     
-    describe "for non-logged-in users" do
+    before(:each) do
+      @country = Factory(:country)
+      @attr = { :name => "Foo", :country_code => "FOO", :currency_code => "FOP",
+                :phone_code => "1-234", :region => 1
+      }
+    end
+    
+    describe "GET 'index'" do
     
       it "should deny access" do
         get "index"
         response.should redirect_to(login_path)
       end
-      
     end
+    
+    describe "GET 'show'" do
       
-    describe "for logged-in non-admins" do
-      
-      before(:each) do
-        @user = test_log_in(Factory(:user))
-        @region = Factory(:region)
-        @country = Factory(:country,  :region => @region)
+      it "should deny access to the 'show' page" do
+        get :show, :id => @country
+        response.should_not be_success
       end
+      
+      it "should redirect to the login page" do
+        get :show, :id => @country
+        response.should redirect_to(login_path)
+      end 
+    end 
+  
+    describe "GET 'new'" do
     
       it "should not be successful" do
-        get :index
+        get :new
+        response.should_not be_success
+      end
+      
+      it "should redirect to the login page" do
+        get :new
+        response.should redirect_to(login_path)
+      end  
+    end
+    
+    describe "POST 'create'" do
+     
+      it "should not allow non-logged in users to create a new country" do
+        lambda do
+          post :create, :country => @attr
+        end.should_not change(Country, :count)
+      end
+      
+      it "should give non-logged in users a 'Permission denied' notice" do
+        post :create, :country => @attr
+        flash[:notice].should =~ /Permission denied/i
+      end
+    end
+    
+    describe "GET 'edit'" do
+      
+      it "should not be possible to access the 'edit' form" do
+        get :edit, :id => @country
+        response.should_not be_success
+      end
+      
+      it "should redirect to the log-in form" do
+        get :edit, :id => @country
+        response.should redirect_to(login_path)
+      end
+    end
+    
+    describe "PUT 'update'" do
+    
+      it "should redirect to the root path if they try to update Country" do
+        put :update, :id => @country, :country => @attr
         response.should redirect_to(root_path)
       end
       
-    end
+      it "should not change the existing Country attributes" do
+        put :update, :id => @country, :country => @attr
+        @country.reload
+        @country.name.should_not == @attr[:name]
+      end
       
-    describe "for logged-in admins" do  
+    end
+    
+    describe "DELETE 'destroy'" do
+    
+      it "should redirect them to the root-path" do
+        delete :destroy, :id => @country 
+        response.should redirect_to(login_path)
+      end
+      
+      it "should not change the number of Country records" do
+        lambda do
+          delete :destroy, :id => @country 
+        end.should_not change(Country, :count)
+      end 
+    end
+  end
+  
+  describe "for logged-in non-admins" do
+    
+    before(:each) do
+      @user = Factory(:user)
+      @country = Factory(:country)
+      @attr = { :name => "Foo", :country_code => "FOO", :currency_code => "FOP",
+                :phone_code => "1-234", :region => 1
+      }
+      test_log_in(@user)
+    end
+    
+    describe "GET 'index'" do
+    
+      it "should deny access" do
+        get "index"
+        response.should redirect_to(root_path)
+      end
+    end
+    
+    describe "GET 'show'" do
+      
+      it "should deny access to the 'show' page" do
+        get :show, :id => @country
+        response.should_not be_success
+      end
+      
+      it "should redirect to the login page" do
+        get :show, :id => @country
+        response.should redirect_to(root_path)
+      end 
+    end 
+  
+    describe "GET 'new'" do
+    
+      it "should not be successful" do
+        get :new
+        response.should_not be_success
+      end
+      
+      it "should redirect to the login page" do
+        get :new
+        response.should redirect_to(root_path)
+      end  
+    end
+    
+    describe "POST 'create'" do
+     
+      it "should not allow non-logged in users to create a new country" do
+        lambda do
+          post :create, :country => @attr
+        end.should_not change(Country, :count)
+      end
+      
+      it "should give non-logged in users a 'Permission denied' notice" do
+        post :create, :country => @attr
+        flash[:notice].should =~ /Permission denied/i
+      end
+    end
+    
+    describe "GET 'edit'" do
+      
+      it "should not be possible to access the 'edit' form" do
+        get :edit, :id => @country
+        response.should_not be_success
+      end
+      
+      it "should redirect to the log-in form" do
+        get :edit, :id => @country
+        response.should redirect_to(root_path)
+      end
+    end
+    
+    describe "PUT 'update'" do
+    
+      it "should redirect to the root path if they try to update Country" do
+        put :update, :id => @country, :country => @attr
+        response.should redirect_to(root_path)
+      end
+      
+      it "should not change the existing Country attributes" do
+        put :update, :id => @country, :country => @attr
+        @country.reload
+        @country.name.should_not == @attr[:name]
+      end
+      
+    end
+    
+    describe "DELETE 'destroy'" do
+    
+      it "should redirect them to the root-path" do
+        delete :destroy, :id => @country 
+        response.should redirect_to(root_path)
+      end
+      
+      it "should not change the number of Country records" do
+        lambda do
+          delete :destroy, :id => @country 
+        end.should_not change(Country, :count)
+      end 
+    end
+    
+  end
+ 
+  describe "for logged-in admins" do
+    
+    before(:each) do
+      @user   =   Factory(:user, :admin => true)
+      @country =  Factory(:country)
+      @attr = { :name => "Foo", :country_code => "FOO", :currency_code => "FOP",
+                :phone_code => "1-234", :region => 1
+      }
+      
+      test_log_in(@user)
+    end
+    
+    describe "GET 'index'" do
       
       before(:each) do
-        @user = test_log_in(Factory(:user, :admin => true))
-        @region = Factory(:region)
-        @country = Factory(:country,  :region => @region)
-        second   = Factory(:country,  :name => "ZYZ", :country_code => "ZZZ", 
-                                      :region => @region)
-        third    = Factory(:country,  :name => "YZY", :country_code => "YYY",
-                                      :region => @region)
-        
-        @countries = [@country, second, third]
+        @region   = Factory(:region, :region => "ZYX")
+        @second   = Factory(:country, :name => "ZYZ", :country_code => "ZZZ", :region => @region )
+        @third    = Factory(:country, :name => "YZY", :country_code => "YYY", :region => @region )
+        @countries = [@country, @second, @third]
       end
       
       it "should be successful" do
@@ -64,10 +246,12 @@ describe CountriesController do
       end
       
       it "should have a Delete button for each country" do
+        
         #AMEND LATER - NO DELETION IF CONNECTED ELSEWHERE
+        
         get :index
         @countries[0..2].each do |country|
-          response.should have_selector("a",  :href => "/countries/#{country.id}",
+          response.should have_selector("a",  :href => "/admin/countries/#{country.id}",
                                               :content => "delete")
         end
       end
@@ -76,15 +260,14 @@ describe CountriesController do
         30.times do
           @countries << Factory(:country, :name => Factory.next(:name), 
                                 :country_code => Factory.next(:country_code),
-                                :region => @region
-          )
+                                :region => @region)
         end
         get :index
         response.should have_selector("div.pagination")
         response.should have_selector("span.disabled", :content => "Previous")
-        response.should have_selector("a",  :href => "/countries?page=2",
+        response.should have_selector("a",  :href => "/admin/countries?page=2",
                                             :content => "2")
-        response.should have_selector("a",  :href => "/countries?page=2",
+        response.should have_selector("a",  :href => "/admin/countries?page=2",
                                             :content => "Next")
       end
       
@@ -115,58 +298,13 @@ describe CountriesController do
       
       it "should have a 'New country' link" do
         get :index
-        response.should have_selector("a",   :href     => "/countries/new",
+        response.should have_selector("a",   :href     => "/admin/countries/new",
                                              :content  => "New country")
-      end
-    end   
-  end
-  
-  
-  
-  
-  describe "GET 'show'" do
-    
-    before(:each) do   
-      @country  = Factory(:country)
+      end     
+      
     end
     
-    describe "for non-logged-in users" do
-      
-      it "should deny access to the 'show' page" do
-        get :show, :id => @country
-        response.should_not be_success
-      end
-      
-      it "should redirect to the login page" do
-        get :show, :id => @country
-        response.should redirect_to(login_path)
-      end 
-    end
-    
-    describe "for logged-in non-admins" do
-      
-      before(:each) do
-        @user = Factory(:user)
-        test_log_in(@user)
-      end
-      
-      it "should deny access to the 'show' page" do
-        get :show, :id => @country
-        response.should_not be_success
-      end
-      
-      it "should redirect to the root-path" do
-        get :show, :id => @country
-        response.should redirect_to(root_path)
-      end 
-    end
-    
-    describe "for logged-in admins" do
-      
-      before(:each) do
-        @admin = Factory(:user, :admin => true)
-        test_log_in(@admin)
-      end
+    describe "GET 'show'" do
       
       it "should successfully display the 'show' page" do
         get :show, :id => @country
@@ -190,7 +328,7 @@ describe CountriesController do
       
       it "should have a link to the Country 'edit' page" do
         get :show, :id => @country
-        response.should have_selector("a",    :href     => edit_country_path,
+        response.should have_selector("a",    :href     => edit_admin_country_path(@country),
                                               :content  => "(edit details)")
       end
       
@@ -202,51 +340,9 @@ describe CountriesController do
         get :show, :id => @country
         response.should have_selector("span.rate",  :content => "Unknown")
       end
-      
-    end
-  end
-  
-  
-  
-  
-  describe "GET 'new'" do
-    
-    describe "for non-logged-in users" do
-      it "should not be successful" do
-        get :new
-        response.should_not be_success
-      end
-      
-      it "should redirect to the login page" do
-        get :new
-        response.should redirect_to(login_path)
-      end
-      
     end
     
-    describe "for logged-in non-admin users" do
-      
-      before(:each) do
-        test_log_in(Factory(:user))
-      end
-      
-      it "should not be successful" do
-        get :new
-        response.should_not be_success
-      end
-      
-      it "should redirect to the root-path" do
-        get :new
-        response.should redirect_to(root_path)
-      end
-      
-    end
-    
-    describe "for logged-in admins" do
-      
-      before(:each) do
-        test_log_in(Factory(:user, :admin => true))
-      end
+    describe "GET 'new'" do
       
       it "should be successful" do
         get :new
@@ -286,64 +382,15 @@ describe CountriesController do
         response.should_not have_selector("a", :content => "(drop changes)" )
       end
     end
-  
-  end
-  
-  
-  
-  
-  describe "POST 'create'" do
     
-    describe "for non-logged-in users" do
+    describe "POST 'create'" do
       
       before(:each) do
-        @region = Factory(:region)
-        @attr = { :name => "OOO", :country_code => "OOO", :currency_code => "EUR", 
-                  :phone_code => "+57", :region_id => @region.id }
-      end
-      
-      
-      it "should not allow non-logged in users to create a new country" do
-        lambda do
-          post :create, :country => @attr
-        end.should_not change(Country, :count)
-      end
-      
-      it "should give non-logged in users a 'Permission denied' notice" do
-        post :create, :country => @attr
-        flash[:notice].should =~ /Permission denied/i
-      end
-    end
-    
-    describe "for logged-in non-admins" do
-     
-      before(:each) do
-        @user = Factory(:user)
-        test_log_in(@user)
-      end
-      
-      it "should not allow logged-in non admins to create a new country" do
-        lambda do
-          post :create, :country => @attr
-        end.should_not change(Country, :count)
-      end
-      
-      it "should give logged in non-admins a 'Permission denied' notice" do
-        post :create, :country => @attr
-        flash[:notice].should =~ /Permission denied/i
-      end
-    end
-    
-    describe "for logged-in admins" do
-      
-      before(:each) do
-        @region = Factory(:region)
+        @region = Factory(:region, :region => "MNM")
         @attr = { :name => "PPP", :country_code => "PPP", :currency_code => "EUR", 
                 :phone_code => "+57", :region_id => @region.id }
         @attr_blank = { :name => "", :country_code => "", :currency_code => "EUR", 
                 :phone_code => "57", :region_id => @region.id }    
-        @user = Factory(:user, :admin => true)
-        test_log_in(@user)
       end
       
       describe "successfully create country" do
@@ -360,7 +407,7 @@ describe CountriesController do
         
         it "should redirect to the Country 'show' page" do
           post :create, :country => @attr
-          response.should redirect_to(country_path(assigns(:country)))
+          response.should redirect_to(admin_country_path(assigns(:country)))
         end
       end
       
@@ -384,59 +431,12 @@ describe CountriesController do
       
         it "should return to the 'new' page" do
           post :create, :country => @attr_blank
-          response.should render_template("new")
+          response.should render_template("admin/countries/new")
         end
       end
     end
-  end
-  
-  
-  
-  
-  describe "GET 'edit'" do
-  
-    before(:each) do
-      @country = Factory(:country)
-    end
     
-    describe "for non-logged-in users" do
-      
-      it "should not be possible to access the 'edit' form" do
-        get :edit, :id => @country
-        response.should_not be_success
-      end
-      
-      it "should redirect to the log-in form" do
-        get :edit, :id => @country
-        response.should redirect_to(login_path)
-      end
-    end
-    
-    describe "for logged-in non-admins" do
-      
-      before(:each) do
-        @user = Factory(:user)
-        test_log_in(@user)
-      end
-      
-      it "should not be possible to access the 'edit' form" do
-        get :edit, :id => @country
-        response.should_not be_success
-      end
-      
-      it "should redirect to the log-in form" do
-        get :edit, :id => @country
-        response.should redirect_to(root_path)
-      end
-      
-    end
-      
-    describe "for logged-in admins" do  
-      
-      before(:each) do
-        admin = Factory(:user, :admin => true)
-        test_log_in(admin)
-      end
+    describe "GET 'edit'" do
       
       it "should be successful" do
         get :edit, :id => @country
@@ -484,66 +484,21 @@ describe CountriesController do
       
       it "should have a 'Drop changes' link to the Country 'show' form" do
         get :edit, :id => @country
-        response.should have_selector("a",    :href => country_path,
+        response.should have_selector("a",    :href => admin_country_path(@country),
                                               :content => "(drop changes)" )
       end
     end
-  end
-
-
-
-
-  describe "PUT 'update'" do
     
-    before(:each) do
-      @country = Factory(:country)
-      @valid_attr = { :name => "Woolla", :country_code => "WOO", :currency_code => "USD",
-                      :phone_code => "+12345", :region_id => 1 }
-    end
-    
-    describe "for non-logged-in users" do
-    
-      it "should redirect to the root path if they try to update Country" do
-        put :update, :id => @country, :country => @valid_attr
-        response.should redirect_to(root_path)
-      end
-      
-      it "should not change the existing Country attributes" do
-        put :update, :id => @country, :country => @valid_attr
-        @country.reload
-        @country.name.should_not == "Woolla"
-      end
-      
-    end
-    
-    describe "for logged-in non-admin users" do
+    describe "PUT 'update'" do
       
       before(:each) do
-        @user = Factory(:user)
-        test_log_in(@user)
-      end
-      
-      it "should redirect to the root path if they try to update Country" do
-        put :update, :id => @country, :country => @valid_attr
-        response.should redirect_to(root_path)
-      end
-      
-      it "should not change the existing Country attributes" do
-        put :update, :id => @country, :country => @valid_attr
-        @country.reload
-        @country.name.should_not == "Woolla"
-      end
-    end
-    
-    describe "for logged-in admin users" do
-      
-      before(:each) do
+        @region = Factory(:region, :region => "Bif")
+        @valid_attr = { :name => "Baz", :country_code => "BAZ", :currency_code => "USD",
+                      :phone_code => "+12345", :region_id => @region.id }
         @bad_attr =   { :name => "", :country_code => "", :currency_code => "",
-                        :phone_code => "123", :region_code => 1 }
+                        :phone_code => "123", :region_code => @region.id }
         @bad_attr2 =  { :name => "Bad", :country_code => "", :currency_code => "",
-                        :phone_code => "123", :region_code => 1 }
-        @admin = Factory(:user, :admin => true)
-        test_log_in(@admin)
+                        :phone_code => "123", :region_code => @region.id }
       end
       
       describe "success" do
@@ -564,7 +519,7 @@ describe CountriesController do
         
         it "should redirect to the 'show' page" do
           put :update, :id => @country, :country => @valid_attr
-          response.should redirect_to country_path
+          response.should redirect_to admin_country_path(@country)
         end
       end
       
@@ -580,7 +535,7 @@ describe CountriesController do
         
         it "should render the 'edit' template" do
           put :update, :id => @country, :country => @bad_attr
-          response.should render_template("edit")
+          response.should render_template("admin/countries/edit")
         end
         
         it "should give an error message" do
@@ -600,63 +555,8 @@ describe CountriesController do
         end
       end
     end
-  end
-
-
-
-
-  describe "DELETE 'destroy'" do
     
-    before(:each) do 
-      @country = Factory(:country)
-    end
-    
-    describe "for non-logged-in users" do
-    
-      it "should redirect them to the root-path" do
-        delete :destroy, :id => @country 
-        response.should redirect_to(login_path)
-      end
-      
-      it "should not change the number of Country records" do
-        lambda do
-          delete :destroy, :id => @country 
-        end.should_not change(Country, :count)
-      end
-        
-    end
-    
-    describe "for logged-in non-admin users" do
-      
-      before(:each) do
-        @user = Factory(:user)
-        test_log_in(@user)
-      end
-      
-      it "should redirect them to the root-path" do
-        delete :destroy, :id => @country 
-        response.should redirect_to(root_path)
-      end
-      
-      it "should give them a warning message" do
-        delete :destroy, :id => @country
-        flash[:notice].should =~ /Permission denied/i 
-      end
-      
-      it "should not change the number of Country records" do
-        lambda do
-          delete :destroy, :id => @country 
-        end.should_not change(Country, :count)
-      end
-      
-    end
-    
-    describe "for logged-in admin users" do
-      
-      before(:each) do
-        @admin = Factory(:user, :admin => true)
-        test_log_in(@admin)
-      end
+    describe "DELETE 'destroy'" do
       
       it "should decrease the number of Country records by one" do
         lambda do
@@ -675,7 +575,7 @@ describe CountriesController do
       
       it "should redirect to the Country 'index' list" do
         delete :destroy, :id => @country 
-        response.should redirect_to(countries_path)
+        response.should redirect_to(admin_countries_path)
       end
       
       it "should display the correct success message" do 
