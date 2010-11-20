@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
   attr_accessible :name, :email, :password, :password_confirmation
   
   belongs_to  :country
+  has_many    :categories
   
   validates :name,      :presence     => true,
                         :length       => { :maximum => 50 }

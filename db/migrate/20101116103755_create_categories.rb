@@ -4,6 +4,7 @@ class CreateCategories < ActiveRecord::Migration
       t.string :category
       t.integer :aim
       t.boolean :authorized, :default => 0
+      t.references :user
 
       t.timestamps
     end

@@ -46,5 +46,6 @@ class PagesController < ApplicationController
   
   def categories_admin
     @title = "Training categories"
+    @topic = Category::AIM_TYPES
   end
 end

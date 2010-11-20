@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(:version => 20101116103755) do
     t.string   "category"
     t.integer  "aim"
     t.boolean  "authorized", :default => false
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -1,2 +1,7 @@
-<h1>Admin::Categories#index</h1>
+<h1><%= @title %></h1>
 <p>Find me in app/views/admin/categories/index.html.erb</p>
+
+<div class="actions">
+  <%= link_to "New category - #{@topic} grouping", new_admin_category_path(:id => @topic), 
+                            :class => "action_round" %> 
+</div>

@@ -1,19 +1,12 @@
 TTraining::Application.routes.draw do
 
-  get "countries/index"
-
-  get "users/index"
-
-  get "regions/index"
-
-  get "regions/new"
-
-  get "pages/home"
-
-  get "categories/index"
-
-  get "categories/new"
-
+  #get "countries/index"
+  #get "users/index"
+  #get "regions/index"
+  #get "regions/new"
+  #get "pages/home"
+  #get "categories/index"
+  #get "categories/new"
   #get "countries/index"
   #get "countries/new"
   #get "countries/create"
