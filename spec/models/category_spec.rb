@@ -3,7 +3,10 @@ require 'spec_helper'
 describe Category do
   
   before(:each) do
-    @attr = { :category => "Oil Gas and Energy", :aim => 0, :authorized => 0 }
+    @user = Factory(:user)
+    @attr = { :category => "Oil Gas and Energy",  :target => "Business", 
+                                                  :authorized => 0, 
+                                                  :user_id => @user.id }
   end
     
   it "should create an instance given valid attributes" do
@@ -41,13 +44,23 @@ describe Category do
     dup_topunct_category.should_not be_valid   
   end
    
-  it "should only accept an integer in the range 0-4 in the 'aim' field" do
-    incorrect_aim_cat = Category.new(@attr.merge(:aim => 5))
-    incorrect_aim_cat.should_not be_valid
+  it "should accept a value from TARGET_TYPES in the 'target' field" do
+    correct_target_cat = Category.new(@attr.merge(:target => "World" ))
+    correct_target_cat.should be_valid
+  end
+  
+  it "should not accept a value in the 'target' field if it is not included in TARGET_TYPES" do
+    incorrect_target_cat = Category.new(@attr.merge(:target => "Local" ))
+    incorrect_target_cat.should_not be_valid
   end
      
-  it "should not accept an empty 'aim' field" do
-    empty_aim_cat =  Category.new(@attr.merge(:aim => nil))
-    empty_aim_cat.should_not be_valid
+  it "should not accept an empty 'target' field" do
+    empty_target_cat =  Category.new(@attr.merge(:target => ""))
+    empty_target_cat.should_not be_valid
+  end
+  
+  it "should not accept an empty 'user_id' field" do
+    empty_user = Category.new(@attr.merge(:user_id => nil))
+    empty_user.should_not be_valid
   end
 end

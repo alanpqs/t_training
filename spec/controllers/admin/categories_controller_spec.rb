@@ -40,8 +40,8 @@ describe Admin::CategoriesController do
   describe "For logged-in non-admins" do
   
     before(:each) do
-      @aim = 1
-      @aim_name = "#{Category::AIM_TYPES[@aim]}"
+      @target = 1
+      @target_name = "#{Category::TARGET_TYPES[@target]}"
       @user = Factory(:user)
       test_log_in(@user)
     end
@@ -49,7 +49,7 @@ describe Admin::CategoriesController do
     describe "GET 'index'" do
       
       it "should not be successful" do
-        get :index, :id => @aim_name
+        get :index, :id => @target_name
         response.should_not be_success
       end
       
@@ -78,8 +78,8 @@ describe Admin::CategoriesController do
   describe "For logged-in admins" do
     
     before(:each) do
-      @aim = 1
-      @aim_name = "#{Category::AIM_TYPES[@aim]}"
+      @target = 1
+      @target_name = "#{Category::TARGET_TYPES[@target]}"
       @user = Factory(:user, :admin => true)
       test_log_in(@user)
     end
@@ -87,14 +87,14 @@ describe Admin::CategoriesController do
     describe "GET 'index'" do
       
       it "should be successful" do
-        get :index, :id => @aim_name
+        get :index, :id => @target_name
         response.should be_success
       end
       
       it "should have the right title" do
-        get :index, :id => @aim_name
+        get :index, :id => @target_name
         response.should have_selector(:title, 
-                    :content => "Training categories => #{@aim_name}" )
+                    :content => "Training categories => #{@target_name}" )
       end
              
       it "should include all authorized categories for the selected group" do
@@ -120,16 +120,16 @@ describe Admin::CategoriesController do
       end
       
       it "should have a 'New category' button including the category type in the label" do
-        get :index, :id => @aim_name
-        response.should have_selector("a",   :href     => "/admin/categories/new?id=#{@aim_name}",
-                                             :content  => "New category - #{@aim_name} grouping")
+        get :index, :id => @target_name
+        response.should have_selector("a",   :href     => "/admin/categories/new?id=#{@target_name}",
+                                             :content  => "New category - #{@target_name} grouping")
       end
     end
     
     describe "GET 'new'" do
       
       before(:each) do
-        @attr = { :id => @aim_name, :user_id => @user.id }
+        @attr = { :id => @target_name, :user_id => @user.id }
       end
       
       it "should be successful" do
@@ -140,7 +140,7 @@ describe Admin::CategoriesController do
       it "should have the right title" do
         get :new, @attr
         response.should have_selector(:title, 
-                    :content => "New #{@aim_name} category" )
+                    :content => "New #{@target_name} category" )
       end
       
       it "should have a visible, editable text-box for the new category" do
@@ -151,9 +151,9 @@ describe Admin::CategoriesController do
       
       it "should have a hidden text-box with the correct grouping pre-set" do
         get :new, @attr
-        response.should have_selector("input",  :name => "category[aim]",
+        response.should have_selector("input",  :name => "category[target]",
                                                 :type => "hidden",
-                                                :value => @aim.to_s)
+                                                :value => @target_name)
       end
       
       it "should have a hidden text-box with the current user's user_id pre-set" do
@@ -172,7 +172,7 @@ describe Admin::CategoriesController do
       
       it "should have a return link to the 'index' page for the grouping" do
         get :new, @attr
-        response.should have_selector("a",      :href => "#{admin_categories_path}?id=#{@aim_name}",
+        response.should have_selector("a",      :href => "#{admin_categories_path}?id=#{@target_name}",
                                                 :content => "check the current list")
       end
       
@@ -185,7 +185,7 @@ describe Admin::CategoriesController do
     describe "POST 'create'" do
       
       before(:each) do
-        @attr_blank = { :category => "", :aim => @aim, :user_id => @user.id }
+        @attr_blank = { :category => "", :target => @target_name, :user_id => @user.id }
       end
         
       describe "failure" do
@@ -193,7 +193,7 @@ describe Admin::CategoriesController do
         it "should not create a new Category record" do
           lambda do
             post :create, :category => @attr_blank
-          end.should_not change(Country, :count)  
+          end.should_not change(Category, :count)  
         end
         
         it "should render the 'new' page again" do
@@ -203,7 +203,7 @@ describe Admin::CategoriesController do
         
         it "should have the right title" do
           post :create, :category => @attr_blank
-          response.should have_selector("title", :content => "New #{@aim_name} category")
+          response.should have_selector("title", :content => "New #{@target_name} category")
         end
         
         it "should generate an appropriate error message" do

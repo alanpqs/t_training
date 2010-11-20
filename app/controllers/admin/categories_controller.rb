@@ -6,27 +6,25 @@ class Admin::CategoriesController < ApplicationController
   
   
   def index
-    @topic = params[:id]
-    @title = "Training categories => #{@topic}" 
+    @target = params[:id]
+    @title = "Training categories => #{@target}" 
   end
 
   def new
-    @topic = params[:id]
-    @title = "New #{@topic} category"
-    aim_id = Category.aims_index(@topic)
-    @category = Category.new(:aim => aim_id, :user_id => current_user.id)
+    @target = params[:id]
+    @title = "New #{@target} category"
+    @category = Category.new(:target => @target, :user_id => current_user.id)
     @tag_name = "Create"
   end
   
   def create
     @category = Category.new(params[:category])
-    @topic_id = @category.aim
-    @topic = @category.training_aim
+    @target = @category.target
     if @category.save
       flash[:success] = "New category created."
-      redirect_to admin_categories_path(:id => @topic)
+      redirect_to admin_categories_path(:id => @target)
     else
-      @title = "New #{@topic} category"
+      @title = "New #{@target} category"
       @tag_name = "Create"
       render 'new'
     end

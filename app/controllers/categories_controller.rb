@@ -2,8 +2,8 @@ class CategoriesController < ApplicationController
   
   
   def index
-    val = params[:id]
-    @title = "Training categories => #{Category.display_aim(val.to_i)}" 
+    @target = params[:id]
+    @title = "Training categories => #{@target}" 
   end
 
   def new

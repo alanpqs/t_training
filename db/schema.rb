@@ -14,7 +14,7 @@ ActiveRecord::Schema.define(:version => 20101116103755) do
 
   create_table "categories", :force => true do |t|
     t.string   "category"
-    t.integer  "aim"
+    t.string   "target"
     t.boolean  "authorized", :default => false
     t.integer  "user_id"
     t.datetime "created_at"

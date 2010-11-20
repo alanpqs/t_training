@@ -127,31 +127,31 @@ describe PagesController do
       
       it "should have a 'Business' link to the category index" do
         get :categories_admin
-        response.should have_selector(:a,    :href => "#{categories_path}?id=0",
+        response.should have_selector(:a,    :href => "#{admin_categories_path}?id=Business",
                                              :content => "Understanding the business")
       end
       
       it "should have a 'Job' link to the category index" do
         get :categories_admin
-        response.should have_selector(:a,    :href => "#{categories_path}?id=1",
+        response.should have_selector(:a,    :href => "#{admin_categories_path}?id=Job",
                                              :content => "Getting better at the job")
       end
       
       it "should have a 'Personal' link to the category index" do
         get :categories_admin
-        response.should have_selector(:a,    :href => "#{categories_path}?id=2",
+        response.should have_selector(:a,    :href => "#{admin_categories_path}?id=Personal",
                                              :content => "Improving personal skills")
       end
       
       it "should have a 'World' link to the category index" do
         get :categories_admin
-        response.should have_selector(:a,    :href => "#{categories_path}?id=3",
+        response.should have_selector(:a,    :href => "#{admin_categories_path}?id=World",
                                              :content => "Understanding world issues") 
       end
       
       it "should have a 'Fun' link to the category index" do
         get :categories_admin
-        response.should have_selector(:a,    :href => "#{categories_path}?id=4",
+        response.should have_selector(:a,    :href => "#{admin_categories_path}?id=Fun",
                                              :content => "Having fun")
       end
     end 
