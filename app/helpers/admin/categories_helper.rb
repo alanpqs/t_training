@@ -1,2 +1,3 @@
 module Admin::CategoriesHelper
+  
 end

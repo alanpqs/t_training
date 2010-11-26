@@ -15,8 +15,12 @@ ActiveRecord::Schema.define(:version => 20101116103755) do
   create_table "categories", :force => true do |t|
     t.string   "category"
     t.string   "target"
-    t.boolean  "authorized", :default => false
+    t.boolean  "authorized",      :default => false
     t.integer  "user_id"
+    t.text     "message"
+    t.boolean  "message_sent",    :default => false
+    t.string   "submitted_name"
+    t.string   "submitted_group"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

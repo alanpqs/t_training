@@ -7,23 +7,28 @@
 
 <table class="mono">
   <tr>
-    <td><%= link_to "Understanding the business", admin_categories_path(:id => @target[0]) %></td>
+    <td><%= link_to "Understanding the business", admin_categories_path(:id => @target[0]), 
+                :title => "List categories for #{@target[0]}" %></td>
     <td><small>e.g. Banking, Healthcare, Construction</small></td>
   </tr>
   <tr>
-    <td><%= link_to "Getting better at the job", admin_categories_path(:id => @target[1]) %></td>
+    <td><%= link_to "Getting better at the job", admin_categories_path(:id => @target[1]),
+                :title => "List categories for #{@target[1]}" %></td>
     <td><small>e.g. Accountancy, HR, Sales</small></td>
   </tr>
   <tr>
-    <td><%= link_to "Improving personal skills", admin_categories_path(:id => @target[2]) %></td>
+    <td><%= link_to "Improving personal skills", admin_categories_path(:id => @target[2]), 
+                :title => "List categories for #{@target[2]}" %></td>
     <td><small>e.g. English as a Foreign Language, Time Management, Programming</small></td>
   </tr>
   <tr>
-    <td><%= link_to "Understanding world issues", admin_categories_path(:id => @target[3]) %></td>
+    <td><%= link_to "Understanding world issues", admin_categories_path(:id => @target[3]),
+                :title => "List categories for #{@target[3]}" %></td>
     <td><small>e.g. Environment, World Trade, Employment Issues</small></td>
   </tr>
   <tr>
-    <td><%= link_to "Having fun", admin_categories_path(:id => @target[4]) %></td>
+    <td><%= link_to "Having fun", admin_categories_path(:id => @target[4]),
+                :title => "List categories for #{@target[4]}" %></td>
     <td><small>e.g. Playing Music, Fitness Training, Gardening</small></td>
   </tr>
 </table>
@@ -31,8 +36,9 @@
 <p>Click on a group to see the current categories list, to add new categories, or to approve new
     submissions from signed-up members.</p>
     
-<p><small>(Vendors can propose new categories but these must be approved by an Admin before they will 
-    appear in the public listing.  Before approval, it's your job to check that the new category does 
-    not duplicate the meaning of an existing category and that it is spelt correctly.  Any additions 
-    made by an Admin are automatically approved.)</small></p>
+<p class="notes">(New categories - vendors can propose them too - must be approved by an Admin 
+    before they appear in the public listing.  Before approval, it's your job to check that 
+    the new category does not duplicate the meaning of an existing category and that it is spelt 
+    correctly.)
+</p>
     

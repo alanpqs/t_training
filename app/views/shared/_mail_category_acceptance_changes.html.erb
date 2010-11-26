@@ -1,0 +1,17 @@
+<p><%= @member.name %></p>
+<p>
+  Thank you for submitting a new Training Category to our lists.
+</p>
+<p>
+  We're pleased to tell you that your submission has been authorized - but with this change.
+</p>
+<p>
+  <% if @category.name_change?(@category.submitted_name) %>
+    <%= @category.report_name_change(@category.submitted_name) %>
+  <% end %>
+  <% if @category.group_change?(@category.submitted_group) %>
+    <br />
+    <%= @category.report_group_change(@category.submitted_group) %>
+  <% end %>
+</p>
+<p>Tickets for Training Admin Team</p>

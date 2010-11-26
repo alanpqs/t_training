@@ -146,6 +146,11 @@ nav ul li a:hover {
   padding:5px 10px;
 } */
 
+textarea {
+  height: 8em;
+  width: 20em;
+}
+
 .two_column_right {
   width:45%;
   padding-left: 1em;
@@ -159,6 +164,7 @@ nav ul li a:hover {
 }
 
 .actions {
+    clear:both;
     padding-top: 10px;
     float:left;
 }
@@ -233,7 +239,14 @@ td.sidebar {
 }
 
 .notes {
-  font-size: 0.9em  
+  font-size: 0.9em;
+  line-height: 130%;  
+}
+
+.mail_quote  {
+  border: 1px solid gray; 
+  padding: 5px; 
+  background-color: ivory    
 }
 
 .profile img.gravatar {

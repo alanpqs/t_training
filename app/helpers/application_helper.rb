@@ -13,4 +13,15 @@ module ApplicationHelper
     end
   end
 
+  def default_date(date_field)
+    date_field.strftime '%d-%b-%Y'
+  end
+  
+  def submit_button(label)
+    submit_tag label, :class => "action_round"
+  end
+  
+  def drop_changes(route)
+    link_to "(drop changes)", route
+  end
 end

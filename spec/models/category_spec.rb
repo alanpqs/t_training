@@ -5,8 +5,11 @@ describe Category do
   before(:each) do
     @user = Factory(:user)
     @attr = { :category => "Oil Gas and Energy",  :target => "Business", 
-                                                  :authorized => 0, 
-                                                  :user_id => @user.id }
+                                                  :authorized => 0,
+                                                  :submitted_name => "Oil Gas and Energy",
+                                                  :submitted_group => "Business", 
+                                                  :user_id => @user.id
+                                                  }
   end
     
   it "should create an instance given valid attributes" do
@@ -26,7 +29,7 @@ describe Category do
    
   it "should not accept a duplicate 'category' field" do
     Category.create!(@attr)
-    duplicate_category = Category.new(@attr.merge(:aim => 1))
+    duplicate_category = Category.new(@attr.merge(:target => "Job"))
     duplicate_category.should_not be_valid 
   end
    
@@ -62,5 +65,15 @@ describe Category do
   it "should not accept an empty 'user_id' field" do
     empty_user = Category.new(@attr.merge(:user_id => nil))
     empty_user.should_not be_valid
+  end
+  
+  it "should not accept an empty 'submitted_name' field" do
+    empty_submitted_name = Category.new(@attr.merge(:submitted_name => "")) 
+    empty_submitted_name.should_not be_valid
+  end
+  
+  it "should not accept an empty 'submitted_group' field" do
+    empty_submitted_group = Category.new(@attr.merge(:submitted_group => "")) 
+    empty_submitted_group.should_not be_valid
   end
 end

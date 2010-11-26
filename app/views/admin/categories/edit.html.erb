@@ -1,0 +1,41 @@
+<h1><%= @title %></h1>
+
+<%= form_for [:admin, @category] do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  <div class="two_column_left">
+    <div class="field">
+      <%= f.label :category %><br />
+      <%= f.text_field :category %>
+    </div>
+    
+    <% if @category.authorized == true %>
+      <%= render "authorized", :f => f %>
+    <% else %>  
+      <%= render "unauthorized", :f => f %>
+    <% end %>
+    
+  </div>
+  
+  <% if @category.authorized == false %>
+    <% if @category.message_sent == false %>
+      <%= render "authorization_message", :f => f %>
+    <% else %>
+      <%= render "rejected_message", :f => f %>
+    <% end %>
+  <% else %>
+    <% if @category.submission_change?(@category.submitted_name, @category.submitted_group) %>
+      <%= render "accepted_with_changes_message" %>
+    <% else %>
+      <%= render "no_message" %>
+    <% end %>
+  <% end %>
+  
+  <div class="actions">
+    <%= submit_button(@tag_name) %>  
+  </div>
+  
+  <div class="redirects">
+    <%= drop_changes(admin_categories_path(:id => @category.target)) %>
+  </div>
+
+<% end %>

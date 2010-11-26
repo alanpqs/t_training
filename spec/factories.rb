@@ -29,4 +29,14 @@ Factory.sequence :country_code do |n|
   "A#{n}"
 end
 
+Factory.define :category do |category|
+  category.category             "HR"
+  category.target               "Job"
+  category.association :user
+  category.submitted_name       "HR"
+  category.submitted_group      "Job"
+end
 
+Factory.sequence :category do |n|
+  "Cat#{n}"
+end

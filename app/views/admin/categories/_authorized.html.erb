@@ -1,0 +1,15 @@
+    <p>
+      <strong>Group</strong> &nbsp; &nbsp;<%= @category.target %>
+    </p>
+    <p>
+      <strong>Submitted by</strong> <br /><%= @category.user.name %> (<%= @category.user_id %>)
+    </p>
+    <div class="field">
+      <%= f.label :authorized %>&nbsp; &nbsp;
+      <%= f.check_box :authorized %>    
+    </div>
+    <div class="notes">Nobody's using this category so you can still uncheck it to remove it from the public list.</div>
+  
+    <br />
+    <br />
+  

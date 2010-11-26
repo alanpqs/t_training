@@ -464,7 +464,8 @@ describe Admin::CountriesController do
       
       it "should have a select field for Currency_code with the correct currency displayed" do
         get :edit, :id => @country
-        response.should have_selector("select", :name => "country[currency_code]",
+        response.should have_selector("option", :value => @country.currency_code,
+                                                :selected => "selected",
                                                 :content => @country.currency_code)
       end
       
@@ -481,7 +482,10 @@ describe Admin::CountriesController do
       end
       
       it "should have a select field for Region_id with the correct region displayed" do
-        
+        get :edit, :id => @country
+        response.should have_selector(:option,  :value => @country.region_id.to_s,
+                                                :selected => "selected",
+                                                :content => @country.region.region)
         #NOT TESTED
       
       end
