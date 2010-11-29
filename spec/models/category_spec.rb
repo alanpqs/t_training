@@ -27,11 +27,19 @@ describe Category do
     long_category.should_not be_valid
   end
    
-  it "should not accept a duplicate 'category' field" do
+  it "should not accept a duplicate 'category' in the same group" do
     Category.create!(@attr)
-    duplicate_category = Category.new(@attr.merge(:target => "Job"))
+    duplicate_category = Category.new(@attr.merge(:submitted_name => "ABC"))
     duplicate_category.should_not be_valid 
   end
+  
+  it "should accept a duplicate 'category' in a different group" do
+    Category.create!(@attr)
+    duplicate_category = Category.new(@attr.merge(:target => "Job"))
+    duplicate_category.should be_valid 
+  end
+  
+  
    
   it "should not accept a duplicate 'category' field up to case" do
     new_title = "Oil gas and energy"

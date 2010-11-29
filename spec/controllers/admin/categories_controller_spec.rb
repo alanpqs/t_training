@@ -55,7 +55,7 @@ describe Admin::CategoriesController do
       
       before(:each) do
         @user = Factory(:user, :email => "fake@example.com")
-        @category = Factory(:category, :user_id => @user.id)
+        @category = Factory(:category, :authorized => true, :user_id => @user.id)
       end
       
       it "should not allow access to the 'edit' form" do
@@ -73,7 +73,8 @@ describe Admin::CategoriesController do
       
       before(:each) do
         @user = Factory(:user, :email => "fake2@example.com")
-        @category = Factory(:category, :category => "EFG", :target => "Job", :user_id => @user.id)
+        @category = Factory(:category, :category => "EFG", :target => "Job", 
+                            :authorized => true, :user_id => @user.id)
         @attr = { :category => "Abc", :target => "Job", :user_id => @user.id }
       end
       
@@ -87,6 +88,25 @@ describe Admin::CategoriesController do
         put :update, :id => @category, :category => @attr
         response.should redirect_to(root_path)
       end 
+    end
+    
+    describe "DELETE 'destroy'" do
+      
+      before(:each) do
+        @user = Factory(:user, :email => "anotherfake@example.com")
+        @category = Factory(:category, :user_id => @user.id)
+      end
+      
+      it "should be impossible for non-logged-in users" do
+        delete :destroy, :id => @category 
+        response.should redirect_to(login_path)
+      end
+      
+      it "should not change the total of categories" do
+        lambda do
+          delete :destroy, :id => @category 
+        end.should_not change(Category, :count)
+      end
     end 
   end
   
@@ -107,9 +127,7 @@ describe Admin::CategoriesController do
         response.should_not be_success
       end
       
-      it "should rediput :update, :id => @country, :country => @attr
-        @country.reload
-        @country.name.should_not == @attr[:name]rect to the home page" do
+      it "should redirect to the home page" do
         get :index
         response.should redirect_to(root_path)
       end
@@ -150,7 +168,7 @@ describe Admin::CategoriesController do
     describe "GET 'edit'" do
       
       before(:each) do
-        @category = Factory(:category, :user_id => @user.id)
+        @category = Factory(:category, :authorized => true, :user_id => @user.id)
       end
       
       it "should not allow access to the 'edit' form" do
@@ -167,7 +185,7 @@ describe Admin::CategoriesController do
     describe "PUT 'update'" do
       
       before(:each) do
-        @category = Factory(:category, :user_id => @user.id)
+        @category = Factory(:category, :authorized => true, :user_id => @user.id)
         @attr = { :category => "xyz", :user_id => @user.id }
       end
       
@@ -181,7 +199,26 @@ describe Admin::CategoriesController do
         put :update, :id => @category, :category => @attr
         response.should redirect_to(root_path)
       end 
-    end  
+    end
+    
+    describe "DELETE 'destroy'" do
+      
+      before(:each) do
+        
+        @category = Factory(:category, :target => @target_name, :user_id => @user.id)
+      end
+      
+      it "should be impossible for non-logged-in users" do
+        delete :destroy, :id => @category 
+        response.should redirect_to(root_path)
+      end
+      
+      it "should not change the total of categories" do
+        lambda do
+          delete :destroy, :id => @category 
+        end.should_not change(Category, :count)
+      end
+    end   
   end
   
   describe "For logged-in admins" do
@@ -189,6 +226,8 @@ describe Admin::CategoriesController do
     before(:each) do
       @target = 1
       @target_name = "#{Category::TARGET_TYPES[@target]}" 
+      @target2 = 2
+      @target_name2 = "#{Category::TARGET_TYPES[@target2]}"
       @user = Factory(:user, :email => "email@example.com", :admin => true)
       test_log_in(@user)
     end
@@ -196,14 +235,22 @@ describe Admin::CategoriesController do
     describe "GET 'index'" do
       
       before(:each) do
-        @category = Factory(:category,  :target => @target_name)
+        @category = Factory(:category,  :authorized => true, :target => @target_name)
         @category2 = Factory(:category, :category => "Accountancy", 
-                                        :target => @target_name, 
+                                        :target => @target_name,
+                                        :authorized => true, 
                                         :user_id => @user.id)
         @category3 = Factory(:category, :category => "Legal", 
-                                        :target => @target_name, 
-                                        :user_id => @user.id)                             
+                                        :target => @target_name,
+                                        :authorized => true, 
+                                        :user_id => @user.id)
+        @category4 = Factory(:category, :category => "Unauthorized", 
+                                        :target => @target_name,
+                                        :authorized => false, 
+                                        :user_id => @user.id)
+                                                                     
         @categories = [@category, @category2, @category3]
+        @categories_with_unauthorized = [@category, @category2, @category3, @category4]
         @wrong_target_name = "Fun"
       end
       
@@ -218,7 +265,18 @@ describe Admin::CategoriesController do
                     :content => "Training categories => #{@target_name}" )
       end
              
-      it "should include all Categories for the selected group" do
+      it "should have an 'Approve Now' link if there are new categories needing authorization" do
+        get :index, :id => @target_name
+        response.should have_selector("h4", :content => "Also please check")
+      end
+      
+      it "should not have an 'Approve Now' if all categories have been authorized" do
+        @category4.update_attribute(:authorized, true)
+        get :index, :id => @target_name
+        response.should_not have_selector("h4", :content => "Also please check")
+      end
+      
+      it "should include all authorized Categories for the selected group" do
         get :index, :id => @target_name
         @categories.each do |category|
           response.should have_selector("td", :content => category.category)
@@ -232,34 +290,22 @@ describe Admin::CategoriesController do
         end
       end
       
-      #note: USERS will only see Authorized categories.
-      
-      it "should arrange the list in the correct order, with actionable items first" do
-        pending
+      it "should not include unauthorized Categories" do
+        get :index, :id => @target_name
+        @categories_with_unauthorized[3..3].each do |category|
+          response.should_not have_selector("td", :content => "Unauthorized")
+        end
       end
       
-      it "should include an authorization reminder if not authorized" do
+      it "should not have an 'Approval' column" do
+        get :index, :id => @target_name
+        response.should_not have_selector("th", :content => "Approval")
+      end
+      
+      it "should not include an authorization reminder" do
         get :index, :id => @target_name
         @categories.each do |category|
-          response.should have_selector("td", :class => "loud", :content => "NEEDED")
-        end
-      end
-      
-      it "should show which submissions have not been rejected but not yet deleted" do
-        @category2.update_attribute(:message_sent, true)
-        @category3.update_attribute(:message_sent, true)
-        get :index, :id => @target_name
-        @categories[1..2].each do |category|
-          response.should have_selector("td", :class => "loud", :content => "rejected")
-        end
-      end
-      
-      it "should not include an authorization reminder if authorized" do
-        @category2.update_attribute(:authorized, true)
-        @category3.update_attribute(:authorized, true)
-        get :index, :id => @target_name
-        @categories[1..2].each do |category|
-          response.should have_selector("td", :class => "loud", :content => "")
+          response.should_not have_selector("td", :class => "loud", :content => "NEEDED")
         end
       end
       
@@ -272,7 +318,7 @@ describe Admin::CategoriesController do
       end
       
       it "should exclude the delete option for categories that are linked to training" do
-        pending
+        pending "till associations are added"
       end
       
       it "should include a link to the 'edit' form for each category in the list" do
@@ -285,13 +331,14 @@ describe Admin::CategoriesController do
       it "should have a 'New category' button including the category type in the label" do
         get :index, :id => @target_name
         response.should have_selector("a",   :href     => "/admin/categories/new?id=#{@target_name}",
-                                             :content  => "New category - #{@target_name} grouping")
+                                             :content  => "New category - #{@target_name}")
       end
       
       it "should paginate Categories" do
         30.times do
           @categories << Factory(:category, :category => Factory.next(:category), 
                                 :target => @target_name,
+                                :authorized => true,
                                 :user_id => @user.id)
         end
         get :index, :id => @target_name
@@ -301,6 +348,16 @@ describe Admin::CategoriesController do
                                             :content => "2")
         response.should have_selector("a",  :href => "/admin/categories?id=#{@target_name}&page=2",
                                             :content => "Next")
+      end
+      
+      it "should have a group redirect selector to other category group index pages" do
+        get :index, :id => @target_name
+        response.should have_selector("a", :href => "/admin/categories?id=#{@target_name2}")
+      end
+      
+      it "should not include its own group in the group redirect selector" do
+        get :index, :id => @target_name
+        response.should_not have_selector("a", :href => "/admin/categories?id=#{@target_name}")
       end
     end
     
@@ -425,7 +482,7 @@ describe Admin::CategoriesController do
         
         it "should send the creator a thank you message" do
           post :create, :category => @attr
-          flash[:success].should =~ /Thank you/i
+          flash[:success].should =~ /now needs to be authorized/i
         end
         
         it "should return the user to the correct category group listing" do
@@ -438,7 +495,7 @@ describe Admin::CategoriesController do
     describe "GET 'edit'" do
       
       before(:each) do
-        @category = Factory(:category, :target => @target_name, :user_id => @user.id)
+        @category = Factory(:category, :target => @target_name, :authorized => true, :user_id => @user.id)
         @authorized_category = Factory(:category, :category => "Xyz",
                                                   :target => @target_name, 
                                                   :authorized => true,
@@ -465,7 +522,7 @@ describe Admin::CategoriesController do
                                                   :submitted_group => @target_name)      
       end
       
-      it "should render the edit form" do
+      it "should rende@category.user.namer the edit form" do
         get :edit, :id => @category
         response.should be_success
       end
@@ -488,24 +545,18 @@ describe Admin::CategoriesController do
       end
       
       it "should not have an Authorized check-box if other records are already linked to Category" do
-        pending
+        pending "till associations are added"
       end
       
       it "should show the creator's name" do
         get :edit, :id => @category
-        response.should have_selector("p.notes", 
-         :content => @category.user.name)
+        response.should have_selector("p", 
+         :content => "#{@category.user.name}")
       end
     
-      it "should show when the category was submitted" do
+      it "should not show the creator's email address" do
         get :edit, :id => @category
-        response.should have_selector("p.notes", 
-         :content => @category.created_at.strftime('%d-%b-%Y'))
-      end
-      
-      it "should show the creator's email address" do
-        get :edit, :id => @category
-        response.should have_selector("p.notes", :content => @category.user.email)
+        response.should_not have_selector("p.notes", :content => @category.user.email)
       end
       
       it "should have a 'drop changes' link, redirecting to the correct index list page" do
@@ -518,89 +569,43 @@ describe Admin::CategoriesController do
         get :edit, :id => @category
         response.should have_selector("input.action_round", :value => "Confirm changes")
       end
-      
-      describe "for unauthorized records" do
-      
-        it "should show the correct Target group in an editable select box" do
-          get :edit, :id => @category
-          response.should have_selector("option", :value => "#{@category.target}", 
-                                                  :selected => "selected",
-                                                  :content => @category.target)
-        end
-      
-        it "should have an empty message-box for rejection notes" do
-          get :edit, :id => @category
-          response.should have_selector("textarea", :content => @category.message)
-        end
-        
-        it "should not show a previous rejection email" do
-          get :edit, :id => @category
-          response.should_not have_selector(".mail_quote", :content => "Unfortunately, we can't accept")
-        end
-        
-      end
-      
-      describe "for authorized records" do
      
-        it "should not show the correct Target group in a select box" do
+      it "should not show the correct Target group in a select box" do
           
-          #best not to change Categories once users start connecting Training programs to them
+        #best not to change Categories once users start connecting Training programs to them
           
-          get :edit, :id => @authorized_category
-          response.should_not have_selector("option", :value => "#{@authorized_category.target}", 
-                                                      :selected => "selected",
-                                                      :content => @authorized_category.target)
-        end
-      
-        it "should have an uneditable reference to the Target group" do
-          get :edit, :id => @authorized_category
-          response.should have_selector("p", :content => @authorized_category.target)
-        end
-      
-        it "should not allow a message to be entered" do
-          get :edit, :id => @authorized_category
-          response.should_not have_selector("textarea", :content => @authorized_category.message)
-        end
-        
-        it "should not show an acceptance email if the original submission was unchanged" do
-          get :edit, :id => @no_change_cat
-          response.should_not have_selector(".mail_quote")
-        end
-        
-        it "should show the acceptance email if the submitted name was changed" do
-          get :edit, :id => @change_name
-          response.should have_selector(".mail_quote", 
-            :content => "from '#{@change_name.submitted_name}' to '#{@change_name.category}'")
-        end
-        
-        it "should show the acceptance email if the submitted group was changed" do
-          get :edit, :id => @change_group
-          response.should have_selector(".mail_quote", 
-            :content => "from '#{@change_group.submitted_group}' to '#{@change_group.target}'")
-        end
-        
+        get :edit, :id => @authorized_category
+        response.should_not have_selector("option", :value => "#{@authorized_category.target}", 
+                                                    :selected => "selected",
+                                                    :content => @authorized_category.target)
       end
       
-      describe "for rejected records" do
-        
-        it "should show the correct Target group in an editable select box" do
-          get :edit, :id => @rejected_category
-          response.should have_selector("option", :value => "#{@rejected_category.target}", 
-                                                  :selected => "selected",
-                                                  :content => @rejected_category.target)
-        end
-        
-        it "should not allow a message to be entered" do
-          get :edit, :id => @rejected_category
-          response.should_not have_selector("textarea", :content => @rejected_category.message)
-        end
-        
-        it "should show the rejection email" do
-          get :edit, :id => @rejected_category
-          response.should have_selector(".mail_quote", :content => "Unfortunately, we can't accept")
-        end
-        
+      it "should have an uneditable reference to the Target group" do
+        get :edit, :id => @authorized_category
+        response.should have_selector("p", :content => @authorized_category.target)
       end
+      
+      it "should not allow an email message to be entered" do
+        get :edit, :id => @authorized_category
+        response.should_not have_selector("textarea", :content => @authorized_category.message)
+      end
+      
+      it "should not show a change history if the original submission has been unchanged" do
+        get :edit, :id => @no_change_cat
+        response.should_not have_selector(".mail_quote")
+      end
+      
+      it "should show changes to the Category name originally submitted" do
+        get :edit, :id => @change_name
+        response.should have_selector(".mail_quote", 
+          :content => "from '#{@change_name.submitted_name}' to '#{@change_name.category}'")
+      end
+        
+      it "should show changes to the Group originally submitted" do
+        get :edit, :id => @change_group
+        response.should have_selector(".mail_quote", 
+          :content => "from '#{@change_group.submitted_group}' to '#{@change_group.target}'")
+      end      
     end
     
     describe "PUT 'update'" do
@@ -608,7 +613,7 @@ describe Admin::CategoriesController do
       describe "failure" do
         
         before(:each) do
-          @category = Factory(:category)
+          @category = Factory(:category, :authorized => true)
           @bad_attr = { :category => "", :target => @target_name, :user_id => @user.id }
         end
         
@@ -620,15 +625,17 @@ describe Admin::CategoriesController do
         end
         
         it "should not send an email message" do
-          pending
+          pending "don't know how to test this"
         end
         
         it "should render the edit page" do
-          pending
+          put :update, :id => @category, :category => @bad_attr
+          response.should render_template('edit')
         end
         
         it "should have an error message describing what went wrong" do
-          pending
+          put :update, :id => @category, :category => @bad_attr
+          response.should have_selector("div#error_explanation", :content => "There were problems")
         end
         
       end
@@ -636,7 +643,7 @@ describe Admin::CategoriesController do
       describe "success" do
         
         before(:each) do
-          @category = Factory(:category)
+          @category = Factory(:category, :authorized => true)
           @good_attr = { :category => "Another", :target => @target_name, :user_id => @user.id }
         end
         
@@ -652,89 +659,54 @@ describe Admin::CategoriesController do
           response.should redirect_to(admin_categories_path(:id => @target_name))
         end
         
-        describe "email responses" do
-        
-          include EmailSpec::Helpers
-          include EmailSpec::Matchers
-          
-          describe "if the submission has been newly rejected and an email message composed" do
-          
-            before(:each) do
-              @email_attr = { :category => "Emailable", :target => @target_name, 
-                              :authorized => false, :message => "is mis-spelt",
-                              :message_sent => false, :user_id => @user.id }
-              @email = UserMailer.category_not_authorized(@user, @category)
-            end
-            
-            it "should deliver an email to the submitter" do
-              put :update, :id => @category, :category => @email_attr
-              @email.should deliver_to(@user.email)
-            end
-          
-            it "should show the submitter's name in the email" do
-              put :update, :id => @category, :category => @email_attr
-              @email.should have_body_text(@user.name)
-            end
-          
-            it "should have a reference to the original submission in the email" do
-              put :update, :id => @category, :category => @email_attr
-              @email.should have_body_text("Thank you for submitting #{@category.category} as a 
-                  new Category in the #{@category.target} group.")
-            end
-          
-            it "should include the correct content in the email" do
-              put :update, :id => @category, :category => @email_attr
-              @email.should have_body_text("we can't accept your submission 
-                because #{@category.message}")
-            end
-          
-            it "should have the correct subject for the email" do
-              put :update, :id => @category, :category => @email_attr
-              @email.should have_subject("'Tickets for Training': your Category submission")
-            end
-          
-            it "should update 'Message sent' to true after sending the email" do
-              put :update, :id => @category, :category => @email_attr
-              @category.reload
-              @category.message_sent.should == true
-            end
-          
-            it "should post a flash message confirming that the email has been sent" do
-              put :update, :id => @category, :category => @email_attr
-              flash[:success].should =~ /rejected/i
-            end
-          end
-        
-          describe "if the Category has been authorized" do
-          
-            before(:each) do
-              @no_email_attr = {  :category => "Not emailable", :target => @target_name, 
-                                  :authorized => true,
-                                  :message_sent => false, :user_id => @user.id,
-                                  :submitted_name => "Not emailable", :submitted_group => @target_name }
-              @email = UserMailer.category_not_authorized(@user, @category)
-            end
-
-          
-            it "should post a flash message showing that the Category has been authorized" do
-              pending
-            end
-          
-          end
-        
-          describe "if the Category has been previously rejected" do
-          
-            it "should not send an email message" do
-              pending
-            end
-          
-            it "should post a flash warning showing that approval has still not been given" do
-              pending
-            end
-          
-          end
-        end
       end  
+    end
+    
+    describe "DELETE 'destroy'" do
+      
+      before(:each) do
+        @category = Factory(:category, :authorized => true)
+      end
+      
+      describe "success" do
+        
+        it "should delete the category if it is not associated with any Training Activity" do
+          pending "till associations are added"
+        end
+        
+        it "should decrease the number of categories by 1" do
+          lambda do
+            delete :destroy, :id => @category
+          end.should change(Category, :count).by(-1)
+        end
+        
+        it "should redirect to the correct category group index page" do
+          delete :destroy, :id => @category
+          response.should redirect_to(admin_categories_path(:id => @target_name))
+        end
+        
+        it "should display a message showing what has been deleted" do
+          delete :destroy, :id => @category
+          flash[:success].should == "#{@category.category} has been deleted."
+        end
+      end
+      
+      
+      describe "failure" do
+      
+        it "should not change the number of categories" do
+          pending "till associations are added"
+        end
+        
+        it "should redirect to the correct category group index page" do
+          pending "till associations are added"
+        end
+        
+        it "should display a failure notice" do
+          pending "till associations are added"
+        end
+          
+      end
     end
   end
 

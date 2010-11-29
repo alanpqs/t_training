@@ -1,11 +1,17 @@
     <div class="two_column_right">
    
-      <div class="notes">The submission has already been <span class="loud">authorized</span> but after 
-          changes were made. This message was emailed:  
+      <div class="notes">The category has been <span class="loud">authorized</span>, but changes 
+          have been made to the original submission.  
           <br />
           <br />
-        <div class="mail_quote">
-          <%= render "shared/mail_category_acceptance_changes" %>
+        <div class="mail_quote" style = "padding:10px">
+          <% if @category.name_change?(@category.submitted_name) %>
+            <%= @category.report_name_change(@category.submitted_name) %>
+          <% end %>
+          <br />
+          <% if @category.group_change?(@category.submitted_group) %>
+            <%= @category.report_group_change(@category.submitted_group) %>
+          <% end %>
         </div>
       </div>
     </div>

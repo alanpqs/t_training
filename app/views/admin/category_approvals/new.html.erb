@@ -1,0 +1,32 @@
+<h1><%= @title %></h1>
+<p>You're creating a new category in the <span class="loud"><%= @target %></span> group.</p>
+<div class="notes">Please follow these guidelines:
+<ul>
+  <li>No duplicates or categories that are virtually identical.  If you're not sure, please
+      <%= link_to "go back and check the current list again.",
+      admin_category_approvals_path(:id => @target) %></li>
+  <li>Must be 30 characters or less.</li>
+  <li>No commas, colons or periods.</li>
+  <li>Start with a capital letter.</li>
+  <li>Keep the categories broad.  We want to make it easy for people to find training.  If we end up 
+      with more than 100 items in a category list, we may make it harder to search, not 
+      easier.</li>
+  <li>Before it appears in the public list, your submission will be checked and authorized.  If there's
+      any reason for us not to accept it, we'll let you know why by email.</li>     
+</ul>
+</div>
+<%= form_for [:admin, @category] do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  <div class="field">
+    <%= f.label :category, "Enter your new #{@target.upcase} category" %><br />
+    <%= f.text_field :category %>
+  </div>
+  
+    <%= f.hidden_field :user_id %>
+    <%= f.hidden_field :authorized %>
+    <%= f.hidden_field :target %>
+  
+  <div class="actions">
+    <%= submit_tag @tag_name, :class => "action_round" %>
+  </div>
+<% end %>

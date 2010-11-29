@@ -1,21 +1,19 @@
+<% if Category.approvals_needed? %>
+  <h4>Also please check <%= link_to "NEW SUBMISSIONS", admin_category_approvals_path %>.</h4>
+<% end %>
+
 <h1><%= @title %></h1>
 
 <%= will_paginate %>
 <table>
   <tr>
     <th>Category</th>
-    <th>Submitted</th>
-    <th style = "text-align: center">Approval</th>
     <th></th>
   </tr>
   <% @categories.each do |category| %>
   <tr>
     <td><%= link_to category.category, edit_admin_category_path(category),
                 :title => "Edit #{category.category}" %></td>
-    <td><small>
-          <%= default_date(category.created_at) if category.authorized == false %>
-    </small></td>
-    <td class="loud" style="text-align:center"><small><%= category.approval_status %></small></td>
     <td><small><%= link_to "delete", admin_category_path(category),  :method => :delete,
                                         :confirm => "You sure?",
                                         :title => "Delete #{category.category}" %>  </small></td> 
@@ -25,6 +23,10 @@
 <%= will_paginate %>
 
 <div class="actions">
-  <%= link_to "New category - #{@target} grouping", new_admin_category_path(:id => @target), 
+  <%= link_to "New category - #{@target}", new_admin_category_path(:id => @target), 
                             :class => "action_round" %> 
+</div>
+
+<div class="redirects">
+  <small>SWITCH TO: <%= pager(0) %> | <%= pager(1) %> | <%= pager(2) %> | <%= pager(3) %></small> 
 </div>

@@ -1,0 +1,41 @@
+<h1><%= @title %></h1>
+<div class="notes">First, make sure a similar item doesn't exist already: click on the group name to check 
+    the current list of authorised categories.  Then click on the category name to approve, reject or 
+    edit the submission.  If you approve, the item will no longer appear here, because it's added to the 
+    public list.  If you reject, the sender will be notified by mail, and then a button will appear 
+    in this list to delete the item.  
+</div> 
+<table>
+  <tr>
+    <th>Category</th>
+    <th>Group</th>
+    <th>Submitted</th>
+    <th style = "text-align: center">Status</th>
+    <th></th>
+  </tr>
+  <% @categories.each do |category| %>
+  <tr>
+    <td><%= link_to category.category, edit_admin_category_approval_path(category),
+                :title => "Edit #{category.category}" %></td>
+    <td><%= link_to category.target, admin_categories_path(:id => category.target) %></td>
+    <td><small>
+          <%= default_date(category.created_at) if category.authorized == false %>
+    </small></td>
+    <td class="loud" style="text-align:center"><small><%= category.approval_status %></small></td>
+    <td><small>
+      <% if category.rejected? %>
+          <%= link_to "delete", admin_category_approval_path(category),  :method => :delete,
+                                        :confirm => "You sure?",
+                                        :title => "Delete #{category.category}" %>  </small>
+      <% end %>                                  
+    </td>    
+  </tr>
+  <% end %>
+</table>
+
+<div class="redirects">
+  <small>
+    VIEW AUTHORIZED CATEGORIES: 
+       <%= pager(0) %> | <%= pager(1) %> | <%= pager(2) %> | <%= pager(3) %> | <%= pager(4) %>
+  </small> 
+</div>

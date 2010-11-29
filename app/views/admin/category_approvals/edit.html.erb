@@ -1,21 +1,21 @@
 <h1><%= @title %></h1>
 
-<%= form_for [:admin, @category] do |f| %>
+<%= form_for [:admin, @category], :url => admin_category_approval_path(@category) do |f| %>
   <%= render 'shared/error_messages', :object => f.object %>
   <div class="two_column_left">
     <div class="field">
       <%= f.label :category %><br />
       <%= f.text_field :category %>
     </div>
+
+    <%= render "unauthorized", :f => f %>
     
-    <%= render "authorized", :f => f %>
-  
   </div>
- 
-  <% if @category.submission_change?(@category.submitted_name, @category.submitted_group) %>
-    <%= render "accepted_with_changes_message" %>
+  
+  <% if @category.message_sent == false %>
+    <%= render "authorization_message", :f => f %>
   <% else %>
-    <%= render "no_message" %>
+    <%= render "rejected_message", :f => f %>
   <% end %>
   
   <div class="actions">
@@ -23,7 +23,7 @@
   </div>
   
   <div class="redirects">
-    <%= drop_changes(admin_categories_path(:id => @category.target)) %>
+    <%= drop_changes(admin_category_approvals_path) %>
   </div>
 
 <% end %>

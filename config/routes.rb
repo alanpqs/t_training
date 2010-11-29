@@ -1,5 +1,9 @@
 TTraining::Application.routes.draw do
 
+  #get "categoryapprovals/index"
+
+  #get "category_approvals/index"
+
   #get "countries/index"
   #get "users/index"
   #get "regions/index"
@@ -18,7 +22,7 @@ TTraining::Application.routes.draw do
 
 
   namespace "admin" do
-    resources :regions, :countries, :categories
+    resources :regions, :countries, :categories, :category_approvals
     resources :users,     :only => [:index, :show, :edit, :update, :destroy]
   end
   

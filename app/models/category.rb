@@ -20,8 +20,6 @@ class Category < ActiveRecord::Base
   
   attr_accessible :category, :target, :authorized, :user_id, :message, :submitted_name, :submitted_group
   
-  before_update :check_authorized
-  
   cat_regex = /\A(\w+(\s?([&]\s)?))+\Z/
   
   TARGET_TYPES = [ "Business", "Job", "Personal", "World", "Fun" ]
@@ -30,19 +28,31 @@ class Category < ActiveRecord::Base
   
   validates :category,        :presence       => true,
                               :length         => { :maximum => 30 },
-                              :uniqueness     => { :case_sensitive => false },
+                              :uniqueness     => { :scope => :target, :case_sensitive => false },
                               :format         => { :with => cat_regex, 
                                                    :message => "is invalid - please avoid commas, dashes,
                                                                 periods and double spaces" }   
   validates :target,          :presence       => true,
                               :inclusion      => { :in => TARGET_TYPES }
+  validates :message,         :length         => { :maximum => 0, :if => :first_time_authorized?, 
+                                          :message => "should be empty if you are authorizing the category" }
   validates :user_id,         :presence       => true
   validates :submitted_name,  :presence       => true
   validates :submitted_group, :presence       => true
    
    
+  #DISPLAY METHODS
+  
   def self.list_all_by_target(target)
     self.find(:all, :conditions => ["target = ?", target], :order => "authorized, message_sent, category")
+  end
+  
+  def self.all_authorized_by_target(target)
+    self.find(:all, :conditions => ["target = ? and authorized = ?", target, true], :order => "category")
+  end
+  
+  def self.all_approvals_needed
+    self.find(:all, :conditions => ["authorized = ?", false])
   end
   
   def approval_status
@@ -51,17 +61,66 @@ class Category < ActiveRecord::Base
     elsif self.message_sent == true
       return "rejected"
     else
-      return "NEEDED"
+      return "new"
     end
   end
   
-  def should_mail_submission_message?
+  def rejected?
+    self.authorized == false && self.message_sent == true
+  end
+  
+  #select method to pick all groups except currently selected
+  
+  def self.list_groups_except(target)
+    t = self::TARGET_TYPES
+    list = []
+    5.times do |n|
+      list << "#{t[n]}" unless "#{t[n]}" == target
+    end
+    return list
+  end
+  
+  
+  #DETERMINES WHETHER CATEGORY APPROVALS ARE REQUIRED
+  
+  def self.approvals_needed?
+    found = self.count(:all, :conditions => ["authorized = ?", false])
+    found >0
+  end
+  
+  #METHODS WHEN APPROVING OR REJECTING NEW CATEGORIES
+  
+  def first_time_authorized?
+    self.authorized == true && self.message_sent == false
+  end
+  
+  #email responses required in 3 cases
+    #New Rejection
+    #Authorization but with changes
+    #Switch from Rejected to Authorized
+      #(Not when previously Authorized to Rejected - which could only occur if Category unused.)
+  
+  def should_mail_submission_message?                   # -> email rejection message
     self.authorized == false && (self.message_sent == false && !self.message.blank?)
   end
   
-  def should_mail_authorization_message?(name, group)
+  def should_mail_authorization_message?(name, group)   # -> email: authorized but changed
     self.authorized == true && self.submission_change?(name, group) && self.message_sent == false
   end
+  
+  def should_mail_auth_mess_after_rej?(name, group)   # -> email: now authorized but changed
+    self.authorized == true && self.submission_change?(name, group) && self.message_sent == true
+  end
+  
+  def now_authorized_after_rejection?    #email sent
+    self.authorized == true && !self.message.blank?
+  end
+  
+  def now_rejected_after_authorized(previous_authorization)   # -> no email required
+    self.authorized == false && previous_authorization == true
+  end
+  
+  #METHODS TO DETERMINE FLASH MESSAGES
   
   def name_change?(name)
     name != self.category
@@ -83,6 +142,8 @@ class Category < ActiveRecord::Base
     return nil
   end
   
+  
+  
   def submission_change?(name, group)
     self.name_change?(name) || self.group_change?(group)
   end
@@ -91,18 +152,23 @@ class Category < ActiveRecord::Base
     
     @cat = name
     
-    message =  ["'#{@cat}' authorized and email confirmation sent.",                         #0
+    message =  ["'#{@cat}' authorized without change - no email confirmation sent.",         #0
                 "'#{@cat}' updated.",                                                        #1      
-                "'#{@cat}' changed to rejected and email sent.",                             #2
+                "'#{@cat}' changed to rejected - no email sent.",                            #2
                 "'#{@cat}' rejected and email sent.",                                        #3
                 "'#{@cat}' changed to authorized - email confirmation sent.",                #4
                 "'#{@cat}' still rejected but updated.",                                     #5
                 "'#{@cat}' updated but still unauthorized - no rejection email sent.",       #6
-                "'#{@cat}' changed to unauthorized - but no rejection email sent."]          #7
+                "'#{@cat}' changed to unauthorized - but no rejection email sent.",          #7
+                "'#{@cat}' authorized - email change-notification sent."                     #8
+                ]         
+                
                 
     
-    if auth1 == false && self.authorized == true && sent == false
+    if auth1 == false && self.authorized == true && !submission_change?(name, group) && sent == false
       m = message[0]
+    elsif auth1 == false && self.authorized == true && submission_change?(name, group) && sent == false
+      m = message[8]
     elsif auth1 == false && self.authorized == true && sent == true
       m = message[4]
     elsif auth1 == true && self.authorized == true
@@ -136,17 +202,5 @@ class Category < ActiveRecord::Base
       end
     end 
   end
-  
-  private
-    
-    def check_authorized
-      
-      @name = self.submitted_name
-      @group = self.submitted_group
-      
-      if self.authorized == true
-        self.update_attribute(:message, nil) if !self.message.blank?
-        self.update_attribute(:message_sent, false) unless self.submission_change?(@name, @group)
-      end
-    end                               
+                  
 end

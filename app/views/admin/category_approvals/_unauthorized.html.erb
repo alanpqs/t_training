@@ -10,9 +10,9 @@
       <%= f.label :authorized, "Authorize" %>&nbsp; &nbsp;
       <%= f.check_box :authorized %>    
     </div>
-    <p class="notes">If you check this box, a confirmation email will be sent 
-           to <%= @member.name %>, including details of any modifications you've made.  
-           The category will then appear in the public list.
+    <p class="notes">Check this box to authorize and send the category to the public list.  If you modify
+           the record, an email will be sent automatically to <%= @member.name %>, explaining the changes.
+           Otherwise, no notification is sent.
     </p>
     
    

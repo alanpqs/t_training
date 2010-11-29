@@ -1,9 +1,11 @@
-<p><%= @member.name %></p>
+<p>Dear <%= @member.name %></p>
 <p>
-  Thank you for submitting a new Training Category to our lists.
+  Previously we rejected your Category submission - '<%= @category.submitted_name %>' in 
+  the '<%= @category.submitted_group %>' group.
 </p>
 <p>
-  We're pleased to tell you that your submission has been authorized - but with this change.
+  But we wanted you to know that we've changed our minds.  We're now accepting your submission - but 
+  with this change:
 </p>
 <p>
   <% if @category.name_change?(@category.submitted_name) %>

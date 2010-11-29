@@ -8,7 +8,8 @@ class Admin::CategoriesController < ApplicationController
   def index
     @target = params[:id]
     @title = "Training categories => #{@target}" 
-    @categories = Category.list_all_by_target(@target).paginate(:page => params[:page])
+    @categories = Category.all_authorized_by_target(@target).paginate(:page => params[:page])
+    @other_groups = Category.list_groups_except(@target)
   end
 
   def new
@@ -24,9 +25,9 @@ class Admin::CategoriesController < ApplicationController
     @target = @category.target
     @category.submitted_name = @content
     @category.submitted_group = @target
+    
     if @category.save
-      flash[:success] = "Thank you for adding '#{@content}' to #{@target}.  Your category submission 
-        will now be checked and authorized, then added to the public list."
+      flash[:success] = "'#{@content}' now needs to be authorized before appearing on the public list."
       redirect_to admin_categories_path(:id => @target)
     else
       @title = "New #{@target} category"
@@ -40,7 +41,6 @@ class Admin::CategoriesController < ApplicationController
     @title = "Edit category"
     @tag_name = "Confirm changes"
     @targets = Category::TARGET_TYPES
-    @member = User.find(@category.user_id) 
   end
   
   def update
@@ -53,15 +53,11 @@ class Admin::CategoriesController < ApplicationController
     @user = User.find(@category.user_id)
     
     if @category.update_attributes(params[:category])
-    
-      if @category.should_mail_submission_message?  
-        UserMailer.category_not_authorized(@user, @category).deliver
-        @category.update_attribute(:message_sent, true)
-      end
       
-      if @category.should_mail_authorization_message?(@category.submitted_name, @category.submitted_group)
-        UserMailer.category_authorized_with_changes(@user, @category).deliver
-        @category.update_attribute(:message_sent, true)
+      #no need to send email if rejecting after authorization: -
+      #if submitter hasn't associated programs with the category, it couldn't have been important.
+      if @category.now_rejected_after_authorized(@auth1)
+        @category.update_attribute(:message_sent, false)
       end
         
       flash[:success] = @category.success_message(@auth1, @sent_before, @original_name, @original_group)  
@@ -70,13 +66,16 @@ class Admin::CategoriesController < ApplicationController
       @title = "Edit category"
       @targets = Category::TARGET_TYPES 
       @tag_name = "Confirm changes"
-      @member = User.find(@category.user_id) 
       render "edit"
     end  
   end
     
   
   def destroy
-    
+    @category = Category.find(params[:id])
+    @category_name = @category.category
+    @category.destroy
+    flash[:success] = "#{@category_name} has been deleted."
+    redirect_to admin_categories_path(:id => @category.target)
   end
 end
