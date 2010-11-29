@@ -3,10 +3,10 @@ class CreateCategories < ActiveRecord::Migration
     create_table :categories do |t|
       t.string :category
       t.string :target
-      t.boolean :authorized, :default => 0
+      t.boolean :authorized, :default => false
       t.references :user
       t.text :message
-      t.boolean :message_sent, :default => 0
+      t.boolean :message_sent, :default => false
       t.string :submitted_name
       t.string :submitted_group
 
