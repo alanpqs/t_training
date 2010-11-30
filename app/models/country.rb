@@ -20,7 +20,8 @@ class Country < ActiveRecord::Base
   
   belongs_to    :region
   
-  has_many      :users
+  has_many      :users 
+  has_many      :cities
   
   idd_regex = /[+]\d+([-])?(\d+)?$/
   

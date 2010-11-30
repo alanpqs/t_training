@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101116103755) do
+ActiveRecord::Schema.define(:version => 20101130111925) do
 
   create_table "categories", :force => true do |t|
     t.string   "category"
@@ -21,6 +21,15 @@ ActiveRecord::Schema.define(:version => 20101116103755) do
     t.boolean  "message_sent",    :default => false
     t.string   "submitted_name"
     t.string   "submitted_group"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "cities", :force => true do |t|
+    t.string   "name"
+    t.integer  "country_id"
+    t.float    "latitude"
+    t.float    "longitude"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
