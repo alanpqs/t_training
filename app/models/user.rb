@@ -19,19 +19,20 @@ class User < ActiveRecord::Base
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
   attr_accessor   :password
-  attr_accessible :name, :email, :password, :password_confirmation
+  attr_accessible :name, :email, :password, :password_confirmation, :country_id
   
   belongs_to  :country
   has_many    :categories
   
-  validates :name,      :presence     => true,
-                        :length       => { :maximum => 50 }
-  validates :email,     :presence     => true,
-                        :format       => { :with => email_regex },
-                        :uniqueness   => { :case_sensitive => false }
-  validates :password,  :presence     => true,
-                        :confirmation => true,
-                        :length       => { :within => 6..40 }
+  validates :name,        :presence     => true,
+                          :length       => { :maximum => 50 }
+  validates :email,       :presence     => true,
+                          :format       => { :with => email_regex },
+                          :uniqueness   => { :case_sensitive => false }
+  validates :password,    :presence     => true,
+                          :confirmation => true,
+                          :length       => { :within => 6..40 }
+  validates :country_id,  :presence     => true
                         
   before_save :encrypt_password
   

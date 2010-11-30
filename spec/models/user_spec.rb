@@ -3,10 +3,13 @@ require 'spec_helper'
 describe User do
   
   before(:each) do
+    @region = Factory(:region)
+    @country = Factory(:country, :region_id => @region.id)
     @attr = {   :name                   => "Example User", 
                 :email                  => "user@example.com",
                 :password               => "foobar",
-                :password_confirmation  => "foobar"  
+                :password_confirmation  => "foobar",
+                :country_id             => @country.id  
     }
   end
   

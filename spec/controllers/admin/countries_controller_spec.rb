@@ -4,12 +4,17 @@ describe Admin::CountriesController do
 
   render_views
   
+  before(:each) do
+    @region = Factory(:region)
+    @country = Factory(:country, :region_id => @region.id)
+  end
+  
   describe "for non-logged-in users" do
     
     before(:each) do
-      @country = Factory(:country)
+      #@country = Factory(:country)
       @attr = { :name => "Foo", :country_code => "FOO", :currency_code => "FOP",
-                :phone_code => "1-234", :region => 1
+                :phone_code => "1-234", :region => @region.id
       }
     end
     
@@ -107,10 +112,10 @@ describe Admin::CountriesController do
   describe "for logged-in non-admins" do
     
     before(:each) do
-      @user = Factory(:user)
-      @country = Factory(:country)
+      @user = Factory(:user, :country_id => @country.id)
+      #@country = Factory(:country)
       @attr = { :name => "Foo", :country_code => "FOO", :currency_code => "FOP",
-                :phone_code => "1-234", :region => 1
+                :phone_code => "1-234", :region => @region.id
       }
       test_log_in(@user)
     end
@@ -210,10 +215,10 @@ describe Admin::CountriesController do
   describe "for logged-in admins" do
     
     before(:each) do
-      @user   =   Factory(:user, :admin => true)
-      @country =  Factory(:country)
+      @user   =   Factory(:user, :admin => true, :country_id => @country.id)
+      #@country =  Factory(:country)
       @attr = { :name => "Foo", :country_code => "FOO", :currency_code => "FOP",
-                :phone_code => "1-234", :region => 1
+                :phone_code => "1-234", :region => @region.id
       }
       
       test_log_in(@user)

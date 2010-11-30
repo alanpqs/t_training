@@ -2,6 +2,11 @@ require 'spec_helper'
 
 describe "Users" do
   
+  before(:each) do
+    @region = Factory(:region)
+    @country = Factory(:country, :region_id => @region.id)
+  end
+    
   describe "signup" do
     
     describe "failure" do
@@ -11,6 +16,7 @@ describe "Users" do
           visit signup_path
           fill_in "Name",         :with => ""
           fill_in "Email",        :with => ""
+          fill_in "Country",      :with => @country.id
           fill_in "Password",     :with => ""
           fill_in "Confirmation", :with => ""
           click_button
@@ -28,6 +34,7 @@ describe "Users" do
           visit signup_path
           fill_in "Name",         :with => "Example User"
           fill_in "Email",        :with => "user@example.com"
+          fill_in "Country",      :with => @country.id
           fill_in "Password",     :with => "foobar"
           fill_in "Confirmation", :with => "foobar"
           click_button
@@ -53,7 +60,7 @@ describe "Users" do
     
     describe "success" do
       it "should sign a user in and out" do
-        user = Factory(:user)
+        user = Factory(:user, :country_id => @country.id)
         integration_log_in(user)
         controller.should be_logged_in
         click_link "Log out"

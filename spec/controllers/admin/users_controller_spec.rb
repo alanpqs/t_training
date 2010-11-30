@@ -4,11 +4,18 @@ describe Admin::UsersController do
 
   render_views
   
+  before(:each) do
+    @region = Factory(:region)
+    @country = Factory(:country, :region_id => @region.id)
+    @user = Factory(:user, :country_id => @country.id)
+    
+  end
+  
   describe "for non-logged-in users" do
     
-    before(:each) do
-      @user = Factory(:user)
-    end
+    #before(:each) do
+    #  @user = Factory(:user)
+    #end
     
     describe "GET 'index'" do
       
@@ -64,7 +71,7 @@ describe Admin::UsersController do
   describe "for logged-in non-admins" do
     
     before(:each) do
-      @user = Factory(:user)
+      #@user = Factory(:user)
       test_log_in(@user)
     end
     
@@ -122,19 +129,21 @@ describe Admin::UsersController do
   describe "for logged-in admins" do
     
     before(:each) do
-      @user = Factory(:user, :admin => true)
-      @second =  Factory(:user, :name => "Second", :email => "another@example.com")
-      @third =   Factory(:user, :name => "Third", :email => "another@example.net")
-      test_log_in(@user)
+      @admin = Factory(:user, :email => "admin@example.com", :admin => true, :country_id => @country.id)
+      @second =  Factory( :user, :name => "Second", 
+                          :email => "another@example.com", :country_id => @country.id)
+      @third =   Factory(:user, :name => "Third", 
+                          :email => "another@example.net", :country_id => @country.id)
+      test_log_in(@admin)
     end
       
     describe "GET 'index'" do
       
       before(:each) do
         
-        @users = [@user, @second, @third]
+        @users = [@admin, @second, @third]
         30.times do
-          @users << Factory(:user, :email => Factory.next(:email))
+          @users << Factory(:user, :country_id => @country.id, :email => Factory.next(:email))
         end
       end
       
@@ -255,7 +264,7 @@ describe Admin::UsersController do
       
         before(:each) do
           @attr = { :name => "New Name", :email => "newname@example.com",
-                    :password => "barbaz", :password_confirmation => "barbaz"
+                    :password => "barbaz", :password_confirmation => "barbaz", :country_id => @country.id
           }
         end
       
@@ -284,7 +293,7 @@ describe Admin::UsersController do
         
         it "should not delete the current user" do
           lambda do
-            delete :destroy, :id => @user
+            delete :destroy, :id => @admin
             flash[:notice].should =~ /You cannot delete your own record./
             response.should redirect_to(admin_users_path)  
           end.should_not change(User, :count)

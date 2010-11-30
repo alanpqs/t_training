@@ -4,4 +4,4 @@
 TO DOs
 
 *  Thorough testing for email submissions and messaging in /admin/categories and admin/category_approvals 
-controllers, also for redirect menu
+controllers, also for redirect menu - in category approvals, test the link on the groups column

@@ -4,8 +4,17 @@ describe Admin::CategoryApprovalsController do
 
   render_views
   
+  before(:each) do
+    @region = Factory(:region)
+    @country = Factory(:country, :region_id => @region.id)
+  end
+  
   describe "For non-logged-in users" do
   
+    before(:each) do
+      @user = Factory(:user, :country_id => @country)
+    end
+    
     describe "GET 'index'" do
       
       it "should not be successful" do
@@ -22,7 +31,7 @@ describe Admin::CategoryApprovalsController do
     describe "GET 'edit'" do
       
       before(:each) do
-        @user = Factory(:user, :email => "fake@example.com")
+        #@user = Factory(:user, :email => "fake@example.com")
         @category = Factory(:category, :user_id => @user.id)
       end
       
@@ -40,7 +49,7 @@ describe Admin::CategoryApprovalsController do
     describe "PUT 'update'" do
       
       before(:each) do
-        @user = Factory(:user, :email => "fake2@example.com")
+        #@user = Factory(:user, :email => "fake2@example.com")
         @category = Factory(:category, :category => "EFG", :target => "Job", :user_id => @user.id)
         @attr = { :category => "Abc", :target => "Job", :user_id => @user.id }
       end
@@ -64,7 +73,7 @@ describe Admin::CategoryApprovalsController do
     before(:each) do
       @target = 1
       @target_name = "#{Category::TARGET_TYPES[@target]}"
-      @user = Factory(:user)
+      @user = Factory(:user, :country_id => @country.id)
       test_log_in(@user)
     end
     
@@ -123,7 +132,7 @@ describe Admin::CategoryApprovalsController do
     before(:each) do
       @target = 1
       @target_name = "#{Category::TARGET_TYPES[@target]}" 
-      @user = Factory(:user, :email => "email@example.com", :admin => true)
+      @user = Factory(:user, :email => "email@example.com", :admin => true, :country_id => @country.id)
       test_log_in(@user)
     end
     
@@ -132,7 +141,7 @@ describe Admin::CategoryApprovalsController do
       before(:each) do
         @authorized_cat = "Accountancy"
         @unauthorized_cat = "Basketball"
-        @category = Factory(:category)
+        @category = Factory(:category, :user_id => @user.id)
         @category2 = Factory(:category, :category => @authorized_cat, 
                                         :target => "Job",
                                         :authorized => true, 
@@ -322,7 +331,7 @@ describe Admin::CategoryApprovalsController do
       describe "failure" do
         
         before(:each) do
-          @category = Factory(:category)
+          @category = Factory(:category, :user_id => @user.id)
           @bad_attr = { :category => "", :target => @target_name, :user_id => @user.id }
         end
         
@@ -352,7 +361,7 @@ describe Admin::CategoryApprovalsController do
       describe "success" do
         
         before(:each) do
-          @category = Factory(:category)
+          @category = Factory(:category, :user_id => @user.id)
           @good_attr = { :category => "Another", :target => @target_name, :user_id => @user.id }
         end
         

@@ -18,6 +18,7 @@ class UsersController < ApplicationController
   def new
     @title = "Sign Up"
     @user = User.new
+    @countries = Country.find(:all, :order => "name")
   end
   
   def create
@@ -30,12 +31,14 @@ class UsersController < ApplicationController
       @title = "Sign Up"
       @user.password = nil
       @user.password_confirmation = nil
+      @countries = Country.find(:all, :order => "name")
       render 'new'
     end
   end
   
   def edit
     @title = "Edit user"
+    @countries = Country.find(:all, :order => "name")
   end
   
   def update
@@ -44,6 +47,7 @@ class UsersController < ApplicationController
       redirect_to @user
     else
       @title = "Edit user"
+      @countries = Country.find(:all, :order => "name")
       render 'edit'
     end
   end

@@ -12,6 +12,10 @@
       <%= f.text_field :email %>
     </div>
     <div class="field">
+      <%= f.label :country_id %><br />
+      <%= collection_select(:user, :country_id, @countries, :id, :name, :prompt => true) %>
+    </div>
+    <div class="field">
       <%= f.label :password %><br />
       <%= f.password_field :password %> 
     </div>

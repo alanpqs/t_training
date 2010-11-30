@@ -3,11 +3,13 @@ require 'spec_helper'
 describe UsersController do
   render_views
 
+  before(:each) do
+    @region = Factory(:region)
+    @country = Factory(:country, :region_id => @region.id)
+    @user = Factory(:user, :country_id => @country.id)
+  end
+  
   describe "GET 'show'" do
-    
-    before(:each) do
-      @user = Factory(:user)
-    end
     
     it "should be successful" do
       get :show, :id => @user
@@ -98,7 +100,7 @@ describe UsersController do
     describe "success" do
       
       before(:each) do
-        @attr = { :name => "New User", :email => "user@example.com",
+        @attr = { :name => "New User", :email => "user@example.com", :country_id => @country.id,
                   :password => "foobar", :password_confirmation => "foobar"
         }
       end
@@ -129,7 +131,6 @@ describe UsersController do
   describe "GET 'edit'" do
     
     before(:each) do
-      @user = Factory(:user)
       test_log_in(@user)
     end
     
@@ -154,7 +155,6 @@ describe UsersController do
   describe "PUT 'update'" do
     
     before(:each) do
-      @user = Factory(:user)
       test_log_in(@user)
     end
     
@@ -213,10 +213,6 @@ describe UsersController do
   
   describe "authentication of edit/update pages" do
     
-    before(:each) do
-      @user = Factory(:user)
-    end
-    
     describe "for non-logged-in users" do
       
       it "should deny access to 'edit'" do
@@ -233,7 +229,7 @@ describe UsersController do
     describe "for logged-in users" do
       
       before(:each) do
-        wrong_user = Factory(:user, :email => "user@example.net")
+        wrong_user = Factory(:user, :email => "user@example.net", :country_id => @country.id)
         test_log_in(wrong_user)
       end
       
@@ -250,10 +246,6 @@ describe UsersController do
   end
   
   describe "DELETE 'destroy'" do
-    
-    before(:each) do 
-      @user = Factory(:user)
-    end
     
     describe "as a non-logged-in user" do
       it "should deny access" do
@@ -273,7 +265,7 @@ describe UsersController do
     describe "as an admin user" do
       
       before(:each) do
-        admin = Factory(:user, :email => "admin@example.com", :admin => true)
+        admin = Factory(:user, :email => "admin@example.com", :admin => true, :country_id => @country.id)
         test_log_in(admin)
       end
       

@@ -4,8 +4,17 @@ describe Admin::CategoriesController do
 
   render_views
   
+  before(:each) do
+    @region = Factory(:region)
+    @country = Factory(:country, :region_id => @region.id)  
+  end
+  
   describe "For non-logged-in users" do
   
+    before(:each) do
+      @user = Factory(:user, :country_id => @country.id) 
+    end
+    
     describe "GET 'index'" do
       
       it "should not be successful" do
@@ -35,7 +44,7 @@ describe Admin::CategoriesController do
     describe "POST 'create'" do
       
       before(:each) do
-        @user = Factory(:user)
+        #@user = Factory(:user)
         @attr = { :category => "Abc", :target => "Job", :user_id => @user.id }
       end
       
@@ -54,7 +63,7 @@ describe Admin::CategoriesController do
     describe "GET 'edit'" do
       
       before(:each) do
-        @user = Factory(:user, :email => "fake@example.com")
+        #@user = Factory(:user, :email => "fake@example.com")
         @category = Factory(:category, :authorized => true, :user_id => @user.id)
       end
       
@@ -72,7 +81,7 @@ describe Admin::CategoriesController do
     describe "PUT 'update'" do
       
       before(:each) do
-        @user = Factory(:user, :email => "fake2@example.com")
+        #@user = Factory(:user, :email => "fake2@example.com")
         @category = Factory(:category, :category => "EFG", :target => "Job", 
                             :authorized => true, :user_id => @user.id)
         @attr = { :category => "Abc", :target => "Job", :user_id => @user.id }
@@ -93,7 +102,7 @@ describe Admin::CategoriesController do
     describe "DELETE 'destroy'" do
       
       before(:each) do
-        @user = Factory(:user, :email => "anotherfake@example.com")
+        #@user = Factory(:user, :email => "anotherfake@example.com")
         @category = Factory(:category, :user_id => @user.id)
       end
       
@@ -116,7 +125,7 @@ describe Admin::CategoriesController do
     before(:each) do
       @target = 1
       @target_name = "#{Category::TARGET_TYPES[@target]}"
-      @user = Factory(:user)
+      @user = Factory(:user, :email => "factory@email.com", :country_id => @country.id) 
       test_log_in(@user)
     end
     
@@ -228,14 +237,14 @@ describe Admin::CategoriesController do
       @target_name = "#{Category::TARGET_TYPES[@target]}" 
       @target2 = 2
       @target_name2 = "#{Category::TARGET_TYPES[@target2]}"
-      @user = Factory(:user, :email => "email@example.com", :admin => true)
+      @user = Factory(:user, :email => "admin2@email.com", :admin => true, :country_id => @country.id) 
       test_log_in(@user)
     end
     
     describe "GET 'index'" do
       
       before(:each) do
-        @category = Factory(:category,  :authorized => true, :target => @target_name)
+        @category = Factory(:category,  :authorized => true, :user_id => @user.id, :target => @target_name)
         @category2 = Factory(:category, :category => "Accountancy", 
                                         :target => @target_name,
                                         :authorized => true, 
@@ -613,7 +622,7 @@ describe Admin::CategoriesController do
       describe "failure" do
         
         before(:each) do
-          @category = Factory(:category, :authorized => true)
+          @category = Factory(:category, :authorized => true, :user_id => @user.id)
           @bad_attr = { :category => "", :target => @target_name, :user_id => @user.id }
         end
         
@@ -643,7 +652,7 @@ describe Admin::CategoriesController do
       describe "success" do
         
         before(:each) do
-          @category = Factory(:category, :authorized => true)
+          @category = Factory(:category, :authorized => true, :user_id => @user.id)
           @good_attr = { :category => "Another", :target => @target_name, :user_id => @user.id }
         end
         
@@ -665,7 +674,7 @@ describe Admin::CategoriesController do
     describe "DELETE 'destroy'" do
       
       before(:each) do
-        @category = Factory(:category, :authorized => true)
+        @category = Factory(:category, :authorized => true, :user_id => @user.id)
       end
       
       describe "success" do

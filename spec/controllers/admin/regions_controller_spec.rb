@@ -4,6 +4,12 @@ describe Admin::RegionsController do
 
   render_views
 
+  before(:each) do
+    @region = Factory(:region)
+    @country = Factory(:country, :region_id => @region.id)
+    @user = Factory(:user, :country_id => @country.id)
+  end
+  
   describe "GET 'index'" do
     
     it "should deny access to non-logged-in users" do
@@ -12,8 +18,8 @@ describe Admin::RegionsController do
     end
     
     it "should deny access to logged-in non-admin users" do
-      user = Factory(:user)
-      test_log_in(user)
+      #user = Factory(:user)
+      test_log_in(@user)
       get :index
       response.should_not be_success
     end
@@ -24,7 +30,7 @@ describe Admin::RegionsController do
         @attrs.each do |attr|
           Region.create!(:region => attr)
         end
-        admin_user = Factory(:user, :admin => true)
+        admin_user = Factory(:user, :email => "admin@example.com", :admin => true, :country_id => @country.id)
         test_log_in(admin_user)
       end
       
@@ -93,7 +99,7 @@ describe Admin::RegionsController do
   describe "deny new/create permissions to non-logged-in and non-admin users" do
     
     before(:each) do
-      @user = Factory(:user)
+      #@user = Factory(:user)
       @attr = { :region => "Some Region"}
     end
     
@@ -164,8 +170,8 @@ describe Admin::RegionsController do
   describe "GET 'new' for logged-in admin users" do
     
     before(:each) do
-      @user = Factory(:user, :admin => true)
-      test_log_in(@user)
+      @admin = Factory(:user, :email => "admin2@example.com", :admin => true, :country_id => @country.id)
+      test_log_in(@admin)
     end
   
     it "should open successfully" do
@@ -182,10 +188,10 @@ describe Admin::RegionsController do
   describe "POST 'create' for logged-in admin users" do
     
     before(:each) do
-      @user = Factory(:user, :admin => true)
+      @admin = Factory(:user, :email => "admin3@example.com", :admin => true, :country_id => @country.id)
       @attr_blank = { :region => "" }
       @attr_good  = { :region => "New region"}
-      test_log_in(@user)
+      test_log_in(@admin)
     end
     
     describe "failure" do
@@ -238,8 +244,8 @@ describe Admin::RegionsController do
   describe "deny edit/update permissions to non-logged-in and non-admin users" do
     
     before(:each) do
-      @user = Factory(:user)
-      @region = Factory(:region)
+      #@user = Factory(:user)
+      #@region = Factory(:region)
       @attr = { :region => "New Region" }
     end
     
@@ -294,9 +300,9 @@ describe Admin::RegionsController do
   describe "edit and update actions for logged-in admin users" do
     
     before(:each) do
-      @user = Factory(:user, :admin => true)
-      @region = Factory(:region)
-      test_log_in(@user)
+      @admin = Factory(:user, :email => "admin4@example.com", :admin => true, :country_id => @country.id)
+      #@region = Factory(:region)
+      test_log_in(@admin)
     end
     
     describe "GET 'edit'" do
@@ -369,8 +375,8 @@ describe Admin::RegionsController do
   describe "DELETE 'destroy'" do
     
     before(:each) do 
-      @user = Factory(:user)
-      @region = Factory(:region)
+      #@user = Factory(:user)
+      #@region = Factory(:region)
     end
     
     it "should be impossible for non-logged-in users" do
@@ -394,7 +400,8 @@ describe Admin::RegionsController do
         @attr2 = { :region => "Asia"}
         @country_attr = { :name => "India", :country_code => "IND", :currency_code => "IRP",
                           :phone_code => "+091", :region_id => 1 }
-        test_log_in(Factory(:user, :email => "user@example.info", :admin => true))
+        test_log_in(Factory(:user, :email => "user4@example.info", 
+                            :admin => true, :country_id => @country.id))
       end
       
       describe "success" do
