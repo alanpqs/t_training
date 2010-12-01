@@ -24,4 +24,15 @@ module ApplicationHelper
   def drop_changes(route)
     link_to "(drop changes)", route
   end
+  
+  def previous_page(admin_route, user_route)
+    if current_user.admin?
+      path = admin_route
+    else
+      path = user_route
+    end
+    
+    link_to "(previous page)", path
+    
+  end
 end

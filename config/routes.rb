@@ -1,5 +1,9 @@
 TTraining::Application.routes.draw do
 
+  #get "cities/index"
+
+  #get "cities/new"
+
   #get "categoryapprovals/index"
 
   #get "category_approvals/index"
@@ -28,7 +32,11 @@ TTraining::Application.routes.draw do
   
   resources :users,       :except => :index
   resources :sessions,    :only => [:new, :create, :destroy]
-  resources :countries
+  
+  resources :countries do
+    resources :cities
+  end
+  
   resources :categories
   
   

@@ -31,6 +31,10 @@ section h1 {
   color: #dc0800;
 }
 
+section h5 {
+  margin-bottom: 0.5em;    
+}
+
 .header_link {
   font-size: 0.6em; 
   padding-left: 10px;  
@@ -100,6 +104,12 @@ nav ul li a:hover {
 }
 
 /* Boxes */
+
+#list_display {
+  background: transparent url(../images/wg-bg.png);
+  padding: 10px; 
+  font-size: 0.9em;  
+}
 
 #loginfo {
   margin-top: 0;

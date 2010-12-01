@@ -41,3 +41,8 @@ end
 Factory.sequence :category do |n|
   "Cat#{n}"
 end
+
+Factory.define :city do |city|
+  city.name                     "Efg"
+  city.association :country
+end

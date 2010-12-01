@@ -13,6 +13,7 @@ class Admin::CountriesController < ApplicationController
   def show
     @country = Country.find(params[:id])
     @title = @country.name
+    @cities = @country.cities.all(:order => "name")
   end
   
   def new

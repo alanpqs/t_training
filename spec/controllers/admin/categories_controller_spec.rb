@@ -435,7 +435,7 @@ describe Admin::CategoriesController do
         
       describe "failure" do
         
-        it "should not create a new Category record" do
+        it "should not create a new Category" do
           lambda do
             post :create, :category => @attr_blank
           end.should_not change(Category, :count)  
