@@ -1,15 +1,15 @@
 # == Schema Information
-# Schema version: 20101130111925
+# Schema version: 20101202195036
 #
 # Table name: cities
 #
 #  id         :integer         not null, primary key
 #  name       :string(255)
 #  country_id :integer
-#  latitude   :float
-#  longitude  :float
 #  created_at :datetime
 #  updated_at :datetime
+#  latitude   :float
+#  longitude  :float
 #
 
 class City < ActiveRecord::Base
@@ -17,6 +17,10 @@ class City < ActiveRecord::Base
   attr_accessible :name, :country_id, :latitude, :longitude
   
   belongs_to :country
+  
+  geocoded_by :location
+  
+  after_validation :fetch_coordinates
   
   city_regex = /\A[A-Z][a-z]*\b\S?([\s|\S][a-zA-Z][a-z]*\b\S?)*\z/
   
@@ -31,6 +35,11 @@ class City < ActiveRecord::Base
   validates  :longitude,  :inclusion    => { :in => -180..180, :allow_nil => true },
                           :numericality => true, :allow_nil => true
                           
+  
+  def location
+    [name, self.country.name].compact.join(', ')
+  end
+  
   def self.no_geolocation
     City.find(:all, :conditions => ["latitude IS ? OR longitude IS ?", nil, nil])
   end
