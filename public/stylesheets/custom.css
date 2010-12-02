@@ -227,6 +227,10 @@ textarea {
   margin-bottom: 0;
 }
 
+table {
+  font-size: 0.9em;    
+}
+
 td.two_col {
   width: 50%;
   padding: 1em;

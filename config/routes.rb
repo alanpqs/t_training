@@ -1,33 +1,9 @@
 TTraining::Application.routes.draw do
 
-  #get "cities/index"
-
-  #get "cities/new"
-
-  #get "categoryapprovals/index"
-
-  #get "category_approvals/index"
-
-  #get "countries/index"
-  #get "users/index"
-  #get "regions/index"
-  #get "regions/new"
-  #get "pages/home"
-  #get "categories/index"
-  #get "categories/new"
-  #get "countries/index"
-  #get "countries/new"
-  #get "countries/create"
-  #get "countries/edit"
-  #get "countries/update"
-  #get "countries/destroy"
-  #get "currencies/index"
-  #get "currencies/show"
-
-
   namespace "admin" do
     resources :regions, :countries, :categories, :category_approvals
     resources :users,     :only => [:index, :show, :edit, :update, :destroy]
+    resources :cities
   end
   
   resources :users,       :except => :index

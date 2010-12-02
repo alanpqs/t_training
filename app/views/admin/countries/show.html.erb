@@ -47,8 +47,4 @@
   <span style="font-weight:normal"><%= link_to "(add a new city)", new_country_city_path(@country)%>
   </span>
 </h5>
-<div id="list_display" class="round">
-<% @cities.each do |city| %>
-   <%= city.name %>&nbsp; &nbsp;
-<% end %>
-</div>
+<%= render "shared/country_cities" %>

@@ -30,5 +30,9 @@ class City < ActiveRecord::Base
                           :numericality => true, :allow_nil => true
   validates  :longitude,  :inclusion    => { :in => -180..180, :allow_nil => true },
                           :numericality => true, :allow_nil => true
+                          
+  def self.no_geolocation
+    City.find(:all, :conditions => ["latitude IS ? OR longitude IS ?", nil, nil])
+  end
                      
 end
