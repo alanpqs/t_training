@@ -1,4 +1,3 @@
-name,country_code,currency_code,phone_code,region_id
 Afghanistan,AFG,AFN,+93,2
 Aland,ALA,EUR,+35-818,3
 Albania,ALB,ALL,+355,3
@@ -164,7 +163,7 @@ Palestine,PSE,ILS,+970,2
 Panama,PAN,PAB,+507,5
 Papua New Guinea,PNG,PGK,+675,8
 Paraguay,PRY,PYG,+595,6
-People's Republic of China,CHN,CNY,+86,1
+Peoples Republic of China,CHN,CNY,+86,1
 Peru,PER,PEN,+51,6
 Philippines,PHL,PHP,+63,1
 Poland,POL,PLN,+48,3
@@ -175,11 +174,11 @@ Reunion,REU,EUR,+262,7
 Romania,ROU,RON,+40,3
 Russia,RUS,RUB,+7,3
 Rwanda,RWA,RWF,+250,7
-Saint Barthelemy,GLP,EUR,+590,5
+Saint Barthelemy,SBT,EUR,+590,5
 Saint Helena,SHN,SHP,+290,3
 Saint Kitts & Nevis,KNA,XCD,+1-869,5
 Saint Lucia,LCA,XCD,+1-758,5
-Saint Martin,GLP,EUR,+590,5
+Saint Martin,SMT,EUR,+590,5
 Saint Pierre & Miquelon,SPM,EUR,+508,4
 Saint Vincent & the Grenadines,VCT,XCD,+1-784,5
 Samoa,WSM,WST,+685,8
