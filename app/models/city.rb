@@ -16,11 +16,13 @@ class City < ActiveRecord::Base
   
   attr_accessible :name, :country_id, :latitude, :longitude
   
+  after_validation :fetch_coordinates
+  
   belongs_to :country
   
   geocoded_by :location
   
-  after_validation :fetch_coordinates
+  
   
   city_regex = /\A[A-Z][a-z]*\b\S?([\s|\S][a-zA-Z][a-z]*\b\S?)*\z/
   
@@ -36,8 +38,9 @@ class City < ActiveRecord::Base
                           :numericality => true, :allow_nil => true
                           
   
+  
   def location
-    [name, self.country.name].compact.join(', ')
+    [self.name, self.country.name].compact.join(', ') 
   end
   
   def self.no_geolocation
