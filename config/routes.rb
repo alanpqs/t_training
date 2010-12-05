@@ -3,16 +3,10 @@ TTraining::Application.routes.draw do
   namespace "admin" do
     resources :regions, :countries, :categories, :category_approvals
     resources :users,     :only => [:index, :show, :edit, :update, :destroy]
-    resources :cities
   end
   
   resources :users,       :except => :index
   resources :sessions,    :only => [:new, :create, :destroy]
-  
-  resources :countries do
-    resources :cities
-  end
-  
   resources :categories
   
   

@@ -354,32 +354,6 @@ describe Admin::CountriesController do
         get :show, :id => @country
         response.should have_selector("span.rate",  :content => "Unknown")
       end
-      
-      describe "listing associated cities" do
-        
-        before(:each) do
-          @country2 = Factory(:country, :name => "Country2", :country_code => "CTX", :region_id => @region.id)
-          @city1 = Factory(:city, :country_id => @country.id)
-          @city2 = Factory(:city, :name => "City Two", :country_id => @country.id)
-          @foreign_city = Factory(:city, :name => "Foreign", :country_id => @country2.id)
-          @cities = [@city1, @city2, @foreign_city]
-        end
-        
-        it "should have a list of associated cities" do
-          get :show, :id => @country
-          @cities[0..1].each do |city| 
-            response.should have_selector("div#list_display", :content  => city.name)
-          end
-        end
-        
-        it "should not include foreign countries" do
-          get :show, :id => @country
-          @cities[2..2].each do |city| 
-            response.should_not have_selector("div#list_display", :content  => city.name)
-          end
-        end
-        
-      end
     end
     
     describe "GET 'new'" do
