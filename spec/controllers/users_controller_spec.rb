@@ -71,6 +71,13 @@ describe UsersController do
     
     it "should have a location field" do
       get :new
+      response.should have_selector("input[name = 'user[vendor]'][type='radio']",
+                                    :checked => "checked",
+                                    :id => "user_vendor_false")
+    end
+    
+    it "should have a vendor select field" do
+      get :new
       response.should have_selector("input[name = 'user[location]'][type='text']")
     end
     
@@ -164,6 +171,13 @@ describe UsersController do
     it "should have a location field" do
       get :new
       response.should have_selector("input[name = 'user[location]'][type='text']")
+    end
+    
+    it "should have a location field" do
+      get :new
+      response.should have_selector("input[name = 'user[vendor]'][type='radio']",
+                                    :checked => "checked",
+                                    :id => "user_vendor_false")
     end
     
     it "should have a link to change the Gravatar" do

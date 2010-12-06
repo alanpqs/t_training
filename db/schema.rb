@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101205131658) do
+ActiveRecord::Schema.define(:version => 20101206005338) do
 
   create_table "categories", :force => true do |t|
     t.string   "category"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(:version => 20101205131658) do
     t.string   "location"
     t.float    "latitude"
     t.float    "longitude"
+    t.boolean  "vendor",             :default => false
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

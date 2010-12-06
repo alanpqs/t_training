@@ -31,6 +31,11 @@ section h1 {
   color: #dc0800;
 }
 
+section h1 .h_tag {
+  font-size: 0.5em; 
+  color: #666;       
+}
+
 section h5 {
   margin-bottom: 0.5em;    
 }
@@ -193,7 +198,7 @@ textarea {
 .redirects {
   float:right; 
   padding-top: 14px; 
-  padding-right:40px;  
+  padding-right:20px;  
 }
 /* Round corners */
 
@@ -263,9 +268,16 @@ td.sidebar {
   background-color: ivory    
 }
 
-.profile img.gravatar {
+.gravatar {
   border: 1px solid #999;
   margin-bottom: -15px;
+  float: right;
+  padding-right: 0;
+}
+
+.caption {
+  padding: 10px;
+  width: 50px;    
 }
 
 div.field, div.actions {
