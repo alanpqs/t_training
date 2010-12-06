@@ -63,6 +63,17 @@ describe UsersController do
       response.should have_selector("input[name = 'user[password]'][type='password']")
     end
     
+    it "should have a country selector field" do
+      get :new
+      response.should have_selector("select", :name => "user[country_id]",
+                                                :content => "")
+    end
+    
+    it "should have a location field" do
+      get :new
+      response.should have_selector("input[name = 'user[location]'][type='text']")
+    end
+    
     it "should have a password confirmation field" do
       get :new
       response.should have_selector("input[name = 'user[password_confirmation]']
@@ -76,7 +87,7 @@ describe UsersController do
       
       before(:each) do 
         @attr = { :name => "", :email => "", :password => "",
-                  :password_confirmation => ""
+                  :password_confirmation => "", :location => "", :country_id => @country.id
         }
       end
       
@@ -101,7 +112,7 @@ describe UsersController do
       
       before(:each) do
         @attr = { :name => "New User", :email => "user@example.com", :country_id => @country.id,
-                  :password => "foobar", :password_confirmation => "foobar"
+                  :location => "Cambridge", :password => "foobar", :password_confirmation => "foobar"
         }
       end
       
@@ -142,6 +153,17 @@ describe UsersController do
     it "should have the right title" do
       get :edit, :id => @user
       response.should have_selector("title", :content => "Edit user")
+    end
+    
+    it "should have a country selector field" do
+      get :new
+      response.should have_selector("select", :name => "user[country_id]",
+                                                :content => @country.name)
+    end
+    
+    it "should have a location field" do
+      get :new
+      response.should have_selector("input[name = 'user[location]'][type='text']")
     end
     
     it "should have a link to change the Gravatar" do
@@ -187,9 +209,9 @@ describe UsersController do
     describe "success" do
       
       before(:each) do
-        @attr = { :name => "New Name", :email => "newname@example.com",
-                  :password => "barbaz", :password_confirmation => "barbaz"
-        }
+        @attr = { :name => "New Name", :email => "newname@example.com", 
+                  :country_id => @country.id, :location => "London",
+                  :password => "foobar", :password_confirmation => "foobar"  }
       end
       
       it "should change the user's attributes" do

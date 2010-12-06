@@ -9,7 +9,8 @@ describe User do
                 :email                  => "user@example.com",
                 :password               => "foobar",
                 :password_confirmation  => "foobar",
-                :country_id             => @country.id  
+                :country_id             => @country.id,
+                :location               => "London"  
     }
   end
   
@@ -60,6 +61,12 @@ describe User do
     User.create!(@attr.merge(:email => upcased_email))
     user_with_duplicate_email = User.new(@attr)
     user_with_duplicate_email.should_not be_valid
+  end
+  
+  it "should reject a location that is too long" do
+    location_name = "a" * 51
+    user_with_long_location = User.new(@attr.merge(:location => location_name))
+    user_with_long_location.should_not be_valid
   end
   
   describe "password validations" do

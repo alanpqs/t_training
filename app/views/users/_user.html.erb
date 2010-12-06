@@ -1,0 +1,30 @@
+  <div class="two_column_left">
+  
+    <div class="field">
+      <%= f.label :name %> <small> (Your public name on T4T)</small><br />
+      <%= f.text_field :name %>
+    </div>
+    <div class="field">
+      <%= f.label :email %><small> (Strictly private & no spam - promise!)</small><br />
+      <%= f.text_field :email %>
+    </div>
+    <div class="field">
+      <%= f.label :country_id %><br />
+      <%= collection_select(:user, :country_id, @countries, :id, :name, :prompt => true) %>
+    </div>
+    <div class="field">
+      <%= f.label :location %><small> (e.g. Dallas, TX <i>or</i> Chelsea, London)</small><br />
+      <%= f.text_field :location %>
+    </div>
+  </div>
+  
+  <div class="two_column_right">
+    <div class="field">
+      <%= f.label :password %><br />
+      <%= f.password_field :password %>
+    </div>
+    <div class="field">
+      <%= f.label :password_confirmation, "Confirmation" %><br />
+      <%= f.password_field :password_confirmation %>
+    </div>
+  </div>

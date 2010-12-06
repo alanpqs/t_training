@@ -1,31 +1,16 @@
 <h1>Your settings</h1>
 
-<div class="two_column_left">
-  <%= form_for(@user) do |f| %>
-    <%= render 'shared/error_messages', :object => f.object %>
-    <div class="field">
-      <%= f.label :name %><br />
-      <%= f.text_field :name %>
-    </div>
-    <div class="field">
-      <%= f.label :email %><br />
-      <%= f.text_field :email %>
-    </div>
-    <div class="field">
-      <%= f.label :password %><br />
-      <%= f.password_field :password %>
-    </div>
-    <div class="field">
-      <%= f.label :password_confirmation, "Confirmation" %><br />
-      <%= f.password_field :password_confirmation %>
-    </div>
-    <div class="actions">
-       <%= submit_tag "Update", :class => "action_round" %>
-    </div> 
-  <% end %>
 
-  <div class="redirects">
-    <%= gravatar_for @user %>
-    <a href="http://gravatar.com/emails">change</a>
-  </div>
+<%= form_for(@user) do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  <%= render 'user', :f => f %>
+  
+  <div class="actions">
+    <%= submit_tag "Update", :class => "action_round" %>
+  </div> 
+<% end %>
+
+<div class="redirects">
+  <%= gravatar_for @user %>
+  <a href="http://gravatar.com/emails">change</a>
 </div>

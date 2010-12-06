@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20101116103755
+# Schema version: 20101205114034
 #
 # Table name: users
 #
@@ -12,6 +12,7 @@
 #  salt               :string(255)
 #  admin              :boolean
 #  country_id         :integer
+#  location           :string(255)
 #
 
 class User < ActiveRecord::Base
@@ -19,10 +20,12 @@ class User < ActiveRecord::Base
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
   attr_accessor   :password
-  attr_accessible :name, :email, :password, :password_confirmation, :country_id
+  attr_accessible :name, :email, :password, :password_confirmation, :country_id, :location
   
   belongs_to  :country
   has_many    :categories
+  
+  geocoded_by :where_is
   
   validates :name,        :presence     => true,
                           :length       => { :maximum => 50 }
@@ -33,8 +36,11 @@ class User < ActiveRecord::Base
                           :confirmation => true,
                           :length       => { :within => 6..40 }
   validates :country_id,  :presence     => true
+  validates :location,    :presence     => true,
+                          :length       => { :maximum => 50 }          
                         
   before_save :encrypt_password
+  after_validation :fetch_coordinates
   
   def has_password?(submitted_password)
     encrypted_password == encrypt(submitted_password)
@@ -51,9 +57,14 @@ class User < ActiveRecord::Base
     (user && user.salt == cookie_salt) ? user : nil
   end
   
+  def where_is
+    [location, country.name].compact.join(', ')
+  end
+  
   private
   
     def encrypt_password
+      self.salt = make_salt if new_record?
       self.encrypted_password = encrypt(password)
     end
     

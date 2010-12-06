@@ -1,46 +1,18 @@
 <h1>Sign up</h1>
 
-<div class="two_column_left">
-  <%= form_for @user do |f| %>
-    <%= render 'shared/error_messages', :object => f.object %>
-    <div class="field">
-      <%= f.label :name %><br />
-      <%= f.text_field :name %>
+<%= form_for @user do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  <%= render 'user', :f => f %>  
+  <div class="actions">
+    
+    <div class="notes">
+      Signing up is absolutely free, and gives you all the benefits we describe in the panel to the left.
+      <br /><br />
+      Make sure you understand the Terms and Conditions, then just click to Sign Up.
+      <br /><br />
     </div>
-    <div class="field">
-      <%= f.label :email %><br />
-      <%= f.text_field :email %>
-    </div>
-    <div class="field">
-      <%= f.label :country_id %><br />
-      <%= collection_select(:user, :country_id, @countries, :id, :name, :prompt => true) %>
-    </div>
-    <div class="field">
-      <%= f.label :password %><br />
-      <%= f.password_field :password %> 
-    </div>
-    <div class="field">
-      <%= f.label :password_confirmation, "Confirmation" %><br />
-      <%= f.password_field :password_confirmation %>
-    </div>
-    <div class="actions">
-       <%= submit_tag "Sign Up", :class => "action_round" %>
-    </div>
-  <% end %>
-</div>
-<div class="two_column_right">
-  <div class="notes">
-    Signing up is absolutely free, and gives you all the benefits we describe in the panel opposite.
-    <br /><br />
-    The name you enter will be the public name people see on the <span class="loud">Tickets for 
-    Training</span> site.  Other users will never see your email address, and the only time we'll 
-    ever use it is for essential administrative matters.  No 'special offers', no spam, that's 
-    a promise.
-    <br /><br />    
-    Your password will be secured with state-of-the-art encryption - but use a strong 
-    password anyway, at least six characters long and preferably not just alphabetic
-    characters.  Repeat your password to confirm it.
-    <br /><br />
-    Make sure you understand the Terms and Conditions, then just click to Sign Up.
+    <%= submit_tag "Sign Up", :class => "action_round" %>
   </div>
-</div>
+<% end %>
+
+  
