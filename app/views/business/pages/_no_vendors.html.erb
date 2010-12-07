@@ -2,6 +2,7 @@
   <p>You're not associated with any training businesses yet, so why not 
       <%= link_to "add a new vendor", new_business_vendor_path %> now.</p>
   <p>OR</p>
-  <p>If you're not planning to sell training via T4T, then go to Settings and say so there.  
+  <p>If you're not planning to sell training via T4T, then go to 
+      <%= link_to "Settings", edit_user_path(@user) %> and say so there.  
       Then you'll be directed to the normal User home page when you log in.</p>
 </div>

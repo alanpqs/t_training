@@ -6,6 +6,8 @@
         <% if current_user.admin? %>
           <li><%= link_to "Home", admin_home_path %></li>
           <li><%= link_to "Users", admin_users_path %></li>
+        <% elsif current_user.vendor? %>
+          <li><%= link_to "Home", business_home_path %></li>
         <% else %>
           <li><%= link_to "Home", root_path %></li>
         <% end %>
