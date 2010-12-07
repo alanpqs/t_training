@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20101205114034
+# Schema version: 20101206142529
 #
 # Table name: users
 #
@@ -13,6 +13,9 @@
 #  admin              :boolean
 #  country_id         :integer
 #  location           :string(255)
+#  latitude           :float
+#  longitude          :float
+#  vendor             :boolean
 #
 
 class User < ActiveRecord::Base
