@@ -1,8 +1,18 @@
 TTraining::Application.routes.draw do
 
+  #get "vendor/index"
+
+  #get "vendor/new"
+
+  #get "pages/home"
+
   namespace "admin" do
     resources :regions, :countries, :categories, :category_approvals
     resources :users,     :only => [:index, :show, :edit, :update, :destroy]
+  end
+  
+  namespace "business" do
+    resources :vendors
   end
   
   resources :users,       :except => :index
@@ -23,6 +33,7 @@ TTraining::Application.routes.draw do
   match '/terms',             :to => 'pages#terms'
   match '/categories_admin',  :to => 'pages#categories_admin'
   match '/admin_home',        :to => 'admin/pages#home'
+  match '/business_home',     :to => 'business/pages#home'
 
   root :to => 'pages#home'
   

@@ -154,6 +154,6 @@ describe PagesController do
         response.should have_selector(:a,    :href => "#{admin_categories_path}?id=Fun",
                                              :content => "Having fun")
       end
-    end 
+    end
   end
 end

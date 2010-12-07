@@ -14,6 +14,8 @@ class SessionsController < ApplicationController
       log_in user
       if current_user.admin?
         redirect_back_or admin_home_path
+      elsif current_user.vendor?
+        redirect_back_or business_home_path
       else
         redirect_back_or user
       end

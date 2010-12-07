@@ -27,6 +27,8 @@ class User < ActiveRecord::Base
   
   belongs_to  :country
   has_many    :categories
+  has_many    :representations, :dependent => :destroy
+  has_many    :vendors, :through => :representations
   
   geocoded_by :where_is
   

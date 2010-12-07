@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Links for users logged in but not admins" do
+describe "Links for users logged in but not admins or vendors" do
 
   before(:each) do
     @user = Factory(:user)

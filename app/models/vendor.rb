@@ -22,7 +22,9 @@ class Vendor < ActiveRecord::Base
   
   attr_accessible :name, :country_id, :address, :website, :email, :phone, :description, :logo
   
-  belongs_to :country
+  belongs_to  :country
+  has_many    :representations, :dependent => :destroy
+  has_many    :users, :through => :representations
 
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   

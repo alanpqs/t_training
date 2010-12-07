@@ -43,7 +43,19 @@ Factory.sequence :category do |n|
   "Cat#{n}"
 end
 
-Factory.define :city do |city|
-  city.name                     "Efg"
-  city.association :country
+Factory.define :vendor do |vendor|
+  vendor.name                   "Abc"
+  vendor.address                "London"
+  vendor.association :country
+  vendor.email                  "vendor@example.com"
 end
+
+Factory.define :representation do |representation|
+  representation.association :user
+  representation.association :vendor
+end
+
+#Factory.define :city do |city|
+#  city.name                     "Efg"
+#  city.association :country
+#end

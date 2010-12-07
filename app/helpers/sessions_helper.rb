@@ -42,6 +42,13 @@ module SessionsHelper
     end
   end
   
+  def vendor_user
+    unless current_user.vendor?
+      flash[:notice] = "If you want to sell training, then you need to modify your 'Settings' page."
+      redirect_to user_path(current_user)
+    end
+  end
+  
   def store_location
     session[:return_to] = request.fullpath
   end
