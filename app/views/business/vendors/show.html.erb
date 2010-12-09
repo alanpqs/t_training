@@ -1,0 +1,16 @@
+<h1><%= @title %></h1>
+
+<%= @vendor.address %><br />
+<%= @vendor.country.name %>
+
+<strong>Profile:</strong><br />
+<%= @vendor.description %>
+<br /><br />
+<strong>Website:</strong><br />
+<%= link_to @vendor.website, @vendor.website %><br />
+<strong>Email:</strong><br />
+<%= @vendor.email %><br />
+<strong>Phone:</strong><br />
+<%= @vendor.phone %><br />
+
+

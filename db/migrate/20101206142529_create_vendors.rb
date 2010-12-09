@@ -8,7 +8,8 @@ class CreateVendors < ActiveRecord::Migration
       t.string :email
       t.string :phone
       t.text :description
-      t.binary :logo
+      t.string :verification_code
+      t.boolean :verified, :default => false
       t.boolean :inactive, :default => false
       t.text :notes
 

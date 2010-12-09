@@ -5,7 +5,7 @@ class Business::PagesController < ApplicationController
   before_filter :vendor_user#,     :except => [:create, :update]   
   
   def home
-    @title = "Training provider - home"
+    @title = "Training supplier - home"
     @user = current_user
   end
 

@@ -19,7 +19,9 @@ TTraining::Application.routes.draw do
   resources :sessions,    :only => [:new, :create, :destroy]
   resources :categories
   
+  resources :vendors
   
+  match '/confirm/:code',     :to => 'vendors#confirm', :constraints => { :code => /[A-Za-z0-9]{18}/ }
   match '/signup',            :to => 'users#new'
   match '/login',             :to => 'sessions#new'
   match '/logout',            :to => 'sessions#destroy'

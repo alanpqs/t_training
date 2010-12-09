@@ -68,7 +68,7 @@ describe Business::PagesController do
       
       it "should have the right title" do
         get :home
-        response.should have_selector("title",  :content => "Training provider - home")
+        response.should have_selector("title",  :content => "Training supplier - home")
       end
       
       describe "if the logged in user does not represent a vendor yet" do

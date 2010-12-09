@@ -1,2 +1,28 @@
-<h1>Business::Vendors#new</h1>
-<p>Find me in app/views/business/vendors/new.html.erb</p>
+<div class="rheader_highlight">
+      <strong>Please do not add a vendor without permission.</strong> 
+      Before activating this vendor account, we'll request authorization from the 
+      email address you enter. 
+    </div>
+
+<h1><%= @title %> <span class="h_tag"> 
+   (<span class="loud"> *</span> = required)
+</h1>
+
+<%= form_for [:business, @vendor] do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  
+  <%= render "vendor", :f => f %>
+  <div class="two_column_right">
+    <div class="notes">Note that your business email will be on public display - for enquiries and orders.
+        <br /><br />
+        You can also display your company logo by attaching it as a gravatar to your business email address - 
+        <%= link_to "further details are here", "http://en.gravatar.com/", :target => "_blank" %>.
+    </div>    
+  </div>
+  <div class="actions">
+      <%= submit_button(@tag_name) %>
+  </div>
+  <div class="redirects">
+    <%= drop_changes(business_vendor_path(@vendor)) unless @title == "New vendor"%>
+  </div>
+<% end %>

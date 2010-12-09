@@ -100,11 +100,4 @@ describe Vendor do
     long_description_vendor.should_not be_valid
   end
   
-  it "should accept a correctly formatted logo field" do
-    pending "how to test?"
-    #image = 
-    #good_logo_vendor = Vendor.new(@attr.merge(:logo => image))
-    #good_logo_vendor.should be_valid
-  end
-  
 end

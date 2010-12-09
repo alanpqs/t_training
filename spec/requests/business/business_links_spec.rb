@@ -10,7 +10,7 @@ describe "BusinessLinks" do
   it "should redirect to the 'business/home' page" do
     visit business_home_path
     click_link "Home"
-    response.should have_selector('title', :content => "Training provider - home")
+    response.should have_selector('title', :content => "Training supplier - home")
   end
   
   it "should have a new vendors link" do

@@ -110,6 +110,7 @@ DEPENDENCIES
   google_currency (= 1.0.2)
   gravatar_image_tag (= 0.1.0)
   json
+  mail (= 2.2.7)
   money (= 3.1.5)
   rails (= 3.0.0)
   rails-geocoder

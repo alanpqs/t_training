@@ -1,0 +1,38 @@
+  <div class="two_column_left">
+    <div id="name" class="field">
+      <span class="loud">* </span>
+      <%= f.label :name %><small> (no duplicates - add branch if necessary)</small><br />
+      <%= f.text_field :name %>
+    </div>
+    <div id="country" class="field">
+      <span class="loud">* </span>
+      <%= f.label :country_id %><br />
+      <%= collection_select(:vendor, :country_id, @countries, :id, :name, :prompt => true) %>
+    </div>
+    <div class="smallarea">
+      <div id="address" class="field">
+        <span class="loud">* </span>
+        <%= f.label :address %><small> (in full - or just <i>city, state)</i></small><br />
+        <%= f.text_area :address %>
+      </div>
+    </div>
+    <div class="field">
+      <%= f.label :phone %><small> (no need for international code)</small><br />
+      <%= f.text_field :phone %>
+    </div>
+    <div id="email" class="field">
+      <span class="loud">* </span>
+      <%= f.label :email %><br />
+      <%= f.text_field :email %>
+    </div>
+  </div>
+  <div class="two_column_right">
+    <div class="field">
+      <%= f.label :website, "Website link" %><br />
+      <%= f.text_field :website %>
+    </div>
+    <div class="field">
+      <%= f.label :description, "Key strengths" %><small> (max 255 characters)</small><br />
+      <%= f.text_area :description %>
+    </div>
+  </div>

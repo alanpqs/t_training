@@ -11,30 +11,6 @@ class Admin::CategoryApprovalsController < ApplicationController
     @other_groups = Category::TARGET_TYPES
   end
 
-  #def new
-  #  @target = params[:id]
-  #  @title = "New #{@target} category"
-  #  @category = Category.new(:target => @target, :user_id => current_user.id)
-  #  @tag_name = "Create"
-  #end
-  
-  #def create
-  #  @category = Category.new(params[:category])
-  #  @content = @category.category
-  #  @target = @category.target
-  #  @category.submitted_name = @content
-  #  @category.submitted_group = @target
-  #  if @category.save
-  #    flash[:success] = "Thank you for adding '#{@content}' to #{@target}.  Your category submission 
-  #      will now be checked and authorized, then added to the public list."
-  #    redirect_to admin_category_approvals_path(:id => @target)
-  #  else
-  #    @title = "New #{@target} category"
-  #    @tag_name = "Create"
-  #    render 'new'
-  #  end
-  #end
-  
   def edit
     @category = Category.find(params[:id])
     @title = "Category authorization"

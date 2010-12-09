@@ -1,0 +1,25 @@
+<div class="notes">
+<p>We've just received a request to add <%= @vendor.name %> to the list of vendors in our world directory of 
+training and learning - <strong>Tickets for Training</strong>.</p>
+
+<p>This mail is just a precaution to check that the submission was made by someone properly authorized 
+to represent your business.</p>
+
+<p>If you know about the application and you're happy to proceed, just click on the link below or paste it
+  into your browser: 
+  
+  <%= link_to @url, @url %>
+  
+ <p>This will immediately add <%= @vendor.name %> to the database, You can then log in and start listing 
+  details of your programmes and products.  You'll also be able to use our 'Tickets' scheme to
+  generate new income.</p>
+
+<p>If you know nothing about the application and don't respond, then we'll assume that you
+don't want to be listed.  All traces of the record will be automatically removed from the Tickets 
+for Training database if we've not heard from you within 72 hours - and in the intervening period 
+your business name will not appear in our public records.</p>
+
+<p>With best wishes</p>
+<p>Vendor Accounts</p>
+<a href = "http://fierce-earth-31.heroku.com">Tickets for Training</a>
+</div>

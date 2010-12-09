@@ -82,4 +82,12 @@ module SessionsHelper
         legality_warning
       end
     end
+    
+    def vendor_legality_check
+      if logged_in?
+        legality_warning unless current_user.vendor?
+      else
+        legality_warning
+      end
+    end
 end

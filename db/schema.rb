@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101207121559) do
+ActiveRecord::Schema.define(:version => 20101208130958) do
 
   create_table "categories", :force => true do |t|
     t.string   "category"
@@ -77,11 +77,14 @@ ActiveRecord::Schema.define(:version => 20101207121559) do
     t.string   "email"
     t.string   "phone"
     t.text     "description"
-    t.binary   "logo"
-    t.boolean  "inactive",    :default => false
+    t.string   "verification_code"
+    t.boolean  "verified",          :default => false
+    t.boolean  "inactive",          :default => false
     t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "latitude"
+    t.float    "longitude"
   end
 
 end
