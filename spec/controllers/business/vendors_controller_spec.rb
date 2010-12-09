@@ -286,35 +286,35 @@ describe Business::VendorsController do
           it "should deliver a confirmation email to the vendor's stated email address" do
             post :create, :vendor => @attr
             @vendor = Vendor.find(:last)
-            @email = UserMailer.vendor_confirmation(@vendor)
+            @email = VendorMailer.vendor_confirmation(@vendor)
             @email.should deliver_to(@vendor.email)
           end
           
           it "should show the submitter's name in the email" do
             post :create, :vendor => @attr
             @vendor = Vendor.find(:last)
-            @email = UserMailer.vendor_confirmation(@vendor)
+            @email = VendorMailer.vendor_confirmation(@vendor)
             @email.should have_body_text(@vendor.name)
           end
           
           it "should include the correct content in the email" do
             post :create, :vendor => @attr
             @vendor = Vendor.find(:last)
-            @email = UserMailer.vendor_confirmation(@vendor)
+            @email = VendorMailer.vendor_confirmation(@vendor)
             @email.should have_body_text("This mail is just a precaution to check")
           end
           
           it "should have the correct subject for the email" do
             post :create, :vendor => @attr
             @vendor = Vendor.find(:last)
-            @email = UserMailer.vendor_confirmation(@vendor)
+            @email = VendorMailer.vendor_confirmation(@vendor)
             @email.should have_subject("'Tickets for Training': Vendor Application")
           end
           
           it "should include a return address with the correct verification code" do
             post :create, :vendor => @attr
             @vendor = Vendor.find(:last)
-            @email = UserMailer.vendor_confirmation(@vendor)
+            @email = VendorMailer.vendor_confirmation(@vendor)
             @v_code = @vendor.verification_code
             @email.should have_body_text("http://localhost:3000/confirm/#{@v_code}")
           end

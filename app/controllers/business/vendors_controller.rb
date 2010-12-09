@@ -22,7 +22,7 @@ class Business::VendorsController < ApplicationController
     @vendor.verification_code = @vendor.generated_verification_code
     if @vendor.save
       Representation.create(:user_id => @user.id, :vendor_id => @vendor.id)
-      UserMailer.vendor_confirmation(@vendor).deliver
+      VendorMailer.vendor_confirmation(@vendor).deliver
       flash[:success] = "#{@vendor.name} has been created, and will be activated after email confirmation."
       redirect_to business_vendor_path(@vendor)
     else
