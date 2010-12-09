@@ -13,5 +13,10 @@ ActionMailer::Base.smtp_settings = {
 #end
 require "development_mail_interceptor"
 
-ActionMailer::Base.default_url_options[:host] = "localhost:3000"
+if Rails.env.production?
+  ActionMailer::Base.default_url_options[:host] = "fierce-earth-31.heroku.com"
+else
+  ActionMailer::Base.default_url_options[:host] = "localhost:3000"
+end
+
 ActionMailer::Base.register_interceptor(DevelopmentMailInterceptor) if Rails.env.development?

@@ -45,13 +45,13 @@ class Vendor < ActiveRecord::Base
                           :length     => { :maximum => 40 }
   validates :phone,       :length     => { :maximum => 20, :allow_blank => true }
   validates :description, :length     => { :maximum => 255, :allow_blank => true }
-  validates :website,     :presence   => true, :unless => :contactable?
+  validates :website,     :length     => { :maximum => 50, :allow_blank => true }
   
   after_validation :fetch_coordinates
   
-  def contactable?
-    !self.email.blank? || !self.phone.blank? || !self.website.blank?
-  end
+  #def contactable?
+  #  !self.email.blank? || !self.phone.blank? || !self.website.blank?
+  #end
   
   def where_is
     [address, country.name].compact.join(', ') unless country_id.nil?

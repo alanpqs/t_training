@@ -250,14 +250,16 @@ describe Business::VendorsController do
           @representation.vendor.name.should == @name
         end
         
-        it "should send a confirmation email to the vendor's stated email address" do
-          pending
-        end
-        
         it "should not mark the Vendor as verified" do
           post :create, :vendor => @attr
           @vendor = Vendor.find(:last)
           @vendor.verified.should == false
+        end
+        
+        it "should create a verification code" do
+          post :create, :vendor => @attr
+          @vendor = Vendor.find(:last)
+          @vendor.verification_code.length.should == 18 
         end
         
         it "should redirect to the correct vendor 'show' page" do
@@ -270,6 +272,53 @@ describe Business::VendorsController do
         flash[:success].should == "#{@name} has been created, and will be activated after email confirmation."
         end
         
+        describe "send email for verification" do
+          
+          include EmailSpec::Helpers
+          include EmailSpec::Matchers
+          
+          before(:each) do
+            @attr = { :name => @name, :country_id => @country.id, 
+                    :address => "London", :email => "xx@email.com", 
+                    :verification_code => "abD154Hl992Dbg834L" }
+          end
+                    
+          it "should deliver a confirmation email to the vendor's stated email address" do
+            post :create, :vendor => @attr
+            @vendor = Vendor.find(:last)
+            @email = UserMailer.vendor_confirmation(@vendor)
+            @email.should deliver_to(@vendor.email)
+          end
+          
+          it "should show the submitter's name in the email" do
+            post :create, :vendor => @attr
+            @vendor = Vendor.find(:last)
+            @email = UserMailer.vendor_confirmation(@vendor)
+            @email.should have_body_text(@vendor.name)
+          end
+          
+          it "should include the correct content in the email" do
+            post :create, :vendor => @attr
+            @vendor = Vendor.find(:last)
+            @email = UserMailer.vendor_confirmation(@vendor)
+            @email.should have_body_text("This mail is just a precaution to check")
+          end
+          
+          it "should have the correct subject for the email" do
+            post :create, :vendor => @attr
+            @vendor = Vendor.find(:last)
+            @email = UserMailer.vendor_confirmation(@vendor)
+            @email.should have_subject("'Tickets for Training': Vendor Application")
+          end
+          
+          it "should include a return address with the correct verification code" do
+            post :create, :vendor => @attr
+            @vendor = Vendor.find(:last)
+            @email = UserMailer.vendor_confirmation(@vendor)
+            @v_code = @vendor.verification_code
+            @email.should have_body_text("http://localhost:3000/confirm/#{@v_code}")
+          end
+        end
       end
       
       describe "failure" do
@@ -292,7 +341,7 @@ describe Business::VendorsController do
         end
         
         it "should not send a confirmation email to the vendor's stated email address" do
-          
+          pending "don't know how to test"
         end
         
         it "should render the vendor 'new' page" do

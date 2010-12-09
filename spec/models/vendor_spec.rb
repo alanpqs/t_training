@@ -88,6 +88,12 @@ describe Vendor do
     long_email_vendor.should_not be_valid
   end
   
+  it "should not have a long website field" do
+    long_website = "www.#{'a' * 46}.com"
+    long_website_vendor = Vendor.new(@attr.merge(:website => long_website))
+    long_website_vendor.should_not be_valid
+  end
+  
   it "should not accept an incorrectly-formatted email field" do
     incorrect_email = "example.com"
     incorrect_email_vendor = Vendor.new(@attr.merge(:email => incorrect_email))

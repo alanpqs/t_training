@@ -61,6 +61,20 @@ module SessionsHelper
     session[:return_to] = nil
   end
   
+  def select_home_path
+    if logged_in?
+      if current_user.vendor?
+        redirect_to business_home_path
+      elsif current_user.admin?
+        redirect_to admin_home_path
+      else
+        redirect_to root_path  
+      end
+    else
+      redirect_to login_path
+    end
+  end
+  
   private
   
     def user_from_remember_token
