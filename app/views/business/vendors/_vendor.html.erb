@@ -9,12 +9,11 @@
       <%= f.label :country_id %><br />
       <%= collection_select(:vendor, :country_id, @countries, :id, :name, :prompt => true) %>
     </div>
-    <div class="smallarea">
-      <div id="address" class="field">
-        <span class="loud">* </span>
-        <%= f.label :address %><small> (in full - or just <i>city, state)</i></small><br />
-        <%= f.text_area :address %>
-      </div>
+    <div id="address" class="field">
+      <span class="loud">* </span>
+      <%= f.label :address, "Location" %><small> (e.g. Deira, Dubai / Atlanta GA)</i></small><br />
+      <%= f.text_field :address %>
+    </div>
     </div>
     <div class="field">
       <%= f.label :phone %><small> (no need for international code)</small><br />

@@ -89,7 +89,7 @@ describe Business::PagesController do
         
         it "should display a partial listing vendors represented by the user" do
           get :home
-          response.should have_selector("p", :content => "You currently represent")
+          response.should have_selector("p", :content => "You are currently associated with")
         end
       end
     end

@@ -1,16 +1,22 @@
-<h1><%= @title %></h1>
+<h1> <%= gravatar_for @vendor %><%= @title %>
+    <span class="header_link"><%= link_to "(edit details)", edit_business_vendor_path(@vendor) %></span>
+</h1>
+<br />
 
-<%= @vendor.address %><br />
-<%= @vendor.country.name %>
+<%= render "vendors/shared/profile" %>
 
-<strong>Profile:</strong><br />
-<%= @vendor.description %>
-<br /><br />
-<strong>Website:</strong><br />
-<%= link_to @vendor.website, @vendor.website %><br />
-<strong>Email:</strong><br />
-<%= @vendor.email %><br />
-<strong>Phone:</strong><br />
-<%= @vendor.phone %><br />
-
-
+<hr />
+<div id="rubric" class="round">
+  This is what members will see when they view the record, so keep everything up to date.  
+  Do you want to display the Review information or not?  Set your instructions on the Edit page.
+  <br /><br />
+  <% if @vendor.unverified? %>
+    Before the vendor details can appear on our live listings, we need a response to the note we sent
+    to the email address above.  If we don't receive your verification with 72 hours, the record will
+    be deleted and you'll need to start again.  Please make sure the email address is correct, and then
+    check your Inbox.
+  <% else %>
+    <%= other_users %> authorized to input and edit data for this vendor.  For details, and instructions
+    on how to add and remove users, click on 'Your colleagues'.
+  <% end %>
+</div>

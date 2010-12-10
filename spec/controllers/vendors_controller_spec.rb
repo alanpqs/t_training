@@ -127,4 +127,19 @@ describe VendorsController do
       end
     end
   end
+  
+  describe "GET 'show'" do
+    
+    it "should successfully display the page" do
+      
+    end
+    
+    it "should find the right vendor" do
+      
+    end
+    
+    it "should have the right title" do
+      
+    end
+  end
 end

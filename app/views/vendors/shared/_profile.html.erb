@@ -1,0 +1,31 @@
+<div class="notes">
+  <div class="two_column_left">
+    <p><%= @vendor.address %><br />
+    <%= @vendor.country.name %></p>
+    <p><strong>Website:</strong>
+      <% unless @vendor.website.blank? %>   
+        <br />
+        <%= link_to @vendor.website, @vendor.website, :target => "_blank" unless @vendor.website.blank? %>
+      <% end %>
+    </p>  
+    <p><strong>Email:</strong><br />
+    <%= @vendor.email %></p>
+    <p><strong>Phone:</strong>
+      <% unless @vendor.phone.blank? %>
+        <br />(<%= @vendor.country.phone_code %>) <%= @vendor.phone unless @vendor.phone.blank? %>
+      <% end %>
+    </p>
+  </div>
+  <div class="two_column_right">
+    <% if @vendor.unverified? %>
+      <div class="warn">
+        <%= @vendor.verification_status%>   
+      </div>
+      <br />
+    <% end %>
+    <p><strong>Profile:</strong><br />
+    <%= @vendor.description %></p>
+    <p><strong>Reviews:</strong><br />
+    None received yet</p>  
+  </div>  
+</div>

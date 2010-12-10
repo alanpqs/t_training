@@ -39,7 +39,7 @@ class Vendor < ActiveRecord::Base
                           :uniqueness => { :scope => :country_id, :case_sensitive => false }
   validates :country_id,  :presence   => true
   validates :address,     :presence   => true,
-                          :length     => { :maximum => 150 }
+                          :length     => { :maximum => 50 }
   validates :email,       :presence   => true,
                           :format     => { :with => email_regex },
                           :length     => { :maximum => 40 }
@@ -64,5 +64,18 @@ class Vendor < ActiveRecord::Base
     d = (a + b + c)
     e = d.split('')
     v_code = e.shuffle.join
+  end
+  
+  def unverified?
+    verified == false
+  end
+  
+  def verification_status
+    return "Awaiting email verification!" if unverified?
+    return nil
+  end
+  
+  def count_reps_excluding_self
+    self.users.count - 1
   end
 end

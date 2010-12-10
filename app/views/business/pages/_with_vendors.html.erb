@@ -1,1 +1,10 @@
-<p>You currently represent</p>
+<p>You are currently associated with:</p>
+<table>
+  <% @user.vendors.each do |v| %>
+    <tr>
+      <td><%= link_to v.name, business_vendor_path(v) %> </td>
+      <td><%= v.country.name %></td>
+      <td><%= v.address %></td>
+    </tr>
+  <% end %>
+</table>

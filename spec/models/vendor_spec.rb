@@ -28,11 +28,6 @@ describe Vendor do
     empty_address.should_not be_valid
   end
   
-  it "should not accept an entry unless at least one of the 'contactable' fields is filled" do
-    not_contactable = Vendor.new(@attr.merge(:email => "", :website => "", :phone => ""))
-    not_contactable.should_not be_valid
-  end
-  
   it "should not accept a long name field" do
     long_name = "Ab " * 17
     long_name_vendor = Vendor.new(@attr.merge(:name => long_name))

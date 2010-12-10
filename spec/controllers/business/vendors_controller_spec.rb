@@ -7,6 +7,7 @@ describe Business::VendorsController do
   before(:each) do
     @region = Factory(:region)
     @country = Factory(:country, :region_id => @region.id)
+    @vendor = Factory(:vendor, :country_id => @country.id, :description => "Great trainer")
   end
   
   describe "for non-logged-in users" do
@@ -56,6 +57,20 @@ describe Business::VendorsController do
         flash[:notice].should =~ /Permission denied/i
       end
     end
+    
+    
+    describe "GET 'show'" do
+      it "should not display the page" do
+        get :show, :id => @vendor
+        response.should_not be_success
+      end
+      
+      it "should redirect to the login page" do
+        get :show, :id => @vendor
+        response.should redirect_to login_path
+      end
+    end
+    
   end
   
   describe "logged-in non-vendors" do
@@ -76,6 +91,20 @@ describe Business::VendorsController do
         response.should redirect_to user_path(@user)
       end
     end
+    
+    
+    describe "GET 'show'" do
+      it "should not display the page" do
+        get :show, :id => @vendor
+        response.should_not be_success
+      end
+      
+      it "should redirect to the root page" do
+        get :show, :id => @vendor
+        response.should redirect_to user_path(@user)
+      end
+    end
+    
     
     describe "GET 'new'" do
       it "should not be successful" do
@@ -159,7 +188,7 @@ describe Business::VendorsController do
       
       it "should have an empty entry field for 'address'" do
         get :new
-        response.should have_selector("textarea",  :name => "vendor[address]",
+        response.should have_selector("input",  :name => "vendor[address]",
                                                 :content => "")
       end
       
@@ -218,6 +247,101 @@ describe Business::VendorsController do
         get :new
         response.should have_selector("a", :href => "http://en.gravatar.com/")
       end
+    end
+    
+    
+    describe "GET 'show'" do
+    
+      it "should successfully display the page" do
+        get :show, :id => @vendor
+        response.should be_success
+      end
+    
+      it "should find the right vendor" do
+        get :show, :id => @vendor
+        assigns(:vendor).should == @vendor
+      end
+    
+      it "should have the right title" do
+        get :show, :id => @vendor
+        response.should have_selector("title", :content => @vendor.name)
+      end
+      
+      it "should display 'verification pending' notices if the vendor has not yet been verified" do
+        @unverified_vendor = Factory(:vendor, :name => "Unverified", :country_id => @country.id,
+                              :verified => false)
+        get :show, :id => @unverified_vendor
+        response.should have_selector(".warn", :content => "Awaiting email verification!")
+        response.should have_selector("div#rubric", :content => "we need a response")
+      end
+      
+      it "should not display the verification notices if the vendor has been verified" do
+        @verified_vendor = Factory(:vendor, :name => "Verified", :country_id => @country.id,
+                              :verified => true)
+        get :show, :id => @verified_vendor
+        response.should_not have_selector(".warn", :content => "Awaiting email verification!")
+        response.should_not have_selector("div#rubric", :content => "we need a response")
+      end
+      
+      it "should include the vendor name" do
+        get :show, :id => @vendor
+        response.should have_selector("h1", :content => @vendor.name)
+      end
+      
+      it "should include the vendor country" do
+        get :show, :id => @vendor
+        response.should have_selector("p", :content => @vendor.country.name)
+      end
+      
+      it "should include the vendor address" do
+        get :show, :id => @vendor
+        response.should have_selector("p", :content => @vendor.address)
+      end
+      
+      it "should include the vendor phone number and IDD code, if listed" do
+        @phone_vendor = Factory(:vendor, :name => "Phonevendor", :country_id => @country.id,
+                                         :phone => "12345")
+        get :show, :id => @phone_vendor
+        response.should have_selector("p", :content => @phone_vendor.phone) 
+        response.should have_selector("p", :content => @country.phone_code)                                
+      end
+      
+      it "should not include the IDD code if the phone number is unlisted" do
+        get :show, :id => @vendor
+        response.should_not have_selector("p", :content => @country.phone_code)
+      end
+      
+      it "should include a link to the vendor website if listed" do
+        @website_vendor = Factory(:vendor, :name => "Webvendor", :country_id => @country.id,
+                          :website => "www.webvendor.info")
+        get :show, :id => @website_vendor   
+        response.should have_selector("a",  :href => @website_vendor.website,
+                                            :content => @website_vendor.website)               
+      end
+      
+      it "should include a linked reference to the vendor's email address" do
+        pending "link to a page sending email not yet designed"
+      end
+      
+      it "should include the description if anything has been written" do
+        get :show, :id => @vendor
+        response.should have_selector("p", :content => @vendor.description)
+      end
+      
+      it "should include the gravatar" do
+        get :show, :id => @vendor
+        response.should have_selector("h1>img", :class => "gravatar")
+      end
+      
+      it "should have a link to the 'edit' page" do
+        get :show, :id => @vendor
+        response.should have_selector("a", :href => edit_business_vendor_path(@vendor),
+                                           :content => "edit details")
+      end
+      
+      it "should include a link to 'Your Colleagues'' and show the number of colleagues with record access" do
+        pending "need to write links"
+      end  
     end
     
     
