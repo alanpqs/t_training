@@ -141,5 +141,10 @@ describe VendorsController do
     it "should have the right title" do
       
     end
+    
+    it "should show reviews if @vendor.show_review is true" do
+      pending "make sure that helper has correct review_msg"
+    end
+      
   end
 end

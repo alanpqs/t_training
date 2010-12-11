@@ -7,8 +7,9 @@
 
 <hr />
 <div id="rubric" class="round">
-  This is what members will see when they view the record, so keep everything up to date.  
-  Do you want to display the Review information or not?  Set your instructions on the Edit page.
+  This is what members will see when they view the record.  But you can choose whether to display
+   <strong>Reviews</strong> or not.  Click on <i>Reviews</i> in the <i>Supplier Menu</i> to set your 
+   instructions.  
   <br /><br />
   <% if @vendor.unverified? %>
     Before the vendor details can appear on our live listings, we need a response to the note we sent
@@ -16,7 +17,7 @@
     be deleted and you'll need to start again.  Please make sure the email address is correct, and then
     check your Inbox.
   <% else %>
-    <%= other_users %> authorized to input and edit data for this vendor.  For details, and instructions
-    on how to add and remove users, click on 'Your colleagues'.
+    <%= other_users %> currently authorized to input and edit data for this vendor.  For details, 
+    and instructions on how to add and remove users, click on <i>Your colleagues</i> in the menu.
   <% end %>
 </div>

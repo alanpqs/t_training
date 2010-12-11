@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101208130958) do
+ActiveRecord::Schema.define(:version => 20101211122542) do
 
   create_table "categories", :force => true do |t|
     t.string   "category"
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(:version => 20101208130958) do
     t.datetime "updated_at"
     t.float    "latitude"
     t.float    "longitude"
+    t.boolean  "show_reviews",      :default => false
   end
 
 end

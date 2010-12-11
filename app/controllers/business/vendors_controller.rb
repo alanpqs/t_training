@@ -7,6 +7,11 @@ class Business::VendorsController < ApplicationController
   def index
   end
 
+  def show
+    @vendor = Vendor.find(params[:id])
+    @title = @vendor.name
+  end
+  
   def new
     @title = "New vendor"
     @user = current_user
@@ -35,8 +40,23 @@ class Business::VendorsController < ApplicationController
     end
   end
   
-  def show
+  def edit
     @vendor = Vendor.find(params[:id])
-    @title = @vendor.name
+    @title = "Edit vendor"
+    @tag_name = "Save changes"
+    @countries = Country.find(:all, :order => "name")
+  end
+  
+  def update
+    @vendor = Vendor.find(params[:id])
+    if @vendor.update_attributes(params[:vendor])
+      flash[:success] = "Vendor updated."
+      redirect_to business_vendor_path(@vendor)
+    else
+      @title = "Edit vendor"
+      @tag_name = "Save changes"
+      @countries = Country.find(:all, :order => "name")
+      render "edit"
+    end     
   end
 end

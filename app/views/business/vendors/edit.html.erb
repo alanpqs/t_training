@@ -1,0 +1,20 @@
+<h1><%= @title %> <span class="h_tag"> 
+   (<span class="loud"> *</span> = required)
+</h1>
+
+<%= form_for [:business, @vendor] do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  
+  <%= render "vendor", :f => f %>
+  
+  <div class="redirects">
+  <%= gravatar_for @vendor %>
+  <a href="http://gravatar.com/emails" target="_blank"> <span class="caption">(change your vendor logo)</span></a>
+</div>
+  <div class="actions">
+      <%= submit_button(@tag_name) %>
+  </div>
+  <div class="redirects">
+    <%= drop_changes(business_vendor_path(@vendor)) unless @title == "New vendor"%>
+  </div>
+<% end %>

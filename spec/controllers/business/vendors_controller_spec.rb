@@ -8,6 +8,8 @@ describe Business::VendorsController do
     @region = Factory(:region)
     @country = Factory(:country, :region_id => @region.id)
     @vendor = Factory(:vendor, :country_id => @country.id, :description => "Great trainer")
+    @attr = { :name => "goodname", :country_id => @country.id, :address => "Swansea",
+                       :email => "goodname@example.com", :description => "Training" }
   end
   
   describe "for non-logged-in users" do
@@ -71,12 +73,42 @@ describe Business::VendorsController do
       end
     end
     
+    
+    describe "GET 'edit'" do
+      
+      it "should not display the page" do
+        get :edit, :id => @vendor
+        response.should_not be_success
+      end
+      
+      it "should redirect to the login page" do
+        get :edit, :id => @vendor
+        response.should redirect_to login_path
+      end
+    end
+    
+    describe "GET 'update'" do
+      
+      it "should redirect to the root path if they attempt to update a vendor" do
+        put :update, :id => :vendor, :vendor => @attr
+        response.should redirect_to root_path
+      end
+      
+      it "should not update the vendor attributes" do
+        put :update, :id => :vendor, :vendor => @attr
+        @vendor.reload
+        @vendor.name.should_not == @attr[:name]
+      end
+    end
+    
   end
   
   describe "logged-in non-vendors" do
     
     before(:each) do
       @user = Factory(:user, :country_id => @country.id)
+      @attr = { :name => "goodname", :country_id => @country.id, :address => "Swansea",
+                       :email => "goodname@example.com", :description => "Training" }
       test_log_in(@user)
     end
     
@@ -137,6 +169,33 @@ describe Business::VendorsController do
         flash[:notice].should =~ /Permission denied/i
       end
     end
+    
+    describe "GET 'edit'" do
+      
+      it "should not display the page" do
+        get :edit, :id => @vendor
+        response.should_not be_success
+      end
+      
+      it "should redirect to the user profile page" do
+        get :edit, :id => @vendor
+        response.should redirect_to user_path(@user)
+      end
+    end
+    
+    describe "GET 'update'" do
+      
+      it "should redirect to the root path if they attempt to update a vendor" do
+        put :update, :id => :vendor, :vendor => @attr
+        response.should redirect_to root_path
+      end
+      
+      it "should not update the vendor attributes" do
+        put :update, :id => :vendor, :vendor => @attr
+        @vendor.reload
+        @vendor.name.should_not == @attr[:name]
+      end
+    end
   end
   
   describe "logged-in vendors" do
@@ -166,8 +225,7 @@ describe Business::VendorsController do
       
       it "should have an empty entry field for 'name'" do
         get :new
-        response.should have_selector("input",  :name => "vendor[name]",
-                                                :content => "")
+        response.should have_selector("input",  :name => "vendor[name]")
       end
       
       it "should show that the name field is required" do
@@ -177,7 +235,8 @@ describe Business::VendorsController do
       
       it "should have an entry field for 'country', preset to the user's country" do
         get :new
-        response.should have_selector("select", :name => "vendor[country_id]",
+        response.should have_selector("option", :value => @user.country.id.to_s,
+                                                :selected => "selected",
                                                 :content => @user.country.name)
       end
       
@@ -188,8 +247,7 @@ describe Business::VendorsController do
       
       it "should have an empty entry field for 'address'" do
         get :new
-        response.should have_selector("input",  :name => "vendor[address]",
-                                                :content => "")
+        response.should have_selector("input",  :name => "vendor[address]")
       end
       
       it "should show that the address field is required" do
@@ -199,8 +257,7 @@ describe Business::VendorsController do
       
       it "should have an empty entry field for 'email'" do
         get :new
-        response.should have_selector("input",  :name => "vendor[email]",
-                                                :content => "")
+        response.should have_selector("input",  :name => "vendor[email]")
       end
       
       it "should show that the email field is required" do
@@ -211,20 +268,17 @@ describe Business::VendorsController do
       
       it "should have an empty entry field for 'phone'" do
         get :new
-        response.should have_selector("input",  :name => "vendor[phone]",
-                                                :content => "")
+        response.should have_selector("input",  :name => "vendor[phone]")
       end
       
       it "should have an empty entry field for 'website'" do
         get :new
-        response.should have_selector("input",  :name => "vendor[website]",
-                                                :content => "")
+        response.should have_selector("input",  :name => "vendor[website]")
       end
       
       it "should have an empty text_area field for 'description'" do
         get :new
-        response.should have_selector("textarea",  :name => "vendor[description]",
-                                                :content => "")
+        response.should have_selector("textarea",  :name => "vendor[description]")
       end
       
       it "should have a 'Create' button" do
@@ -337,6 +391,18 @@ describe Business::VendorsController do
         get :show, :id => @vendor
         response.should have_selector("a", :href => edit_business_vendor_path(@vendor),
                                            :content => "edit details")
+      end
+      
+      it "should state that Reviews are not displayed if vendor.show_reviews is false" do
+        get :show, :id => @vendor
+        response.should have_selector(".loud", :content => "Not displayed")
+      end
+      
+      it "should state that Reviews are displayed if vendor.show_reviews is true" do
+        @review_vendor = Factory(:vendor, :name => "Review", :country_id => @country.id,
+                                  :show_reviews => true)
+        get :show, :id => @review_vendor
+        response.should have_selector(".loud", :content => "To turn off")
       end
       
       it "should include a link to 'Your Colleagues'' and show the number of colleagues with record access" do
@@ -480,6 +546,168 @@ describe Business::VendorsController do
         
         it "should display an error message showing why the entry has not been accepted" do
           post :create, :vendor => @bad_attr
+          response.should have_selector("div#error_explanation", :content => "There were problems")
+        end
+      end
+    end
+    
+    
+    describe "GET 'edit'" do
+      
+      it "should be successful" do
+        get :edit, :id => @vendor
+        response.should be_success
+      end
+      
+      it "should have the right title" do
+        get :edit, :id => @vendor
+        response.should have_selector("title", :content => "Edit vendor")
+      end
+      
+      it "should have an entry field for 'name'" do
+        get :edit, :id => @vendor
+        response.should have_selector("input",  :name => "vendor[name]",
+                                                :value => @vendor.name)
+      end
+      
+      it "should show that the name field is required" do
+        get :edit, :id => @vendor
+        response.should have_selector("div#name", :content => "*")
+      end
+      
+      it "should have an entry field for 'country'" do
+        get :edit, :id => @vendor
+        response.should have_selector("option", :value => @vendor.country.id.to_s,
+                                                :selected => "selected",
+                                                :content => @vendor.country.name)
+      end
+      
+      it "should show that the country field is required" do
+        get :edit, :id => @vendor
+        response.should have_selector("div#country", :content => "*")
+      end
+      
+      it "should have an entry field for 'address'" do
+        get :edit, :id => @vendor
+        response.should have_selector("input",  :name => "vendor[address]",
+                                                :value => @vendor.address)
+      end
+      
+      it "should show that the address field is required" do
+        get :edit, :id => @vendor
+        response.should have_selector("div#address", :content => "*")
+      end
+      
+      it "should have an entry field for 'email'" do
+        get :edit, :id => @vendor
+        response.should have_selector("input",  :name => "vendor[email]",
+                                                :value => @vendor.email)
+      end
+      
+      it "should show that the email field is required" do
+        get :edit, :id => @vendor
+        response.should have_selector("div#email", :content => "*")
+      end
+      
+      
+      it "should have an entry field for 'phone'" do
+        get :edit, :id => @vendor
+        response.should have_selector("input",  :name => "vendor[phone]")
+      end
+      
+      it "should have an entry field for 'website'" do
+        get :edit, :id => @vendor
+        response.should have_selector("input",  :name => "vendor[website]")
+      end
+      
+      it "should have a text_area field for 'description'" do
+        get :edit, :id => @vendor
+        response.should have_selector("textarea",  :name => "vendor[description]",
+                                                :content => @vendor.description)
+      end
+      
+      it "should have a 'save changes' button" do
+        get :edit, :id => @vendor
+        response.should have_selector("input", :value => "Save changes")
+      end
+      
+      it "should have a 'Drop changes' link to the Country 'show' form" do
+        get :edit, :id => @vendor
+        response.should have_selector("a", :content => "(drop changes)" )
+      end
+      
+      it "should display the vendor's logo" do
+        get :edit, :id => @vendor
+        response.should have_selector(".gravatar")
+      end
+      
+      it "should have a link to the gravatar site" do
+        get :edit, :id => @vendor
+        response.should have_selector("a", :href => "http://gravatar.com/emails")
+      end
+      
+      it "should display the number of characters used as the description path is filled" do
+        pending "feature to be added later"
+      end
+    end
+    
+    
+    describe "PUT 'update'" do
+      
+      before(:each) do
+        good_name = "Good Name"
+        good_description = "a" * 254
+        good_address = "London"
+        good_email = "goodname@example.com"
+        bad_name = ""
+        bad_description = "a" * 256
+        bad_address = ""
+        bad_email = "badname.com"
+        @good_attr = { :name => good_name, :country_id => @country.id, :address => good_address,
+                       :email => good_email, :description => good_description }
+        @bad_attr = { :name => bad_name, :country_id => @country.id, :address => bad_address,
+                       :email => bad_email, :description => bad_description }
+      end
+      
+      describe "success" do
+        
+        it "should update the vendor attributes" do
+          put :update, :id => @vendor, :vendor => @good_attr
+          vendor = assigns(:vendor)
+          @vendor.reload
+          @vendor.name.should == vendor.name
+          @vendor.email.should == vendor.email
+        end
+        
+        it "should display a success message" do
+          put :update, :id => @vendor, :vendor => @good_attr
+          flash[:success].should == "Vendor updated."
+        end
+        
+        it "should redirect to the 'show' page" do
+          put :update, :id => @vendor, :vendor => @good_attr
+          response.should redirect_to business_vendor_path(@vendor)
+        end
+        
+      end
+      
+      describe "failure" do
+        
+        it "should not update the vendor attributes" do
+          put :update, :id => @vendor, :vendor => @bad_attr
+          vendor = assigns(:vendor)
+          @vendor.reload
+          @vendor.name.should_not == vendor.name
+          @vendor.email.should_not == vendor.email
+        end
+        
+        it "should render the 'edit' template" do
+          put :update, :id => @vendor, :vendor => @bad_attr
+          response.should render_template("business/vendors/edit")
+        end
+        
+        it "should display an error message" do
+          put :update, :id => @vendor, :vendor => @bad_attr
           response.should have_selector("div#error_explanation", :content => "There were problems")
         end
       end

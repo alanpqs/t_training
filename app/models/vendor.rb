@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20101208130958
+# Schema version: 20101211122542
 #
 # Table name: vendors
 #
@@ -19,12 +19,13 @@
 #  updated_at        :datetime
 #  latitude          :float
 #  longitude         :float
+#  show_reviews      :boolean
 #
 
 class Vendor < ActiveRecord::Base
   
   attr_accessible :name, :country_id, :address, :website, :email, :phone, :description, :logo, :verified,
-                  :verification_code
+                  :verification_code, :show_reviews
   
   belongs_to  :country
   has_many    :representations, :dependent => :destroy

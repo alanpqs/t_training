@@ -16,14 +16,17 @@
         Supplier Menu
       </div>
       <ul>
-        <li><%= link_to "Add a new vendor", new_business_vendor_path %></li>
-        <li>Your training resources</li>
+        <li><%= link_to "Home", business_home_path %></li>
+        <li>Vendor profile</li>
+        <li>Products & services</li>
         <li>Schedule</li>
         <li>Tickets</li>
         <li>Reviews</li>
         <li>History</li>
         <li>Your colleagues</li>
+        <li><%= link_to "Add a new vendor", new_business_vendor_path %></li>
       </ul>
+   
     <% end %>
   <% else %>
   <div class="title">
