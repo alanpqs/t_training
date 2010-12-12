@@ -24,8 +24,8 @@
 
 class Vendor < ActiveRecord::Base
   
-  attr_accessible :name, :country_id, :address, :website, :email, :phone, :description, :logo, :verified,
-                  :verification_code, :show_reviews
+  attr_accessible :name, :country_id, :address, :website, :email, :phone, :description, :verified,
+                  :verification_code, :show_reviews, :inactive, :notes
   
   belongs_to  :country
   has_many    :representations, :dependent => :destroy
