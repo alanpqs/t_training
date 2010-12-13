@@ -146,6 +146,84 @@ describe UsersController do
     end
   end
   
+  
+  describe "GET 'forgotten_password'" do
+    
+    it "should allow a user to enter an email address" do
+      get :forgotten_password
+      response.should have_selector("input", :name => "user[email]")
+    end
+    
+    it "should have a submit button" do
+      get :forgotten_password
+      response.should have_selector(".action_round",  :type => "submit",
+                                                :value => "Send request" )
+    end
+  end
+  
+  describe "PUT 'new_password'" do
+    
+    before(:each) do
+      @email = "pwuser@mail.com"
+      @unknown_email = "qzuser@mail.com"
+      @attr = { :email => @email }
+      @unknown_attr = { :email => @unknown_email}
+      @new_password = "barbaz100"
+      @pw_user = Factory(:user, :email => @email, :country_id => @country.id)
+    end
+    
+    describe "valid email address submitted" do
+        
+      it "should change the user's encrypted password" do
+        old_encryption = @pw_user.encrypted_password
+        put :new_password, :user => @attr
+        @pw_user.reload
+        @pw_user.encrypted_password.should_not == old_encryption
+      end
+      
+      describe "send email for verification" do
+          
+        include EmailSpec::Helpers
+        include EmailSpec::Matchers
+      
+        it "should generate an email to the user's email address" do
+          put :new_password, :user => @attr
+          @user = User.find_by_email(@email)
+          @email = UserMailer.new_password(@user, @new_password)
+          @email.should deliver_to(@user.email)
+        end
+      
+        it "should include the user's new password in the email" do
+          put :new_password, :user => @attr
+          @user = User.find_by_email(@email)
+          @email = UserMailer.new_password(@user, @new_password)
+          @email.should have_body_text(@new_password)
+        end
+        
+        it "should have the correct subject for the email" do
+          put :new_password, :user => @attr
+          @user = User.find_by_email(@email)
+          @email = UserMailer.new_password(@user, @new_password)
+          @email.should have_subject("'Tickets for Training': your new password")
+        end
+      end
+    end
+    
+    describe "invalid email address submitted" do
+      
+      it "should generate an 'unknown email' response" do
+        put :new_password, :user => @unknown_attr
+        flash[:error].should =~ /We couldn't find the email address/
+      end
+      
+      it "should redisplay the forgotten password page" do
+        put :new_password, :user => @unknown_attr
+        response.should redirect_to forgotten_password_path
+      end
+    end
+  end
+  
+  
   describe "GET 'edit'" do
     
     before(:each) do

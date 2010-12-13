@@ -84,4 +84,13 @@ class User < ActiveRecord::Base
     def secure_hash(string)
       Digest::SHA2.hexdigest(string)
     end
+    
+    def self.generated_password
+      a = ('a'..'z').to_a.shuffle[0..2].join
+      b = (0..9).to_a.shuffle[0..2].join
+      c = ('A'..'Z').to_a.shuffle[0..2].join
+      d = (a + b + c)
+      e = d.split(', ')
+      pw = e.shuffle.join
+    end
 end

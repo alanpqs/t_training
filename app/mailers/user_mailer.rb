@@ -31,15 +31,15 @@ class UserMailer < ActionMailer::Base
           :subject  => "'Tickets for Training': your Category now accepted")
   end
   
-  #def vendor_confirmation(vendor)
-  #  @vendor = vendor
-  #  @v_code = @vendor.verification_code
-  #  unless Rails.env.production?
-  #    @url = "http://localhost:3000/confirm/#{@v_code}"
-  #  else
-  #    @url = "http://fierce-earth-31.heroku.com/confirm/#{@v_code}"
-  #  end
-  #  mail( :to       => "#{vendor.name} <#{vendor.email}>", 
-  #        :subject  => "'Tickets for Training': Vendor Application")
-  #end
+  def new_password(user, pass)
+    @user = user
+    @password = pass
+    unless Rails.env.production?
+      @url = "http://localhost:3000/login"
+    else
+      @url = "http://fierce-earth-31.heroku.com/login"
+    end
+    mail( :to       => "#{@user.name} <#{@user.email}>", 
+          :subject  => "'Tickets for Training': your new password")
+  end
 end

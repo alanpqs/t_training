@@ -21,21 +21,23 @@ TTraining::Application.routes.draw do
   
   resources :vendors
   
-  match '/confirm/:code',     :to => 'vendors#confirm', :constraints => { :code => /[A-Za-z0-9]{18}/ }
-  match '/signup',            :to => 'users#new'
-  match '/login',             :to => 'sessions#new'
-  match '/logout',            :to => 'sessions#destroy'
-  match '/why_register',      :to => 'pages#why_register'
-  match '/about',             :to => 'pages#about'
-  match '/faqs',              :to => 'pages#faqs'
-  match '/find_training',     :to => 'pages#find_training'
-  match '/buyers',            :to => 'pages#buyers'
-  match '/sellers',           :to => 'pages#sellers'
-  match '/affiliates',        :to => 'pages#affiliates'
-  match '/terms',             :to => 'pages#terms'
-  match '/categories_admin',  :to => 'pages#categories_admin'
-  match '/admin_home',        :to => 'admin/pages#home'
-  match '/business_home',     :to => 'business/pages#home'
+  match '/confirm/:code',       :to => 'vendors#confirm', :constraints => { :code => /[A-Za-z0-9]{18}/ }
+  match '/signup',              :to => 'users#new'
+  match '/login',               :to => 'sessions#new'
+  match '/logout',              :to => 'sessions#destroy'
+  match '/why_register',        :to => 'pages#why_register'
+  match '/about',               :to => 'pages#about'
+  match '/faqs',                :to => 'pages#faqs'
+  match '/find_training',       :to => 'pages#find_training'
+  match '/buyers',              :to => 'pages#buyers'
+  match '/sellers',             :to => 'pages#sellers'
+  match '/affiliates',          :to => 'pages#affiliates'
+  match '/terms',               :to => 'pages#terms'
+  match '/categories_admin',    :to => 'pages#categories_admin'
+  match '/admin_home',          :to => 'admin/pages#home'
+  match '/business_home',       :to => 'business/pages#home'
+  match '/forgotten_password',  :to => 'users#forgotten_password'
+  match '/new_password',        :to => 'users#new_password'
 
   root :to => 'pages#home'
   

@@ -159,7 +159,8 @@ nav ul li a:hover {
   font-size: 0.9em;
   padding: 10px;
   border: 1px solid #ddd;
-  background: transparent url(../images/wg-bg.png);  
+  background: transparent url(../images/wg-bg.png);
+  line-height: 1.3em;
 }
 
 /* #action_button {

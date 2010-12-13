@@ -58,11 +58,33 @@ class UsersController < ApplicationController
     redirect_to users_path
   end
   
+  def forgotten_password
+    @tag_name = "Send request"
+  end
+  
+  def new_password
+    @user = User.find_by_email(params[:user][:email])
+    if @user.nil?
+      flash[:error] = "We couldn't find the email address you entered in the T4T member database. Are 
+        you sure this is the address you gave when you signed up?"
+      @tag_name = "Send request"
+      redirect_to forgotten_password_path
+    else
+      @pw = User.generated_password
+      @user.update_attributes(:password => @pw, :password_confirmation => @pw)
+      UserMailer.new_password(@user, @pw).deliver
+      flash[:success] = "Your new password is being emailed to you now."
+      redirect_to login_path
+    end
+  end
+  
   private
     
     def correct_user
       @user = User.find(params[:id])
       redirect_to(root_path) unless current_user?(@user)
     end
+    
+    
     
 end
