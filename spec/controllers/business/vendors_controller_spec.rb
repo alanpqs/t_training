@@ -301,6 +301,11 @@ describe Business::VendorsController do
         get :new
         response.should have_selector("a", :href => "http://en.gravatar.com/")
       end
+      
+      it "should reset the vendor_id cookie to nil" do
+        get :new
+        response.cookies["vendor_id"].should == nil
+      end
     end
     
     
@@ -405,6 +410,11 @@ describe Business::VendorsController do
         response.should have_selector(".loud", :content => "To turn off")
       end
       
+      it "should set the vendor_id cookie to the vendor id" do
+        get :show, :id => @vendor
+        response.cookies["vendor_id"].should == "#{@vendor.id}"
+      end
+      
       it "should include a link to 'Your Colleagues'' and show the number of colleagues with record access" do
         pending "need to write links"
       end  
@@ -460,6 +470,12 @@ describe Business::VendorsController do
         it "should display a success message, warning that confirmation is still required" do
           post :create, :vendor => @attr
         flash[:success].should == "#{@name} has been created, and will be activated after email confirmation."
+        end
+        
+        it "should set the vendor_id cookie to the vendor.id" do
+          post :create, :vendor => @attr
+          @vendor = Vendor.find(:last)
+          response.cookies["vendor_id"].should == "#{@vendor.id}"
         end
         
         describe "send email for verification" do

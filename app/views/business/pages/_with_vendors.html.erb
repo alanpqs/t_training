@@ -1,10 +1,12 @@
-<p>You are currently associated with:</p>
-<table>
+
+Associated with:<br /><br />
+<ul>
   <% @user.vendors.each do |v| %>
-    <tr>
-      <td><%= link_to v.name, business_vendor_path(v) %> </td>
-      <td><%= v.country.name %></td>
-      <td><%= v.address %></td>
-    </tr>
+    <li><%= link_to v.name, business_vendor_path(v), :title => "View vendor profile" %>  
+        - <%= v.address %>
+        <% if v.unverified? %>
+          <span class="loud"> - <%= v.verification_status %></span>
+        <% end %>
+    </li>
   <% end %>
-</table>
+</ul>

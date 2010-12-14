@@ -78,18 +78,52 @@ describe Business::PagesController do
           response.should have_selector("p", 
               :content => "You're not associated with any training businesses yet")
         end
+        
+        it "should not have a 'vendor' cookie" do
+          get :home
+          response.cookies["vendor_id"].should == nil
+        end
       end
       
-      describe "if the logged-in user already represents at least one vendor" do
+      describe "if the logged-in user represents only one vendor" do
         
         before(:each) do
           @vendor = Factory(:vendor, :country_id => @country.id)
           @representation = Factory(:representation, :user_id => @provider.id, :vendor_id => @vendor.id)
         end
         
-        it "should display a partial listing vendors represented by the user" do
+        it "should display a partial listing the vendor represented by the user" do
           get :home
-          response.should have_selector("p", :content => "You are currently associated with")
+          response.should have_selector("li", :content => @vendor.name)
+        end
+        
+        it "should have the vendor.id stored as a cookie" do
+          get :home
+          response.cookies["vendor_id"].should == "#{@vendor.id}"
+        end
+      end
+      
+      describe "if the logged-in user represents more than one vendor" do
+        
+        before(:each) do
+          @vendor = Factory(:vendor, :country_id => @country.id)
+          @vendor2 = Factory(:vendor, :name => "Vendor2", :country_id => @country.id,
+                                      :address => "Oxford", :email => "vendor2@example.com")
+          @representation1 = Factory(:representation, :user_id => @provider.id, :vendor_id => @vendor.id)
+          @representation2 = Factory(:representation, :user_id => @provider.id, :vendor_id => @vendor2.id)
+          @reps = [@representation1, @representation2]
+        end
+        
+        it "should display a partial listing all the vendors represented by the user" do
+          get :home
+          @reps.each do |rep|
+            response.should have_selector("li", :content => rep.vendor.name)
+          end
+        end
+        
+        it "should not have a stored vendor cookie yet" do
+          get :home
+          response.cookies["vendor_id"].should == nil
         end
       end
     end

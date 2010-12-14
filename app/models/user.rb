@@ -66,6 +66,21 @@ class User < ActiveRecord::Base
     [location, country.name].compact.join(', ')
   end
   
+  def single_company_vendor?
+    if self.vendor?
+      self.vendors.count == 1
+    end
+  end
+  
+  def get_single_company_vendor
+    if single_company_vendor?
+      @representation = Representation.find(:first, :conditions => ["user_id = ?", self.id])
+      return @representation.vendor_id
+    else
+      return nil
+    end
+  end
+  
   private
   
     def encrypt_password

@@ -54,8 +54,3 @@ Factory.define :representation do |representation|
   representation.association :user
   representation.association :vendor
 end
-
-#Factory.define :city do |city|
-#  city.name                     "Efg"
-#  city.association :country
-#end

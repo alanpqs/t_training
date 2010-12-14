@@ -5,8 +5,9 @@ class Business::PagesController < ApplicationController
   before_filter :vendor_user#,     :except => [:create, :update]   
   
   def home
-    @title = "Training supplier - home"
     @user = current_user
+    @title = "Training supplier - home"
+    cookies[:vendor_id] = @user.get_single_company_vendor   #set to nil unless only one associated company    
   end
 
 end

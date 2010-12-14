@@ -49,6 +49,18 @@ module SessionsHelper
     end
   end
   
+  def current_vendor
+    if current_vendor?
+      Vendor.find(cookies[:vendor_id])
+    else
+      return nil
+    end
+  end
+  
+  def current_vendor?
+    !cookies[:vendor_id].nil?
+  end
+  
   def store_location
     session[:return_to] = request.fullpath
   end

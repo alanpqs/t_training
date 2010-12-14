@@ -9,10 +9,12 @@ class Business::VendorsController < ApplicationController
 
   def show
     @vendor = Vendor.find(params[:id])
+    cookies[:vendor_id] = @vendor.id
     @title = @vendor.name
   end
   
   def new
+    cookies[:vendor_id] = nil
     @title = "New vendor"
     @user = current_user
     @vendor = Vendor.new
@@ -27,6 +29,7 @@ class Business::VendorsController < ApplicationController
     @vendor.verification_code = @vendor.generated_verification_code
     if @vendor.save
       Representation.create(:user_id => @user.id, :vendor_id => @vendor.id)
+      cookies[:vendor_id] = @vendor.id
       VendorMailer.vendor_confirmation(@vendor).deliver
       flash[:success] = "#{@vendor.name} has been created, and will be activated after email confirmation."
       redirect_to business_vendor_path(@vendor)
