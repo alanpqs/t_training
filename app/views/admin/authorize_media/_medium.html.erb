@@ -1,0 +1,9 @@
+    <div class="field">
+      <%= f.label :medium %><br />
+      <%= f.text_field :medium %>
+    </div>
+  
+    <p class="notes">Submitted <%= default_date(@medium.created_at)%> by 
+      <%= @medium.user.name %><br />
+      <%= @medium.user.email %>
+    </p>

@@ -54,3 +54,8 @@ Factory.define :representation do |representation|
   representation.association :user
   representation.association :vendor
 end
+
+Factory.define :medium do |medium|
+  medium.medium                 "Abc"
+  medium.association :user
+end

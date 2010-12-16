@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101211122542) do
+ActiveRecord::Schema.define(:version => 20101214002714) do
 
   create_table "categories", :force => true do |t|
     t.string   "category"
@@ -37,6 +37,15 @@ ActiveRecord::Schema.define(:version => 20101211122542) do
 
   add_index "countries", ["country_code"], :name => "index_countries_on_country_code", :unique => true
   add_index "countries", ["name"], :name => "index_countries_on_name", :unique => true
+
+  create_table "media", :force => true do |t|
+    t.string   "medium"
+    t.boolean  "authorized",        :default => false
+    t.integer  "user_id"
+    t.text     "rejection_message"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "regions", :force => true do |t|
     t.string   "region"

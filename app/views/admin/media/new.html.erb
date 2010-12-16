@@ -1,0 +1,20 @@
+<h1><%= @title %></h1>
+
+<%= form_for [:admin, @medium] do |f| %>
+  <%= render "shared/error_messages", :object => f.object %>
+  
+  <div class="field">
+    <%= f.label :medium %><br />
+    <%= f.text_field :medium %>
+  </div>
+  
+  <div class="field">
+    <%= f.hidden_field :user_id %>
+  </div>
+  
+  <div class="actions">
+     <%= submit_button(@tag_name) %>
+  </div> 
+
+
+<% end %>

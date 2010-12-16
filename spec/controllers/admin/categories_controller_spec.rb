@@ -217,7 +217,7 @@ describe Admin::CategoriesController do
         @category = Factory(:category, :target => @target_name, :user_id => @user.id)
       end
       
-      it "should be impossible for non-logged-in users" do
+      it "should be impossible for non-admins" do
         delete :destroy, :id => @category 
         response.should redirect_to(root_path)
       end

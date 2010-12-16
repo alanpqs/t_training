@@ -1,14 +1,9 @@
 TTraining::Application.routes.draw do
 
-  #get "vendor/index"
-
-  #get "vendor/new"
-
-  #get "pages/home"
-
   namespace "admin" do
-    resources :regions, :countries, :categories, :category_approvals
+    resources :regions, :countries, :categories, :category_approvals, :media
     resources :users,     :only => [:index, :show, :edit, :update, :destroy]
+    resources :authorize_media
   end
   
   namespace "business" do

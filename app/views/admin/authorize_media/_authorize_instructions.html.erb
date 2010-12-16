@@ -1,0 +1,12 @@
+    <div class="field">
+      <%= f.label :authorized, "Authorize" %>&nbsp; &nbsp;
+      <%= f.check_box :authorized %>    
+    </div>
+    <% if @medium.unauthorized? %>
+      <p class="notes"> 
+          To reject, leave this box unchecked, and complete the <strong>Rejection</strong> box, right. 
+          <br /><br />
+          Check this box to authorize and make this one of the media options.  No authorization
+          notification will be sent unless you modify the submission - this will generate an automatic email.         
+      </p>
+    <% end %>

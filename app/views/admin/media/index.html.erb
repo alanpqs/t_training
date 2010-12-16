@@ -1,0 +1,25 @@
+<h1><%= @title %></h1>
+
+<ul class="listing">
+  <% @media.each do |medium| %>
+    <li>
+      <%= select_edit_form(medium) %>
+      <% if medium.warning? %>
+        <small class="loud"> - <%= display_warning(medium) %></small>
+        <% if medium.rejected? %>      
+          <small>
+            <%= link_to " - now delete", admin_medium_path(medium), 
+                                :method => :delete, 
+                                :confirm => "Deleting '#{medium.medium}'. You sure?",
+                                :title => "Delete '#{medium.medium}'" %>
+          </small>
+        <% end %>
+      <% end %>
+      
+    </li> 
+  <% end %>
+</ul>
+<div class="actions">
+  <%= link_to "New medium", new_admin_medium_path, :class => "action_round" %>
+</div> 
+

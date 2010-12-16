@@ -1,0 +1,23 @@
+<h1><%= @title %></h1>
+
+<%= form_for [:admin, @medium], :url => admin_authorize_medium_path(@medium) do |f| %>
+  <%= render "shared/error_messages", :object => f.object %>
+  
+  <div class="two_column_left">
+    <%= render 'medium', :f => f %>
+    <%= render 'authorize_instructions', :f => f %>
+  </div>
+  <div class="two_column_right">   
+    <% if @medium.unauthorized? %>
+      <%= render 'rejection_msg', :f => f%>
+    <% end %>
+  </div>
+  <div class="actions">
+     <%= submit_button(@tag_name) %>
+  </div> 
+  <div class="redirects">
+    <%= drop_changes(admin_media_path) %>
+  </div>
+
+<% end %>
+

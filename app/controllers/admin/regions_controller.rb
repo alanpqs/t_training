@@ -40,6 +40,7 @@ class Admin::RegionsController < ApplicationController
       redirect_to admin_regions_path
     else
       @title = "Edit region"
+      @tag_name = "Confirm changes"
       render 'edit'
     end
   end

@@ -31,6 +31,22 @@ class UserMailer < ActionMailer::Base
           :subject  => "'Tickets for Training': your Category now accepted")
   end
   
+  def medium_accepted_with_changes(user, original, modification)
+    @user = user
+    @original = original
+    @modification = modification
+    mail( :to       => "#{@user.name} <#{@user.email}>", 
+          :subject  => "'Tickets for Training': Training Medium accepted - but changed")
+    
+  end
+  
+  def medium_rejected(user, submission)
+    @user = user
+    @medium = submission
+    mail( :to       => "#{@user.name} <#{@user.email}>", 
+          :subject  => "'Tickets for Training': Training Medium not accepted")
+  end
+  
   def new_password(user, pass)
     @user = user
     @password = pass

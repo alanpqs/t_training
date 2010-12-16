@@ -29,6 +29,7 @@ class User < ActiveRecord::Base
   has_many    :categories
   has_many    :representations, :dependent => :destroy
   has_many    :vendors, :through => :representations
+  has_many    :media
   
   geocoded_by :where_is
   

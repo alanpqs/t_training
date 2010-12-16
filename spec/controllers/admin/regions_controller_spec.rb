@@ -203,8 +203,8 @@ describe Admin::RegionsController do
       end
       
       it "should display an error message" do
-          post :create, :region => @attr_blank
-          response.should have_selector("div#error_explanation", :content => "There were problems")
+        post :create, :region => @attr_blank
+        response.should have_selector("div#error_explanation", :content => "There were problems")
       end
       
       it "should have the right title" do

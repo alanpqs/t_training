@@ -1,0 +1,10 @@
+      <div class="field">
+        <%= f.label :rejection_message, "Rejection" %><br />
+        <p class="notes">
+          To reject this new submission, you need to leave the record unauthorized and explain why in the box 
+          below.  Your explanation will then be emailed to <%= @medium.user.name %> when you <i>Confirm changes</i>.
+          <br /><br />
+          Complete the sentence: <i>We regret that we cannot accept your submission because</i>  
+        </p>
+        <%= f.text_area:rejection_message %>
+      </div> 

@@ -1,0 +1,19 @@
+<h1><%= @title %></h1>
+
+<%= form_for [:admin, @medium] do |f| %>
+  <%= render "shared/error_messages", :object => f.object %>
+  
+    <div class="field">
+      <%= f.label :medium, "Change the medium label" %><br />
+      <%= f.text_field :medium %>
+    </div>
+  
+  <div class="actions">
+     <%= submit_button(@tag_name) %>
+  </div> 
+  <div class="redirects">
+    <%= drop_changes(admin_media_path) %>
+  </div>
+
+<% end %>
+
