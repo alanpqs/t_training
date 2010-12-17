@@ -210,7 +210,7 @@ describe Admin::MediaController do
                                     :authorized => false, :rejection_message => "Rejected")
       end
       
-      it "should be redirect to the root path" do
+      it "should redirect to the root path" do
         delete :destroy, :id => @rejected_medium
         response.should redirect_to(root_path)
       end

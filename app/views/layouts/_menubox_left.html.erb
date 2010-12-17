@@ -18,7 +18,7 @@
       <ul>
         <li><%= link_to "Home", business_home_path %></li>
         <% if current_vendor? %>
-           <li>Vendor profile</li>
+           <li><%= link_to "Vendor profile", business_vendor_path(current_vendor) %></li>
         <% end %>
         </li>
         <li>Products & services</li>
