@@ -18,7 +18,8 @@ class Medium < ActiveRecord::Base
   
   before_destroy :has_been_rejected?
   
-  belongs_to :user
+  belongs_to  :user
+  has_many    :resources
   
   validates       :medium,            :presence     => true,
                                       :length       => { :maximum => 30 },

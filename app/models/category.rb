@@ -25,6 +25,7 @@ class Category < ActiveRecord::Base
   TARGET_TYPES = [ "Business", "Job", "Personal", "World", "Fun" ]
 
   belongs_to :user
+  has_many   :resources
   
   validates :category,        :presence       => true,
                               :length         => { :maximum => 30 },

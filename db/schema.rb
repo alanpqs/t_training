@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101214002714) do
+ActiveRecord::Schema.define(:version => 20101217135841) do
 
   create_table "categories", :force => true do |t|
     t.string   "category"
@@ -57,6 +57,20 @@ ActiveRecord::Schema.define(:version => 20101214002714) do
   create_table "representations", :force => true do |t|
     t.integer  "user_id"
     t.integer  "vendor_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "resources", :force => true do |t|
+    t.string   "name"
+    t.integer  "vendor_id"
+    t.integer  "category_id"
+    t.integer  "medium_id"
+    t.string   "length_unit", :default => "Hour"
+    t.integer  "length",      :default => 1
+    t.string   "description"
+    t.string   "webpage"
+    t.boolean  "hidden",      :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

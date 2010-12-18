@@ -30,6 +30,7 @@ class Vendor < ActiveRecord::Base
   belongs_to  :country
   has_many    :representations, :dependent => :destroy
   has_many    :users, :through => :representations
+  has_many    :resources, :dependent => :destroy
 
   geocoded_by :where_is
   
