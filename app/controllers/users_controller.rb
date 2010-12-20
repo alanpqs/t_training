@@ -26,7 +26,11 @@ class UsersController < ApplicationController
     if @user.save
       log_in @user
       flash[:success] = "Welcome to Tickets for Training!"
-      redirect_to @user
+      if @user.vendor?
+        redirect_to business_home_path
+      else
+        redirect_to @user
+      end
     else
       @title = "Sign Up"
       @user.password = nil

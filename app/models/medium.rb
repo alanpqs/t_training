@@ -49,6 +49,10 @@ class Medium < ActiveRecord::Base
     self.authorized == true
   end
   
+  def self.all_authorized
+    self.find(:all, :conditions => ["authorized = ?", true], :order => "medium")
+  end
+  
   private
   
     def has_been_rejected?

@@ -1,0 +1,50 @@
+<h1><%= @title %> <span class="h_tag"> from <%= @vendor.name %> (<span class="loud"> *</span> = required)</span></h1>
+
+<%= form_for [@vendor, @resource] do |f| %>
+  
+  <%= render 'shared/error_messages', :object => f.object %>
+  
+  <div class="two_column_left">
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :name, "Resource name" %><br />
+      <%= f.text_field :name %>
+    </div>
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :category_id %> <small> &nbsp;(suggest a new category <%= link_to "here", "#" %>)</small><br />
+      <%= collection_select(:resource, :category_id, @categories, :id, :category, :prompt => true) %>
+    </div>
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :medium_id, "Format" %> <small> &nbsp;(suggest a new format <%= link_to "here", "#" %>)</small><br />
+      <%= collection_select(:resource, :medium_id, @media, :id, :medium, :prompt => true) %>
+    </div>
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :length_unit %><br />
+      <%= select(:resource, :length_unit, 
+                 options_for_select(Resource::LENGTH_TYPES, @resource.length_unit ), 
+                 :prompt => true) %>
+    </div>
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :length, "Number of units" %><br />
+      <%= f.text_field :length, :size => 5 %>
+    </div>
+  </div>
+  <div class="two_column_right">
+    <div class="field">
+      <%= f.label :description %> <small> (max 255 characters)</small><br />
+      <%= f.text_area :description %>
+    </div>
+    <div class="field">
+      <%= f.label :webpage %> <small>(where can we find more info?)</small><br />
+      <%= f.text_field :webpage %>
+    </div>
+  </div>
+  
+  <div class="actions">
+    <%= submit_button(@tag_name) %>
+  </div>
+<% end %>

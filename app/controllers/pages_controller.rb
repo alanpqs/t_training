@@ -8,6 +8,8 @@ class PagesController < ApplicationController
     unless current_user.nil?
       if current_user.admin?
         redirect_to admin_home_path
+      elsif current_user.vendor?
+        redirect_to business_home_path
       end
     end
   end

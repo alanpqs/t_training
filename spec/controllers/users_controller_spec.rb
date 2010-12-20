@@ -144,6 +144,20 @@ describe UsersController do
         controller.should be_logged_in   
       end
     end
+    
+    describe "when the user is also a vendor" do
+      
+      before(:each) do
+        @vendor_attr = { :name => "Vendor User", :email => "vendir@example.com", :country_id => @country.id,
+                  :location => "Cambridge", :password => "foobar", :password_confirmation => "foobar",
+                  :vendor => true
+        }
+      end
+      it "should open at the business_home page" do
+        post :create, :user => @vendor_attr
+        response.should redirect_to business_home_path
+      end  
+    end
   end
   
   

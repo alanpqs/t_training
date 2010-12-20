@@ -30,6 +30,10 @@ RSpec.configure do |config|
     controller.log_in(user)
   end
   
+  def test_vendor_cookie(user)
+    controller.vendor_cookie(user)
+  end
+  
   def integration_log_in(user)
     visit login_path
     fill_in :email,    :with => user.email

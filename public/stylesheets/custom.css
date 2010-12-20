@@ -319,6 +319,10 @@ div.field, div.actions {
   margin-bottom: 5px;
 }
 
+.indent {
+  margin-left: 30px;  
+}
+
 /* Errors */
 
 .field_with_errors {

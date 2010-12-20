@@ -5,6 +5,12 @@ module SessionsHelper
     current_user = user
   end
   
+  def vendor_cookie(user)
+    if user.single_company_vendor?
+      cookies[:vendor_id] = user.get_single_company_vendor
+    end
+  end
+  
   def current_user=(user)
     @current_user = user
   end
@@ -58,7 +64,7 @@ module SessionsHelper
   end
   
   def current_vendor?
-    !cookies[:vendor_id].nil?
+    !cookies[:vendor_id].blank?
   end
   
   def store_location

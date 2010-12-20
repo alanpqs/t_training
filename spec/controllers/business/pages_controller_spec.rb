@@ -26,6 +26,19 @@ describe Business::PagesController do
         response.should redirect_to login_path
       end
     end
+    
+    describe "GET 'resource_group'" do
+      
+      it "should not be successful" do
+        get :resource_group
+        response.should_not be_success
+      end
+      
+      it "should redirect to the login page" do
+        get :resource_group
+        response.should redirect_to login_path
+      end
+    end
   end
   
   describe "for logged-in users without a vendor attribute" do
@@ -51,6 +64,26 @@ describe Business::PagesController do
         flash[:notice].should =~ /If you want to sell training/
       end
     end
+    
+    describe "GET 'resource_group'" do
+      
+      it "should not be successful" do
+        get :resource_group
+        response.should_not be_success
+      end
+      
+      it "should redirect to the user home page" do
+        get :resource_group
+        response.should redirect_to user_path(@user)
+      end
+      
+      it "should have a message explaining how to sign up as a vendor" do
+        get :resource_group
+        flash[:notice].should =~ /If you want to sell training/
+      end
+    end
+    
+    
   end
   
   describe "for logged-in users with the vendor attribute set to true" do
@@ -127,5 +160,80 @@ describe Business::PagesController do
         end
       end
     end
+    
+    
+    describe "GET 'resource_group'" do
+      
+      before(:each) do
+        @vendor = Factory(:vendor, :country_id => @country.id)
+        @vendor2 = Factory(:vendor, :name => "vendor2", :country_id => @country.id)
+      end
+      
+      describe "if the 'vendor_id' cookie is set" do
+        
+        before(:each) do
+          @representation = Factory(:representation, :user_id => @provider.id, :vendor_id => @vendor2.id)
+          test_vendor_cookie(@provider)
+          @groups = ["Business", "Job", "Personal", "World", "Fun"]
+        end
+        
+        it "should be successful" do
+          get :resource_group
+          response.should be_success
+        end
+      
+        it "should have the right title" do
+          get :resource_group
+          response.should have_selector("title",  :content => "New resource - select a group")
+        end
+        
+        it "should have a radio button for each group" do
+          get :resource_group
+          @groups.each do |group|
+            response.should have_selector("input",  :name => "group",
+                                                    :type => "radio",
+                                                    :value => "#{group}")
+          end
+        end
+        
+        it "should have a link to the new vendor resource path for this vendor" do
+          get :resource_group
+          response.should have_selector("input", :type => "submit", :value => "Confirm")
+        end
+      end
+      
+      describe "if the 'vendor_id' cookie is not set" do
+      
+        it "should not be successful" do
+          get :resource_group
+          response.should_not be_success
+        end
+        
+        it "should redirect to the business_home page" do
+          get :resource_group
+          response.should redirect_to business_home_path
+        end  
+        
+        describe "if the user has no associated vendors" do
+          
+          it "should warn the user to add at least one vendor" do
+            get :resource_group
+            flash[:error].should == "First you need to add at least one vendor business." 
+          end
+          
+        end
+        
+        describe "if the user has associated vendors" do
+          
+          before(:each) do
+            @representation = Factory(:representation, :user_id => @provider.id, :vendor_id => @vendor2.id)
+          end 
+          it "should tell the user to select a vendor" do
+            get :resource_group
+            flash[:error].should == "First you need to select one of your vendor businesses."
+          end
+        end
+      end
+    end    
   end
 end

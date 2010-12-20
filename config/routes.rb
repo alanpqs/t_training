@@ -1,5 +1,11 @@
 TTraining::Application.routes.draw do
 
+  get "resources/show"
+
+  get "resources/index"
+
+  get "resources/new"
+
   namespace "admin" do
     resources :regions, :countries, :categories, :category_approvals, :media
     resources :users,     :only => [:index, :show, :edit, :update, :destroy]
@@ -14,7 +20,9 @@ TTraining::Application.routes.draw do
   resources :sessions,    :only => [:new, :create, :destroy]
   resources :categories
   
-  resources :vendors
+  resources :vendors do
+    resources :resources, :shallow => true
+  end
   
   match '/confirm/:code',       :to => 'vendors#confirm', :constraints => { :code => /[A-Za-z0-9]{18}/ }
   match '/signup',              :to => 'users#new'
@@ -33,12 +41,9 @@ TTraining::Application.routes.draw do
   match '/business_home',       :to => 'business/pages#home'
   match '/forgotten_password',  :to => 'users#forgotten_password'
   match '/new_password',        :to => 'users#new_password'
+  match '/resource_group',      :to => 'business/pages#resource_group'
 
   root :to => 'pages#home'
-  
-  #get "pages/home"
-  #get "pages/why_register"
-  #get "pages/about"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
