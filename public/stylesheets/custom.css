@@ -301,7 +301,16 @@ td.sidebar {
 .mail_quote  {
   border: 1px solid gray; 
   padding: 5px; 
-  background-color: ivory    
+  background-color: ivory;    
+}
+
+.description {
+  -moz-border-radius:    10px;
+  -webkit-border-radius: 10px;
+  border-radius:         10px; 
+  border: 1px solid #ddd; 
+  padding: 10px; 
+  background-color: ivory;    
 }
 
 .gravatar {

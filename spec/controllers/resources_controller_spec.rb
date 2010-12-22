@@ -21,6 +21,7 @@ describe ResourcesController do
     @medium2 = Factory(:medium, :medium => "Fgh", :user_id => @user.id, :authorized => true)
     @medium3 = Factory(:medium, :medium => "Jkl", :user_id => @user.id)
     @media = [@medium1, @medium2, @medium3]
+    @resource1 = Factory(:resource, :vendor_id => @vendor2.id, :category_id => @category1.id, :medium_id => @medium1.id)
   end
   
   describe "for non-logged-in users" do
@@ -47,6 +48,26 @@ describe ResourcesController do
       it "should redirect to the login path" do
         get :new, :group => "Job"
         response.should redirect_to login_path
+      end
+    end
+    
+    
+    describe "POST 'create'" do
+      
+      before(:each) do
+        @good_attr = { :name => "Good Book", :category_id => @category1.id,
+                       :medium_id => @medium1.id, :length_unit => "Page", :length => 244 }
+      end
+      
+      it "should not add a new resource" do
+        lambda do
+          post :create, :vendor_id => @vendor2.id, :resource => @good_attr 
+        end.should_not change(Resource, :count)
+      end
+      
+      it "should redirect to the root path" do
+        post :create, :vendor_id => @vendor2.id, :resource => @good_attr
+        response.should redirect_to root_path 
       end
     end
   end
@@ -86,6 +107,24 @@ describe ResourcesController do
       end
     end
     
+    describe "POST 'create'" do
+      
+      before(:each) do
+        @good_attr = { :name => "Good Book", :category_id => @category1.id,
+                       :medium_id => @medium1.id, :length_unit => "Page", :length => 244 }
+      end
+      
+      it "should not add a new resource" do
+        lambda do
+          post :create, :vendor_id => @vendor2.id, :resource => @good_attr 
+        end.should_not change(Resource, :count)
+      end
+      
+      it "should redirect to the root path" do
+        post :create, :vendor_id => @vendor2.id, :resource => @good_attr
+        response.should redirect_to root_path 
+      end
+    end
   end
   
   describe "for logged-in vendors" do
@@ -126,17 +165,17 @@ describe ResourcesController do
     describe "GET 'new'" do
       
       it "should be successful" do
-        get 'new', :group => "Job"
+        get :new, :group => "Job"
         response.should be_success
       end
       
       it "should have the right title" do
-        get 'new', :group => "Job"
+        get :new, :group => "Job"
         response.should have_selector("title", :content => "New resource")
       end
       
       it "should display the correct vendor name" do
-        get 'new', :group => "Job"
+        get :new, :group => "Job"
         response.should have_selector(".h_tag", :content => @vendor2.name)
       end
       
@@ -227,6 +266,168 @@ describe ResourcesController do
       it "should include a text area to add up to 10 related tags" do
         pending
       end
+    end
+    
+    
+    describe "POST 'create'" do
+      
+      before(:each) do
+        @good_attr = { :name => "Good Book", :category_id => @category1.id,
+                       :medium_id => @medium1.id, :length_unit => "Page", :length => 244
+        }
+        @bad_attr = { :name => "", :vendor_id => @vendor2.id, :category_id => @category1.id,
+                      :medium_id => @medium1.id, :length_unit => "Century", :length => 4
+        }
+      end
+      
+      describe "success" do
+        
+        it "should create a new resource" do
+          lambda do
+            post :create, :vendor_id => @vendor2.id, :resource => @good_attr 
+          end.should change(Resource, :count).by(1)
+        end
+        
+        it "should be associated with the correct vendor" do
+          post :create, :vendor_id => @vendor2.id, :resource => @good_attr 
+          @resource = Resource.find(:last)
+          @resource.vendor_id.should == @vendor2.id
+        end
+        
+        it "should redirect to the 'show' page" do
+          post :create, :vendor_id => @vendor2.id, :resource => @good_attr 
+          @resource = Resource.find(:last)
+          response.should redirect_to @resource 
+        end
+        
+        it "should have a success message" do
+          post :create, :vendor_id => @vendor2.id, :resource => @good_attr 
+          flash[:success].should =~ /successfully created/
+        end   
+      end
+      
+      describe "failure" do
+        
+        it "should not create a new resource" do
+          lambda do
+            post :create, :vendor_id => @vendor2.id, :resource => @bad_attr 
+          end.should_not change(Resource, :count)
+        end
+        
+        it "should redisplay the 'new' page" do
+          post :create, :vendor_id => @vendor2.id, :resource => @bad_attr 
+          response.should render_template("new")
+        end
+        
+        it "should have the right title" do
+          post :create, :vendor_id => @vendor2.id, :resource => @bad_attr 
+          response.should have_selector("title", :content => "New resource")
+        end
+        
+        it "should have a failure message explaining the errors" do
+          post :create, :vendor_id => @vendor2.id, :resource => @bad_attr 
+          response.should have_selector("div#error_explanation", :content => "There were problems")     
+        end
+      end
+    end
+    
+    
+    describe "GET 'show'" do 
+      
+     # before(:each) do
+     #   this_vendor = @vendor2
+     #   this_resource = @resource1
+     #   @selected_resource = this_vendor.this_resource
+     # end
+      
+      it "should be successful" do
+        get :show, :id => @resource1
+        response.should be_success
+      end
+      
+      it "should display the resource name" do
+        get :show, :id => @resource1
+        response.should have_selector("h1", :content => @resource1.name)
+      end
+      
+      it "should have the right title" do
+        get :show, :id => @resource1
+        response.should have_selector("title", :content => @resource1.name)
+      end
+      
+      it "should display the resource vendor" do
+        get :show, :id => @resource1
+        response.should have_selector(".two_column_left", :content => @vendor2.name.upcase)
+      end
+      
+      it "should display the resource category and group" do
+        
+      end
+      
+      it "should display the resource format" do
+        
+      end
+      
+      it "should display the resource length" do
+        
+      end
+      
+      it "should display the 'description', if any" do
+        
+      end
+      
+      it "should display a link to the resource webpage, if any" do
+        
+      end
+      
+      it "should have an 'Edit' link" do
+        
+      end
+      
+      it "should have a link to add a new resource for this vendor" do
+        
+      end
+      
+      it "should display the number of reviews" do
+        
+      end
+      
+      it "should display the average review score" do
+        
+      end
+      
+      it "should display any public reviews" do
+        
+      end
+      
+      it "should show whether reviews are shown in the public display" do
+        
+      end
+      
+      it "should have a link to the reviews page" do
+        
+      end
+      
+      it "should show the number of tickets offered" do
+        
+      end
+      
+      it "should show the number of tickets 'purchased'" do
+        
+      end
+      
+      it "should show the number of tickets currently outstanding" do
+        
+      end
+      
+      it "should have a link to the tickets page" do
+        
+      end
+      
+      it "should have a link to the 'schedule' page for this resource" do
+        
+      end
+         
     end
   end
 

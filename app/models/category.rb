@@ -143,7 +143,9 @@ class Category < ActiveRecord::Base
     return nil
   end
   
-  
+  def in_group
+    self.target
+  end
   
   def submission_change?(name, group)
     self.name_change?(name) || self.group_change?(group)

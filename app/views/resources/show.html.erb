@@ -1,0 +1,27 @@
+<h1><%= @resource.name %>
+   <span class="header_link"><%= link_to "(edit details)", edit_resource_path(@resource) %></span>
+</h1>
+<div class="notes">
+  <div class="two_column_left">
+    <%= @resource.medium.medium %> from<br /> 
+    <%= @vendor.name.upcase %><br />
+    <%= @vendor.address %>, <%= @vendor.country.name %>
+    <br /><br />
+    <strong>Category:</strong><br />
+     <%= @resource.category.in_group %> - <%= @resource.category.category %>
+    <br /><br />
+    <strong>Length:</strong> <%= pluralize(@resource.length, @resource.length_unit.downcase) %>
+    <br /><br />
+    <% unless @resource.webpage.blank? %>
+      <strong>More info:</strong> <br />
+      <%= link_to @resource.webpage, @resource.webpage, :target => "_blank" %>
+      <br /<br />
+    <% end %>
+    <%= display_status %>
+  </div>
+  <div class="two_column_right">
+    <div class="description">
+      <%= @resource.description %>
+    </div>
+  </div>
+</div>

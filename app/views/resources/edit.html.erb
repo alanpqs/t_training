@@ -1,6 +1,6 @@
 <h1><%= @title %> <span class="h_tag"> from <%= @vendor.name %> (<span class="loud"> *</span> = required)</span></h1>
 
-<%= form_for [@vendor, @resource] do |f| %>
+<%= form_for @resource do |f| %>
   
   <%= render 'shared/error_messages', :object => f.object %>
   
@@ -8,5 +8,8 @@
   
   <div class="actions">
     <%= submit_button(@tag_name) %>
+  </div>
+   <div class="redirects">
+    <%= drop_changes(resource_path(@resource)) %>
   </div>
 <% end %>

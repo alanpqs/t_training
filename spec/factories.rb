@@ -59,3 +59,14 @@ Factory.define :medium do |medium|
   medium.medium                 "Abc"
   medium.association :user
 end
+
+Factory.define :resource do |resource|
+  resource.name                 "Resource"
+  resource.association :vendor
+  resource.association :category
+  resource.association :medium
+  resource.length_unit          "Hour"
+  resource.length               24
+  
+end
+

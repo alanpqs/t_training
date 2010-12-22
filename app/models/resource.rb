@@ -41,4 +41,6 @@ class Resource < ActiveRecord::Base
   validates :webpage,         :length         => { :maximum => 50, :allow_blank => true }
   
   validates_associated :vendor, :category, :medium
+
+
 end
