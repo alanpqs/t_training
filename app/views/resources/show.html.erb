@@ -7,7 +7,7 @@
     <%= @vendor.name.upcase %><br />
     <%= @vendor.address %>, <%= @vendor.country.name %>
     <br /><br />
-    <strong>Category:</strong><br />
+    <strong>Group - Category:</strong><br />
      <%= @resource.category.in_group %> - <%= @resource.category.category %>
     <br /><br />
     <strong>Length:</strong> <%= pluralize(@resource.length, @resource.length_unit.downcase) %>
@@ -17,11 +17,27 @@
       <%= link_to @resource.webpage, @resource.webpage, :target => "_blank" %>
       <br /<br />
     <% end %>
-    <%= display_status %>
+    <i><%= display_status %></i>
   </div>
   <div class="two_column_right">
     <div class="description">
-      <%= @resource.description %>
+      <% if @resource.description.blank? %>
+        <span class="loud">
+          <i><%= description_handler %></i>
+        </span>
+      <% else %>
+        <%= description_handler %>
+      <% end %>
+    </div>
+    <br />
+    <h5>OTHER ACTIONS WITH THIS RESOURCE</h5>
+    <div class="indent">
+      <li>Duplicate >> different group/category</li>
+      <li>Change >> different group/category</li>
+      <% unless current_user.single_company_vendor? %>
+        <li>Duplicate >> another of your vendors</li>
+      <% end %>
+      <li>New resource in '<%= @resource.category.in_group %>' group</li>
     </div>
   </div>
 </div>

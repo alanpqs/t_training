@@ -2,8 +2,8 @@ module ResourcesHelper
   
   def display_status
     if !@resource.vendor.verified?
-      "This resource will not be seen by the public until the vendor has been verified.  An authorization request has
-       been sent to the vendor email address."
+      "Until the vendor has been verified, this resource will not be seen by the public, and you won't be allowed to
+       set a schedule.  We've sent an authorization request to your vendor email address.  Please reply."
     else
       if @resource.hidden?
         "This resource is hidden from public view."
@@ -11,5 +11,14 @@ module ResourcesHelper
         "This resource is displayed to the public."
       end
     end
+  end
+  
+  def description_handler
+    if @resource.description.blank?
+      return "We strongly recommend that you add a description of your resource.  Use it as a sales pitch: what
+       special features does it have, and how will people benefit?"
+    else 
+      @resource.description 
+    end  
   end
 end

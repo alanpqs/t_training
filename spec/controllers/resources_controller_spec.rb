@@ -15,13 +15,26 @@ describe ResourcesController do
     @category2 = Factory(:category, :user_id => @user.id, :category => "HS", :authorized => true)
     @category3 = Factory(:category, :user_id => @user.id, :category => "HT", :authorized => true)
     
-    @category4 = Factory(:category, :user_id => @user.id, :category => "HU", :target => "Fun", :authorized => true )
+    @category4 = Factory(:category, :user_id => @user.id, :category => "HU", :target => "Fun", 
+                         :authorized => true )
     @categories = [@category1, @category2, @category3, @category4]
     @medium1 = Factory(:medium, :user_id => @user.id, :authorized => true)
     @medium2 = Factory(:medium, :medium => "Fgh", :user_id => @user.id, :authorized => true)
     @medium3 = Factory(:medium, :medium => "Jkl", :user_id => @user.id)
     @media = [@medium1, @medium2, @medium3]
-    @resource1 = Factory(:resource, :vendor_id => @vendor2.id, :category_id => @category1.id, :medium_id => @medium1.id)
+    @resource1 = Factory(:resource, :vendor_id => @vendor2.id, :category_id => @category1.id, 
+                                    :medium_id => @medium1.id)
+    @resource2 = Factory(:resource, :name => "Resource2", :vendor_id => @vendor2.id, 
+                                    :category_id => @category1.id, :webpage => "webpage@example.com",
+                                    :medium_id => @medium1.id, :description => "It's a")
+    @resource3 = Factory(:resource, :name => "Resource3", :vendor_id => @vendor2.id, 
+                                    :category_id => @category1.id, 
+                                    :medium_id => @medium1.id)
+    @other_vendor_resource = Factory(:resource, :name => "Resource4", :vendor_id => @vendor.id, 
+                                    :category_id => @category1.id, 
+                                    :medium_id => @medium1.id)
+    @resources = [@resource1, @resource2, @resource3, @other_vendor_resource]
+                                    
   end
   
   describe "for non-logged-in users" do
@@ -154,6 +167,91 @@ describe ResourcesController do
       it "should not have a reference to the wrong vendor" do
         get :index
         response.should_not have_selector(".h_tag", :content => @vendor.name)
+      end
+      
+      it "should have a resource-name reference for each element" do
+        get :index
+        @resources[0..2].each do |resource|
+          response.should have_selector("td", :content => resource.name)
+        end
+      end
+      
+      it "should not include reference to resources from other vendors" do
+        get :index
+        response.should_not have_selector("td", :content => @other_vendor_resource.name)
+      end
+      
+      it "should have a link to the resource show-page for each element" do
+        get :index
+        @resources[0..2].each do |resource|
+          response.should have_selector("a", :href => resource_path(resource))
+        end
+      end
+      
+      it "should have a group reference for each element" do
+        get :index
+        @resources[0..2].each do |resource|
+          response.should have_selector("td", 
+                  :content => "#{resource.category.in_group}")
+        end
+      end
+      
+      it "should have a category reference for each element" do
+        get :index
+        @resources[0..2].each do |resource|
+          response.should have_selector("td", 
+                  :content => "#{resource.category.category}")
+        end
+      end
+      
+      it "should have a format reference for each element" do
+        get :index
+        @resources[0..2].each do |resource|
+          response.should have_selector("td", 
+                  :content => resource.medium.medium)
+        end
+      end
+      
+      it "should have a course-length reference for each element" do
+        get :index
+        @resources[0..2].each do |resource|
+          response.should have_selector("td", :content => "24 hours")
+        end
+      end
+      
+      it "should have a delete option for resources that have never been scheduled" do
+        pending "to be implemented in helper after scheduling has been added"
+      end
+      
+      it "should have a 'hidden' reference for resources the vendor opts not to display" do
+        
+      end
+      
+      it "should successfully paginate the data" do
+        30.times do
+          @resources << Factory(:resource, :name => Factory.next(:name), 
+                                :vendor_id => @vendor2.id, :medium_id => @medium1.id,
+                                :category_id => @category1.id)
+        end
+        get :index
+        response.should have_selector("div.pagination")
+        response.should have_selector("span.disabled", :content => "Previous")
+        response.should have_selector("a",  :href => "/resources/index?page=2",
+                                            :content => "2")
+        response.should have_selector("a",  :href => "/resources/index?page=2",
+                                            :content => "Next")
+      end
+      
+      it "should allow the user to filter by group" do
+        pending "not implemented yet"
+      end
+      
+      it "should allow the user to filter by category" do
+        pending "not implemented yet"
+      end
+      
+      it "should allow the user to filter by media type" do
+        pending "not implemented yet"
       end
       
       it "should have an 'Add a new resource' link" do
@@ -334,12 +432,6 @@ describe ResourcesController do
     
     describe "GET 'show'" do 
       
-     # before(:each) do
-     #   this_vendor = @vendor2
-     #   this_resource = @resource1
-     #   @selected_resource = this_vendor.this_resource
-     # end
-      
       it "should be successful" do
         get :show, :id => @resource1
         response.should be_success
@@ -361,73 +453,133 @@ describe ResourcesController do
       end
       
       it "should display the resource category and group" do
-        
+        get :show, :id => @resource1
+        response.should have_selector(".two_column_left", 
+              :content => "#{@resource1.category.in_group} - #{@resource1.category.category}")
       end
       
       it "should display the resource format" do
-        
+        get :show, :id => @resource1
+        response.should have_selector(".two_column_left", :content => @resource1.medium.medium)
       end
       
       it "should display the resource length" do
-        
+        get :show, :id => @resource1
+        response.should have_selector(".two_column_left", :content => "24 hours")
       end
       
       it "should display the 'description', if any" do
-        
+        get :show, :id => @resource2
+        response.should have_selector(".description", :content => @resource2.description)
+      end
+      
+      it "should encourage the user to add a description if the description is blank" do
+        get :show, :id => @resource1
+        response.should have_selector(".description", :content => "We strongly recommend")
       end
       
       it "should display a link to the resource webpage, if any" do
-        
+        get :show, :id => @resource2
+        response.should have_selector("a", :href => "#{@resource2.webpage}", 
+                                           :content => @resource2.webpage)
+      end
+      
+      it "should open the webpage link in a new tab, if clicked" do
+        get :show, :id => @resource2
+        response.should have_selector("a", :href => "#{@resource2.webpage}", 
+                                           :target => "_blank")
+      end
+      
+      it "should not display 'More info' if there is no webpage listed" do
+        get :show, :id => @resource1
+        response.should_not have_selector("a", :href => "#{@resource1.webpage}")
+        response.should_not have_selector("two_column_left", :content => "More info:")
       end
       
       it "should have an 'Edit' link" do
-        
+        get :show, :id => @resource1
+        response.should have_selector("a", :href => edit_resource_path(@resource1))
+      end
+      
+      it "should include a list of keywords associated with the resource" do
+        pending "till keywords added"
+      end
+      
+      it "should set the 'current_resource' cookie to the current resource.id" do
+      
       end
       
       it "should have a link to add a new resource for this vendor" do
         
       end
       
-      it "should display the number of reviews" do
+      it "should be possible to copy this resource to another associated vendor, if there is one" do
+
+      end
+      
+      it "should be possible to copy this resource to other associate vendors, if there are more than one" do
         
+      end
+      
+      it "should be possible to copy this resource to a different group, retaining all other associations" do 
+        
+      end
+      
+      it "should not offer the 'copy to another vendor' option if there are no other associated vendors" do
+        
+      end
+      
+      it "should display the number of reviews" do
+        pending "awaiting reviews to be added"
       end
       
       it "should display the average review score" do
-        
+        pending "awaiting reviews to be added"
       end
       
       it "should display any public reviews" do
-        
+        pending "awaiting reviews to be added"
       end
       
       it "should show whether reviews are shown in the public display" do
-        
+        pending "awaiting reviews to be added"
       end
       
       it "should have a link to the reviews page" do
-        
+        pending "awaiting reviews to be added"
       end
       
       it "should show the number of tickets offered" do
-        
+        pending "awaiting tickets to be added"
       end
       
       it "should show the number of tickets 'purchased'" do
-        
+        pending "awaiting tickets to be added"
       end
       
       it "should show the number of tickets currently outstanding" do
-        
+        pending "awaiting tickets to be added"
       end
       
       it "should have a link to the tickets page" do
-        
+        pending "awaiting tickets to be added"
       end
       
       it "should have a link to the 'schedule' page for this resource" do
+        pending "awaiting schedule to be added"
+      end
+   
+      it "should warn that no records will be displayed for an unverified vendor" do
         
       end
-         
+      
+      it "should show that hidden resources are hidden" do
+        
+      end
+      
+      it "should show that displayed resources are displayed" do
+        
+      end      
     end
   end
 

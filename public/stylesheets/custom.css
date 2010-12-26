@@ -308,9 +308,10 @@ td.sidebar {
   -moz-border-radius:    10px;
   -webkit-border-radius: 10px;
   border-radius:         10px; 
-  border: 1px solid #ddd; 
-  padding: 10px; 
-  background-color: ivory;    
+  background: transparent url(../images/page-bg.png);
+  border: 1px solid #eee;
+  border-top: 0; 
+  padding: 1em;
 }
 
 .gravatar {

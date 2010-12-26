@@ -52,6 +52,7 @@ class ResourcesController < ApplicationController
     @resource = Resource.find(params[:id])
     @vendor = Vendor.find(@resource.vendor_id)
     @title = @resource.name
+    cookies[:resource_id] = @resource.id
   end
   
   def edit

@@ -26,4 +26,20 @@ class Business::PagesController < ApplicationController
       redirect_to business_home_path
     end 
   end
+  
+  def duplicate_resource_to_vendor
+    
+  end
+  
+  def duplicate_resource to_group
+    
+  end
+  
+  def move_resource_to_group
+    
+  end
+  
+  def new_resource_same_group
+    
+  end
 end

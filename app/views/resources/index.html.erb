@@ -2,16 +2,25 @@
 
   <%= will_paginate %>
   <table>
-    <% @resources.each do |resource| %>
-      <tr>
-        <td><%= link_to resource.name, resource_path(resource), :title => "View details" %></td>
-        <td><%= resource.category.in_group %> - <%= resource.category.category %></td>
-        <td><%= resource.medium.medium %></td>
-        <td><%= pluralize(resource.length, resource.length_unit.downcase) %></td>
-        <td><small><%= link_to "delete", resource_path(resource),  :method => :delete,
+    <tr>
+      <th>Title</th>
+      <th>Group</th>
+      <th>Category</th>
+      <th>Format</th>
+      <th>Length</th>
+      <th></th>
+    </tr>
+    <% @resources.each do |resource| %>      
+    <tr>
+      <td><%= link_to resource.name, resource_path(resource), :title => "View details" %></td>
+      <td><%= resource.category.in_group %></td> 
+      <td><%= resource.category.category %></td>
+      <td><%= resource.medium.medium %></td>
+      <td><%= pluralize(resource.length, resource.length_unit.downcase) %></td>
+      <td><small><%= link_to "delete", resource_path(resource),  :method => :delete,
                                         :confirm => "You sure?",
                                         :title => "Delete #{resource.name}" %>  </small></td> 
-      <tr>
+    </tr>
     <% end %>
   </table>
   <%= will_paginate %>
