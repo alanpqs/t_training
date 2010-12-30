@@ -47,6 +47,12 @@ describe "BusinessLinks" do
       click_link "Add a new vendor"
       response.should have_selector('title', :content => "New vendor") 
     end
+    
+    it "should have a supplier menu reference in the 'loginfo' div" do
+      visit business_home_path
+      response.should have_selector("div#loginfo", :content => "Menu:")
+      response.should have_selector("div#loginfo", :content => @vendor.name)
+    end
   end
   
   describe "when 'vendor_id' cookie is not set" do
@@ -55,6 +61,12 @@ describe "BusinessLinks" do
       @vendor2 = Factory(:vendor, :name => "Vendor2", :country_id => @country.id)
       @representation2 = Factory(:representation, :user_id => @user.id, :vendor_id => @vendor2.id)
       integration_log_in(@user)
+    end
+    
+    it "should not have a supplier menu reference in the 'loginfo' div" do
+      visit business_home_path
+      response.should_not have_selector("div#loginfo", :content => "Menu:")
+      response.should_not have_selector("div#loginfo", :content => @vendor2.name)
     end
     
     it "should not have a 'Vendor Profile' link" do

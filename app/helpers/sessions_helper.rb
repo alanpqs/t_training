@@ -11,6 +11,14 @@ module SessionsHelper
     end
   end
   
+  def selected_vendor_cookie(vendor)
+    cookies[:vendor_id] = vendor
+  end
+  
+  def resource_cookie(resource)
+    cookies[:resource_id] = resource
+  end
+  
   def current_user=(user)
     @current_user = user
   end

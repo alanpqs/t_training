@@ -9,7 +9,8 @@ class Business::VendorsController < ApplicationController
 
   def show
     @vendor = Vendor.find(params[:id])
-    cookies[:vendor_id] = @vendor.id
+    selected_vendor_cookie(@vendor.id)
+    #cookies[:vendor_id] = @vendor.id
     @title = @vendor.name
   end
   

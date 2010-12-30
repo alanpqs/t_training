@@ -1,0 +1,37 @@
+<h1>Duplicate resource to another vendor</h1>
+<h4>Resource: <%= @resource.name %></h4>
+
+<div class="two_column_left">
+  <strong>Already offers this resource:</strong><br />
+    <div class="notes">
+      <ul>
+      <% @with_resource.each do |vendor| %> 
+        <li>
+          <%= vendor.name %>
+        </li>
+      <% end %>
+      </ul>
+    </div>
+
+  <strong>Add resource:</strong>
+  <table> 
+    <% @without_resource.each do |xvendor| %>
+      <tr> 
+        <td><%= xvendor.name %></td>
+        <td><%= link_to "Duplicate", duplicate_to_vendor_path(:id => xvendor.id) %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+<div class="two_column_right">
+  <div id="rubric" class="round">
+  Duplication allows you to create the same training resource for your other vendors without entering 
+  everything again.
+  <br /><br />
+  Key details are transferred directly, but not customer reviews/tickets/history, which stay 
+  with the original vendor.
+  <br /><br />
+  On completion, the new record will be displayed, so that you can make any minor changes required - if for 
+  example the new vendor has its own website.
+  </div>
+</div>

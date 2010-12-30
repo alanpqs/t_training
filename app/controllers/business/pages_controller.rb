@@ -7,7 +7,7 @@ class Business::PagesController < ApplicationController
   def home
     @user = current_user
     @title = "Training supplier - home"
-    cookies[:vendor_id] = @user.get_single_company_vendor   #set to nil unless only one associated company    
+    cookies[:vendor_id] = @user.get_single_company_vendor   #set to blank unless only one associated company    
   end
 
   def resource_group
@@ -28,18 +28,37 @@ class Business::PagesController < ApplicationController
   end
   
   def duplicate_resource_to_vendor
-    
+    if cookies[:resource_id].blank?
+      redirect_to business_home_path
+    else
+      @resource = Resource.find(cookies[:resource_id])
+      @title = "Duplicate resource to vendor"
+      @with_resource = []
+      @without_resource = []
+      @user = current_user
+      @vendors = @user.vendors
+      @vendors.each do |vendor|
+        if vendor.has_resource?("#{@resource.name}")
+          @with_resource << vendor
+        else
+          @without_resource << vendor
+        end
+      end
+    end
   end
   
-  def duplicate_resource to_group
-    
+  def duplicate_to_vendor
+    @attr_resource = Resource.find(cookies[:resource_id])
+    @vendor = Vendor.find(params[:id])
+    @resource = Resource.create(:name => @attr_resource.name, :vendor_id => @vendor.id, 
+      :category_id => @attr_resource.category_id, :medium_id => @attr_resource.medium_id,
+      :length_unit => @attr_resource.length_unit, :length => @attr_resource.length,
+      :description => @attr_resource.description, :webpage => @attr_resource.webpage)
+    cookies[:vendor_id] = @vendor.id
+    flash[:success] = "This resource has been successfully duplicated - but you may now 
+      need to edit your webpage reference.  Note that you are now working with the 
+      #{@vendor.name} menu."
+    redirect_to resource_path(@resource)
   end
   
-  def move_resource_to_group
-    
-  end
-  
-  def new_resource_same_group
-    
-  end
 end

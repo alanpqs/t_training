@@ -80,4 +80,10 @@ class Vendor < ActiveRecord::Base
   def count_reps_excluding_self
     self.users.count - 1
   end
+  
+  def has_resource?(name)
+    @resource = Resource.find(:first, 
+                               :conditions => ["name = ? and vendor_id = ?", name, self.id])
+    !@resource.nil?
+  end
 end

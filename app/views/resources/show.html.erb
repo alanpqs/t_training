@@ -30,14 +30,16 @@
       <% end %>
     </div>
     <br />
-    <h5>OTHER ACTIONS WITH THIS RESOURCE</h5>
+    <h5>OTHER ACTIONS</h5>
     <div class="indent">
-      <li>Duplicate >> different group/category</li>
-      <li>Change >> different group/category</li>
       <% unless current_user.single_company_vendor? %>
-        <li>Duplicate >> another of your vendors</li>
+        <% unless current_user.resource_duplicated_to_all?(@resource.name) %>     
+          <li><%= link_to "Duplicate >> another of your vendors", 
+            duplicate_resource_to_vendor_path %>    
+          </li>
+        <% end %>
       <% end %>
-      <li>New resource in '<%= @resource.category.in_group %>' group</li>
+      <li><%= link_to "Add a new resource", resource_group_path %></li>
     </div>
   </div>
 </div>

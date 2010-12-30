@@ -14,6 +14,7 @@ TTraining::Application.routes.draw do
   
   namespace "business" do
     resources :vendors
+    resources :pages, { :duplicate_to_vendors => :post }
   end
   
   resources :users,       :except => :index
@@ -42,6 +43,10 @@ TTraining::Application.routes.draw do
   match '/forgotten_password',  :to => 'users#forgotten_password'
   match '/new_password',        :to => 'users#new_password'
   match '/resource_group',      :to => 'business/pages#resource_group'
+  match '/duplicate_resource_to_vendor',  
+                            :to => 'business/pages#duplicate_resource_to_vendor'
+  match 'duplicate_to_vendor',  :to => 'business/pages#duplicate_to_vendor'
+  
 
   root :to => 'pages#home'
 

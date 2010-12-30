@@ -9,7 +9,7 @@ describe ResourcesController do
     @country = Factory(:country, :region_id => @region.id)
     @user = Factory(:user, :country_id => @country.id, :vendor => true)
     @vendor = Factory(:vendor, :country_id => @country.id)
-    @vendor2 = Factory(:vendor, :name => "Vendor2", :country_id => @country.id)
+    @vendor2 = Factory(:vendor, :name => "Vendor2", :country_id => @country.id, :verified => true)   
     @representation = Factory(:representation, :user_id => @user.id, :vendor_id => @vendor2.id) 
     @category1 = Factory(:category, :user_id => @user.id, :authorized => true)
     @category2 = Factory(:category, :user_id => @user.id, :category => "HS", :authorized => true)
@@ -506,27 +506,19 @@ describe ResourcesController do
       end
       
       it "should set the 'current_resource' cookie to the current resource.id" do
-      
+        pending "to be added"
       end
       
       it "should have a link to add a new resource for this vendor" do
-        
+        get :show, :id => @resource1
+        response.should have_selector("a", :href => resource_group_path,
+                                            :content => "Add a new resource")
       end
       
-      it "should be possible to copy this resource to another associated vendor, if there is one" do
-
-      end
-      
-      it "should be possible to copy this resource to other associate vendors, if there are more than one" do
-        
-      end
-      
-      it "should be possible to copy this resource to a different group, retaining all other associations" do 
-        
-      end
-      
-      it "should not offer the 'copy to another vendor' option if there are no other associated vendors" do
-        
+      it "should not be possible to duplicate this resource to another vendor, for single-vendor users" do
+        get :show, :id => @resource1
+        response.should_not have_selector("a", :href => "/duplicate_resource_to_vendor",
+                                           :content => "another of your vendors")
       end
       
       it "should display the number of reviews" do
@@ -570,17 +562,45 @@ describe ResourcesController do
       end
    
       it "should warn that no records will be displayed for an unverified vendor" do
-        
+        get :show, :id => @other_vendor_resource
+        response.should have_selector(".two_column_left", :content => "this resource will not be seen")
+      end
+      
+      it "should not display the verification warning if the vendor has been verified" do
+        get :show, :id => @resource1
+        response.should_not have_selector(".two_column_left", :content => "this resource will not be seen")
       end
       
       it "should show that hidden resources are hidden" do
-        
+        pending "to be added"
       end
       
       it "should show that displayed resources are displayed" do
+        pending "to be added"
+      end
+      
+      describe "when the user has more than one vendor" do
         
-      end      
+        before(:each) do
+          @vendor3 = Factory(:vendor, :name => "Vendor3", :country_id => @country.id)
+          @representation3 = Factory(:representation, :user_id => @user.id, :vendor_id => @vendor3.id) 
+          @resource4 = Factory(:resource, :name => "Resource2", :vendor_id => @vendor3.id, 
+                                        :category_id => @category1.id, :webpage => "webpage@example.com",
+                                        :medium_id => @medium1.id, :description => "It's a")
+        end
+        
+        it "should be possible to duplicate this resource to another associated vendor" do
+          get :show, :id => @resource1
+          response.should have_selector("a", :href => "/duplicate_resource_to_vendor",
+                                           :content => "another of your vendors")
+        end
+        
+        it "should not be possible to dupicate this resource to a vendor, if all already have the resource" do
+          get :show, :id => @resource2
+          response.should_not have_selector("a", :href => "/duplicate_resource_to_vendor",
+                                               :content => "another of your vendors")
+        end
+      end        
     end
   end
-
 end

@@ -1,7 +1,12 @@
 <div id="loginfo">
   <% if logged_in? %>
     <strong><%= current_user.name %></strong><br />
-    <strong>User ID:</strong>  <%= link_to current_user.id, current_user %>
+    <strong>User ID:</strong>  <%= link_to current_user.id, current_user %><br />
+    <% if current_user.vendor? %>
+      <% if current_vendor? %>
+        <strong>Menu: </strong><%= current_vendor.name %>
+      <% end %>
+    <% end %>
   <% else %>
     <p>You are not logged in but you can still use our search tools to find 
       training events and materials.

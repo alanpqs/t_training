@@ -82,6 +82,23 @@ class User < ActiveRecord::Base
     end
   end
   
+  def resource_duplicated_to_all?(resource_name)
+    status = true
+    if self.vendor?
+      unless self.single_company_vendor?
+        @vendors = self.vendors
+        @vendors.each do |vendor|
+          @resource = Resource.find(:first, 
+               :conditions => ["name = ? and vendor_id =?", resource_name, vendor.id])
+          if @resource.nil?
+            status = false
+          end
+        end
+      end
+    end
+    return status
+  end
+  
   private
   
     def encrypt_password
