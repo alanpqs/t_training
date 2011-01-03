@@ -1,2 +1,5 @@
 module Business::PagesHelper
+  
+  
+  
 end

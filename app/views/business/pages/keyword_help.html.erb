@@ -1,0 +1,91 @@
+<h1><%= @title %> 
+  <span class="header_link"> <%= link_to " (close)", session[:return_to] || business_home_path %></span>
+</h1>
+
+<div class="two_column_left" style = "font-size: 0.9em">
+    <strong>How are Keywords used?</strong>
+    <br /><br />
+    We try to make it as easy as possible for users to find exactly the training they're looking for.  They can 
+    search by group or category and by location (within a region, a country, or a defined distance).
+    <br /><br />
+    We're deliberately keeping the T4T categories general.  For example, 'HR', 'Sales', 'Accountancy' are 
+    three categories in the 'Jobs' group.  But each of these categories could include a vast array of 
+    different training options.  For example, HR training might focus on manpower planning, attendance, 
+    payroll, recruitment, appraisal, training itself - or all of these.  And while some programs will be 
+    aimed at beginners, others will be for experienced HR staff, or perhaps even for non-HR managers who need
+    a better understanding of what HR can offer.  
+    <br /><br />
+    If we allowed for all these distinctions at the category level, users would need to search through
+    lists thousands of items long to find what they need.  That's not what we want.
+    <br /><br />
+    Instead we use Keywords.  Vendors can attach up to 15 actual words as keywords to each of their 
+    training resources.  And when users search or set up their permanent preferences, they'll make location, 
+    group and category selections (optionally also, a format preference - e.g <i>'I want online 
+    training'</i>); then they enter up to 10 keywords as well.
+    <br /><br />
+    T4T will then determine the best matches, starting with location, group and category, but then 
+    fine-tuning with the keywords.  The resources with the most matching keywords will be given the 
+    highest priority.
+    <br /><br />
+    <i>(User review scores are also important.  Where the number of keyword matches are the same, the 
+    resource with the highest review scores will be listed first.)</i>
+    <br /><br />
+    When users are actively searching for training, T4T starts with the user's preferences, and then tracks 
+    down matching vendor resources.
+    <br /><br />
+    But when a vendor issues a discounted T4T ticket, it works the other way round.  T4T looks for users whose
+    location, group and category preferences fit, and then does a keyword match.  While users have the website
+    open <i>(or, if they prefer, via an email notification)</i>, they'll see a list of the current tickets 
+    that match all their preferences and at least one of their keywords.  Again, the list will be 
+    prioritized by the number of keyword matches (and then by user review scores).
+    <br /><br />
+    The result, we hope, will be a search and selection methodology that's easy to use, but always provides
+    relevant results.  Users should see only the training that's likely to interest them, while vendor 
+    promotions will be targeted precisely at the people who are most likely to buy.  
+</div>
+<div class="two_column_right" style = "font-size: 0.9em">
+    <strong>Building your Keyword list</strong>
+    <br /><br />
+    Keywords can be a single word or a cluster of words, with each separated from the next by a comma.  Let's
+    take a look at an example of a well-written keyword set. 
+    <br /><br />
+    <div class="description"><i>guitar, acoustic, folk, chords, finger picking, chord diagrams, audio examples, 
+      beginner, learn songs</i>
+    </div>
+    <br />
+    With these 9 keywords (using 13 words - the maximum allowed is 15 actual words), anyone should have a
+    pretty clear idea what the training is about.  If I want to be a guitar hero playing electric rock, this
+    course probably isn't for me.  And if I'm already an experienced guitarist it's probably too easy.  But
+    if I'm starting out and want to learn to play folk-style, and I've had that old acoustic guitar for 
+    years, then this could be a good way to get started.
+    <br /><br />
+    The keywords don't include anything about 'learning to play'.  Why not?  Because this training resource
+    is in the 'Fun' group, categorized as 'Playing a musical instrument'.  Users select a category, then enter
+    their keyword preferences - so you don't need to repeat the category.
+    <br /><br />
+    Similarly, keywords don't need to include the training format, because that will be picked up from the 
+    main description.  This particular course happens to be an online program - this will be shown in the
+    search results.  And if users wish to specify a preference for a particular learning format, they can do
+    so, and T4T will limit the results accordingly.
+    <br /><br />
+    It is important to define the type of learner who'll benefit most from the training - in this case, it's
+    a 'beginner'.  Other useful level indicators could be: - <i>managers, experienced, trainee, induction, 
+    professional</i>. 
+    <br /><br />
+    If the training is preparation for a well-known qualification (our guitar course isn't), then include the
+    qualification as a keyword.  But always remember that an effective keyword is one that's likely to appear
+    in user search lists, so there's not much point in listing a little-known qualification or an internal
+    certificate.
+    <br /><br />
+    The key is to imagine yourself as one of your own potential clients - but someone who's never come 
+    across your training before.  What would their keyword preference list look like?  There's help 
+    available.  If you click on <i>Popular keywords</i>, you'll see a list of the most
+    popular keywords for the current category.
+    <br /><br />
+    Finally, check your resource description again.  Does it prompt you to add new keywords?  And are some of
+    your keywords in the description too?  If not, they should be, to reinforce your message. 
+    
+    
+</div>
+
+

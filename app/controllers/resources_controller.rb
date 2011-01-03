@@ -8,7 +8,7 @@ class ResourcesController < ApplicationController
   def index
     @title = "Resources"
     @tag_name = "Add a new resource"
-    @vendor = current_vendor
+    @vendor = Vendor.find(current_vendor)
     @resources = @vendor.resources.paginate(:page => params[:page],
                                   :order => :name)
     @users = User.paginate(:page => params[:page])
@@ -25,10 +25,12 @@ class ResourcesController < ApplicationController
       @vendor = current_vendor
       @group = params[:group]
       cookies[:group_name] = @group
+      cookies[:category_id] = nil
       @resource = Resource.new
       @categories = Category.all_authorized_by_target(@group)
       @media = Medium.all_authorized
       @tag_name = "Create"
+      store_location
     end 
   end
 
@@ -63,8 +65,10 @@ class ResourcesController < ApplicationController
     @vendor = Vendor.find(@resource.vendor_id)
     @group = Category.find(@resource.category_id).in_group
     cookies[:group_name] = @group
+    cookies[:category_id] = @resource.category_id
     @categories = Category.all_authorized_by_target(@group)
     @media = Medium.all_authorized
+    store_location
   end
   
   def update

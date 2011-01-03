@@ -1,0 +1,42 @@
+<div class="redirects">
+  <%= back_to_input %>
+</div>
+
+<h1>Popular keywords</h1>
+<h4 class="loud"><%= @category.category %></h4>
+
+<div class="two_column_left">
+  <h5>Vendor favorites</h5>
+  
+  <div class="cloud">
+  <% tag_cloud(@tags, %w(css1 css2 css3 css4)) do |tag, css_class| %>  
+    <% if css_class == "css1" %>
+      <span class="css1">
+    <% elsif css_class == "css2" %>
+      <span class="css2">
+    <% elsif css_class == "css3" %>
+      <span class="css3">
+    <% elsif css_class == "css4" %>
+      <span class="css4">  
+    <% end %>
+      <%= tag.name %>
+    </span>
+  <% end %> 
+  </div>
+  <br /> 
+</div>
+<div class="two_column_right">
+  <h5>User favorites</h5>
+  <div class="cloud">
+  </div>
+  <br />
+</div>
+
+<div class="notes" style ="clear:both">
+  Create new keywords by all means, showing users why your product is special - but don't neglect the 
+  popular keywords, especially those most requested by users.
+</div>
+<div class="redirects">
+  <%= back_to_input %>
+</div>
+

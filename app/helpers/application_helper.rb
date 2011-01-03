@@ -1,5 +1,7 @@
 module ApplicationHelper
 
+  include ActsAsTaggableOn::TagsHelper
+  
   def logo
     image_tag("logo.png", :alt => "Tickets for Training", :class => "round")  
   end
@@ -23,6 +25,10 @@ module ApplicationHelper
   
   def drop_changes(route)
     link_to "(drop changes)", route
+  end
+  
+  def back_to_input
+    link_to "(return to input form)", session[:return_to]
   end
   
   def previous_page(admin_route, user_route)

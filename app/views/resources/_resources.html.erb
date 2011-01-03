@@ -33,6 +33,17 @@
       <%= f.text_area :description %>
     </div>
     <div class="field">
+      <%= f.label :feature_list, "Keywords" %> <small> (separated by commas. <=15 words)</small><br />
+      <%= f.text_field :feature_list %>
+      <small><%= link_to "Keyword help", keyword_help_path %>&nbsp; &nbsp; 
+             <% if cookies[:category_id].blank? %>
+               <%= link_to "Popular keywords", select_category_path %>
+             <% else %>            
+               <%= link_to "Popular keywords", popular_keywords_path %>
+             <% end %>
+      </small> 
+    </div>
+    <div class="field">
       <%= f.label :webpage %> <small>(where can we find more info?)</small><br />
       <%= f.text_field :webpage %>
     </div>

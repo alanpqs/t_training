@@ -239,6 +239,21 @@ textarea {
   color: #dc0800;  
 }
 
+.cloud {
+  color: #777;
+  border: 1px solid #ddd;
+  padding: 10px;
+  -moz-border-radius:    10px;
+  -webkit-border-radius: 10px;
+  border-radius:         10px;
+}
+
+/* for Acts As Taggable On */
+.css1 { font-size: 0.7em; }
+.css2 { font-size: 0.9em; }
+.css3 { font-size: 1.1em; }
+.css4 { font-size: 1.3em; }
+
 /* Round corners */
 
 .round {
@@ -326,7 +341,10 @@ td.sidebar {
 }
 
 div.field, div.actions {
-  margin-bottom: 5px;
+  /*padding-bottom: 0px; 
+  padding-top: 0px; */
+  line-height: 1em; 
+  margin-bottom: 15px;
 }
 
 .indent {

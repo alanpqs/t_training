@@ -14,6 +14,7 @@ gem 'google_currency', '1.0.2'
 gem 'activerecord-import', '0.2.3'
 gem 'json'
 gem 'mail', '2.2.7'
+gem 'acts-as-taggable-on'
 
 group :development do
   gem 'rspec-rails', '2.0.0.beta.18'

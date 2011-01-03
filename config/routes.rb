@@ -46,7 +46,10 @@ TTraining::Application.routes.draw do
   match '/duplicate_resource_to_vendor',  
                             :to => 'business/pages#duplicate_resource_to_vendor'
   match 'duplicate_to_vendor',  :to => 'business/pages#duplicate_to_vendor'
-  
+  match 'keyword_help',         :to => 'business/pages#keyword_help'
+  match 'popular_keywords',     :to => 'business/pages#popular_keywords'
+  match 'select_category',      :to => 'business/pages#select_category'
+  match 'category_selected',    :to => 'business/pages#category_selected'
 
   root :to => 'pages#home'
 

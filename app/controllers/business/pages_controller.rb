@@ -53,7 +53,8 @@ class Business::PagesController < ApplicationController
     @resource = Resource.create(:name => @attr_resource.name, :vendor_id => @vendor.id, 
       :category_id => @attr_resource.category_id, :medium_id => @attr_resource.medium_id,
       :length_unit => @attr_resource.length_unit, :length => @attr_resource.length,
-      :description => @attr_resource.description, :webpage => @attr_resource.webpage)
+      :description => @attr_resource.description, :webpage => @attr_resource.webpage,
+      :feature_list => @attr_resource.feature_list)
     cookies[:vendor_id] = @vendor.id
     flash[:success] = "This resource has been successfully duplicated - but you may now 
       need to edit your webpage reference.  Note that you are now working with the 
@@ -61,4 +62,31 @@ class Business::PagesController < ApplicationController
     redirect_to resource_path(@resource)
   end
   
+  def keyword_help
+    @title = "Keyword help"
+  end
+  
+  def popular_keywords
+    @category = Category.find(cookies[:category_id])
+    @title = "Popular keywords: #{@category.category}"
+    @tags = @category.resources.tag_counts_on(:features)
+    tag_cloud(@category)
+  end
+  
+  def tag_cloud(category)
+    @tags = category.resources.tag_counts_on(:features)
+  end
+  
+  def select_category
+    @group = (cookies[:group_name])
+    @title = "Select category: #{@group}"
+    @categories = Category.all_authorized_by_target(@group)
+    @tag_name = "Now click to view popular keywords"
+  end
+  
+  def category_selected
+    @category = Category.find(params[:category])
+    cookies[:category_id] = @category.id
+    redirect_to :popular_keywords
+  end
 end
