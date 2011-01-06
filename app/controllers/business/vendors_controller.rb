@@ -1,8 +1,10 @@
 class Business::VendorsController < ApplicationController
   
   before_filter :authenticate,            :except => [:create, :update]    
-  before_filter :vendor_legality_check,   :only   => [:create, :update]
-  before_filter :vendor_user,             :except => [:create, :update]   
+  before_filter :user_authorization,      :only   => [:show, :edit, :update, :destroy]
+  before_filter :vendor_legality_check,   :only   => [:create]
+  before_filter :vendor_user,             :only   => [:index, :new]   
+  
   
   def index
   end
@@ -63,4 +65,20 @@ class Business::VendorsController < ApplicationController
       render "edit"
     end     
   end
+  
+  private
+  
+    def user_authorization
+      msg = "You're trying to access an area that does not belong to you.  Please don't!!"
+      if logged_in?
+        @vendor = Vendor.find(params[:id])
+        unless @vendor.is_associated_with?(current_user.id)
+          flash[:error] = msg
+          select_home_path
+        end
+      else
+        flash[:error] = msg
+        redirect_to root_path
+      end
+    end
 end

@@ -94,7 +94,7 @@ module SessionsHelper
       elsif current_user.admin?
         redirect_to admin_home_path
       else
-        redirect_to root_path  
+        redirect_to user_path(current_user) 
       end
     else
       redirect_to login_path

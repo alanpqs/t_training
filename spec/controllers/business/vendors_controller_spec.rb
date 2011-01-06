@@ -8,6 +8,8 @@ describe Business::VendorsController do
     @region = Factory(:region)
     @country = Factory(:country, :region_id => @region.id)
     @vendor = Factory(:vendor, :country_id => @country.id, :description => "Great trainer")
+    @vendor2 = Factory(:vendor, :name => "Vendor2", :address => "Birmingham",
+                                :country_id => @country.id, :email => "vendor2@example.com")
     @attr = { :name => "goodname", :country_id => @country.id, :address => "Swansea",
                        :email => "goodname@example.com", :description => "Training" }
   end
@@ -87,15 +89,15 @@ describe Business::VendorsController do
       end
     end
     
-    describe "GET 'update'" do
+    describe "PUT 'update'" do
       
       it "should redirect to the root path if they attempt to update a vendor" do
-        put :update, :id => :vendor, :vendor => @attr
+        put :update, :id => @vendor, :vendor => @attr
         response.should redirect_to root_path
       end
       
       it "should not update the vendor attributes" do
-        put :update, :id => :vendor, :vendor => @attr
+        put :update, :id => @vendor, :vendor => @attr
         @vendor.reload
         @vendor.name.should_not == @attr[:name]
       end
@@ -131,7 +133,7 @@ describe Business::VendorsController do
         response.should_not be_success
       end
       
-      it "should redirect to the root page" do
+      it "should redirect to the user home page" do
         get :show, :id => @vendor
         response.should redirect_to user_path(@user)
       end
@@ -177,7 +179,7 @@ describe Business::VendorsController do
         response.should_not be_success
       end
       
-      it "should redirect to the user profile page" do
+      it "should redirect to the user home page" do
         get :edit, :id => @vendor
         response.should redirect_to user_path(@user)
       end
@@ -186,29 +188,30 @@ describe Business::VendorsController do
     describe "GET 'update'" do
       
       it "should redirect to the root path if they attempt to update a vendor" do
-        put :update, :id => :vendor, :vendor => @attr
-        response.should redirect_to root_path
+        put :update, :id => @vendor, :vendor => @attr
+        response.should redirect_to user_path(@user)
       end
       
       it "should not update the vendor attributes" do
-        put :update, :id => :vendor, :vendor => @attr
+        put :update, :id => @vendor, :vendor => @attr
         @vendor.reload
         @vendor.name.should_not == @attr[:name]
       end
     end
   end
   
-  describe "logged-in vendors" do
+  describe "logged-in vendor-users, associated with vendor(s)" do
   
     before(:each) do
       @user = Factory(:user, :vendor => true, :country_id => @country.id)
+      @representation = Factory(:representation, :user_id => @user.id, :vendor_id => @vendor.id)
       test_log_in(@user)
     end
     
     describe "GET 'index'" do
       it "should be successful" do
-        get :index
-        response.should be_success
+        pending "should perhaps scrap index - business/home instead"
+        #response.should be_success
       end 
     end
 
@@ -329,6 +332,8 @@ describe Business::VendorsController do
       it "should display 'verification pending' notices if the vendor has not yet been verified" do
         @unverified_vendor = Factory(:vendor, :name => "Unverified", :country_id => @country.id,
                               :verified => false)
+        @unver_representation = Factory(:representation, :user_id => @user.id, 
+                                        :vendor_id => @unverified_vendor.id)
         get :show, :id => @unverified_vendor
         response.should have_selector(".warn", :content => "Awaiting email verification!")
         response.should have_selector("div#rubric", :content => "we need a response")
@@ -337,6 +342,8 @@ describe Business::VendorsController do
       it "should not display the verification notices if the vendor has been verified" do
         @verified_vendor = Factory(:vendor, :name => "Verified", :country_id => @country.id,
                               :verified => true)
+        @ver_representation = Factory(:representation, :user_id => @user.id, 
+                                        :vendor_id => @verified_vendor.id)
         get :show, :id => @verified_vendor
         response.should_not have_selector(".warn", :content => "Awaiting email verification!")
         response.should_not have_selector("div#rubric", :content => "we need a response")
@@ -360,6 +367,8 @@ describe Business::VendorsController do
       it "should include the vendor phone number and IDD code, if listed" do
         @phone_vendor = Factory(:vendor, :name => "Phonevendor", :country_id => @country.id,
                                          :phone => "12345")
+        @phone_representation = Factory(:representation, :user_id => @user.id, 
+                                        :vendor_id => @phone_vendor.id)                                 
         get :show, :id => @phone_vendor
         response.should have_selector("p", :content => @phone_vendor.phone) 
         response.should have_selector("p", :content => @country.phone_code)                                
@@ -373,6 +382,8 @@ describe Business::VendorsController do
       it "should include a link to the vendor website if listed" do
         @website_vendor = Factory(:vendor, :name => "Webvendor", :country_id => @country.id,
                           :website => "www.webvendor.info")
+        @website_representation = Factory(:representation, :user_id => @user.id, 
+                                        :vendor_id => @website_vendor.id)
         get :show, :id => @website_vendor   
         response.should have_selector("a",  :href => @website_vendor.website,
                                             :content => @website_vendor.website)               
@@ -406,6 +417,8 @@ describe Business::VendorsController do
       it "should state that Reviews are displayed if vendor.show_reviews is true" do
         @review_vendor = Factory(:vendor, :name => "Review", :country_id => @country.id,
                                   :show_reviews => true)
+        @review_representation = Factory(:representation, :user_id => @user.id, 
+                                        :vendor_id => @review_vendor.id)
         get :show, :id => @review_vendor
         response.should have_selector(".loud", :content => "To turn off")
       end
@@ -727,6 +740,86 @@ describe Business::VendorsController do
           response.should have_selector("div#error_explanation", :content => "There were problems")
         end
       end
+    end
+  end
+  
+  describe "logged-in vendor-users, with vendor attributes but not associated with this vendor" do
+    
+    before(:each) do
+      @wrong_user = Factory(:user, :email => "wrong_user@example.com", 
+                            :vendor => true, :country_id => @country.id)
+      @representation2 = Factory(:representation, :user_id => @wrong_user.id, :vendor_id => @vendor2.id)       
+      test_log_in(@wrong_user)
+    end
+    
+    describe "GET 'show'" do
+    
+      it "should not display the page" do
+        get :show, :id => @vendor
+        response.should_not be_success
+      end
+      
+      it "should redirect to the business home path" do
+        get :show, :id => @vendor
+        response.should redirect_to business_home_path
+      end
+      
+      it "should display a warning" do
+        get :show, :id => @vendor
+        flash[:error].should =~ /does not belong to you/
+      end
+      
+    end
+    
+    describe "GET 'edit'" do
+      
+      it "should not display the page" do
+        get :edit, :id => @vendor
+        response.should_not be_success
+      end
+      
+      it "should redirect to the business home path" do
+        get :edit, :id => @vendor
+        response.should redirect_to business_home_path
+      end
+      
+      it "should display a warning" do
+        get :edit, :id => @vendor
+        flash[:error].should =~ /does not belong to you/
+      end  
+    end
+    
+    describe "PUT 'update'" do
+      
+      before(:each) do
+        @good_name = "Good Name"
+        @good_description = "a" * 254
+        @good_address = "London"
+        @good_email = "goodname@example.com"
+        @good_attr = { :name => @good_name, :country_id => @country.id, :address => @good_address,
+                       :email => @good_email, :description => @good_description }
+      end
+
+      it "should not update the vendor attributes" do
+        put :update, :id => @vendor, :vendor => @good_attr
+        @vendor.reload
+        @vendor.name.should_not == @good_name
+        @vendor.email.should_not == @good_email
+      end
+      
+      it "should redirect to the business home path" do
+        put :update, :id => @vendor, :vendor => @good_attr
+        response.should redirect_to business_home_path
+      end
+      
+      it "should display a warning" do
+        put :update, :id => @vendor, :vendor => @good_attr
+        flash[:error].should =~ /does not belong to you/
+      end  
+    end
+    
+    describe "DELETE 'destroy'" do
+      pending
     end
   end
 end

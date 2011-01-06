@@ -86,4 +86,15 @@ class Vendor < ActiveRecord::Base
                                :conditions => ["name = ? and vendor_id = ?", name, self.id])
     !@resource.nil?
   end
+  
+  def is_associated_with?(user)
+    result = false
+    @reps = self.users
+    @reps.each do |rep|
+      if rep.id == user
+        result = true
+      end
+    end
+    return result
+  end
 end

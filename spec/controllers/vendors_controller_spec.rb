@@ -70,7 +70,7 @@ describe VendorsController do
         it "should direct other logged-in users to the home page" do
           test_log_in(@user)
           put :confirm, :action => "confirm", :code => @v_code
-          response.should redirect_to root_path
+          response.should redirect_to user_path(@user)
         end
         
         it "should direct first-time users to the root-path" do
@@ -117,7 +117,7 @@ describe VendorsController do
         it "should direct other logged-in users to the home page" do
           test_log_in(@user)
           put :confirm, :action => "confirm", :code => @wrong_v_code
-          response.should redirect_to root_path
+          response.should redirect_to user_path(@user)
         end
         
         it "should direct first-time users to the root-path" do
