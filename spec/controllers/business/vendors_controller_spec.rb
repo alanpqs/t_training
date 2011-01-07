@@ -35,12 +35,11 @@ describe Business::VendorsController do
       end
       
       it "should redirect to the login path" do
-        get :index
+        get :new
         response.should redirect_to login_path
       end
       
     end
-    
     
     describe "POST 'create'" do
       
@@ -147,7 +146,7 @@ describe Business::VendorsController do
       end
       
       it "should redirect to the user profile page" do
-        get :index
+        get :new
         response.should redirect_to user_path(@user)
       end
     end
@@ -819,7 +818,7 @@ describe Business::VendorsController do
     end
     
     describe "DELETE 'destroy'" do
-      pending
+      pending "till conditions for deletion are decided"
     end
   end
 end

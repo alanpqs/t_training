@@ -1,6 +1,9 @@
 <h1><%= @resource.name %>
    <span class="header_link"><%= link_to "(edit details)", edit_resource_path(@resource) %></span>
 </h1>
+<% if @resource.hidden? %>
+  <h4>This resource is currently <u class="loud">hidden</u> from public view.</h4>
+<% end %>
 <div class="notes">
   <div class="two_column_left">
     <%= @resource.medium.medium %> from<br /> 

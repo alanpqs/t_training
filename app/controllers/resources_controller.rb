@@ -93,7 +93,7 @@ class ResourcesController < ApplicationController
     @vendor = Vendor.find(@resource.vendor_id)
     @resource_name = @resource.name
     @resource.destroy
-    flash[:success] = "#{@resource_name} deleted."
+    flash[:success] = "'#{@resource_name}' deleted."
     redirect_to(vendor_resources_path(@vendor))
   end
   

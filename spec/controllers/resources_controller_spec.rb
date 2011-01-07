@@ -33,7 +33,12 @@ describe ResourcesController do
     @other_vendor_resource = Factory(:resource, :name => "Resource4", :vendor_id => @vendor.id, 
                                     :category_id => @category1.id, 
                                     :medium_id => @medium1.id)
+    @hidden_resource = Factory(:resource, :name => "Hidden", :vendor_id => @vendor2.id, 
+                                    :category_id => @category1.id, :webpage => "hidden@example.com",
+                                    :medium_id => @medium1.id, :hidden => true)                 
     @resources = [@resource1, @resource2, @resource3, @other_vendor_resource]
+    @good_attr = { :name => "Good name", :category_id => @category2.id, :medium_id => @medium2, 
+                                          :feature_list => "hot, sticky"}
                                     
   end
   
@@ -64,7 +69,6 @@ describe ResourcesController do
       end
     end
     
-    
     describe "POST 'create'" do
       
       before(:each) do
@@ -82,6 +86,61 @@ describe ResourcesController do
         post :create, :vendor_id => @vendor2.id, :resource => @good_attr
         response.should redirect_to root_path 
       end
+    end
+    
+    describe "GET 'show'" do
+      
+      it "should not be successful" do
+        get :show, :id => @resource1
+        response.should_not be_success
+      end
+      
+      it "should redirect to the login page" do
+        get :show, :id => @resource1
+        response.should redirect_to login_path
+      end
+    end
+    
+    describe "GET 'edit'" do
+      
+      it "should not be successful" do
+        get :edit, :id => @resource1
+        response.should_not be_success
+      end
+      
+      it "should redirect to the login page" do
+        get :edit, :id => @resource1
+        response.should redirect_to login_path
+      end
+    end
+    
+    describe "PUT 'update'" do
+      
+      it "should not change the resource attributes" do
+        put :update, :id => @resource1, :resource => @good_attr
+        @resource1.reload
+        @resource1.name.should_not == "Good name"
+      end
+      
+      it "should redirect to the login page" do
+        put :update, :id => @resource1, :resource => @good_attr
+        response.should redirect_to root_path
+      end
+    end
+    
+    describe "DELETE 'destroy'" do
+      
+      it "should not delete the resource" do
+        original_count = Resource.count(:all)
+        delete :destroy, :id => @resource1
+        new_count = Resource.count(:all)
+        new_count.should == original_count
+      end
+    end
+    
+    it "should redirect to the login path" do
+      delete :destroy, :id => @resource1
+      response.should redirect_to login_path
     end
   end
   
@@ -138,6 +197,73 @@ describe ResourcesController do
         response.should redirect_to root_path 
       end
     end
+    
+    describe "GET 'show'" do
+      
+      it "should not be successful" do
+        get :show, :id => @resource1
+        response.should_not be_success
+      end
+      
+      it "should redirect to the login page" do
+        get :show, :id => @resource1
+        response.should redirect_to @non_vendoruser
+      end
+      
+      it "should display a warning message" do
+        get :show, :id => @resource1
+        flash[:error].should =~ /an area that does not belong to you/
+      end
+
+    end
+    
+    describe "GET 'edit'" do
+      
+      it "should not be successful" do
+        get :edit, :id => @resource1
+        response.should_not be_success
+      end
+      
+      it "should redirect to the login page" do
+        get :edit, :id => @resource1
+        response.should redirect_to @non_vendoruser
+      end
+    end
+    
+    describe "PUT 'update'" do
+      
+      it "should not change the resource attributes" do
+        put :update, :id => @resource1, :resource => @good_attr
+        @resource1.reload
+        @resource1.name.should_not == "Good name"
+      end
+      
+      it "should redirect to the login page" do
+        put :update, :id => @resource1, :resource => @good_attr
+        response.should redirect_to @non_vendoruser
+      end
+    end
+    
+    describe "DELETE 'destroy'" do
+      
+      it "should not delete the resource" do
+        original_count = Resource.count(:all)
+        delete :destroy, :id => @resource1
+        new_count = Resource.count(:all)
+        new_count.should == original_count
+      end
+    end
+    
+    it "should redirect to the login path" do
+      delete :destroy, :id => @resource1
+      response.should redirect_to @non_vendoruser
+    end
+    
+    it "should display a warning message" do
+      delete :destroy, :id => @resource1
+      flash[:error].should =~ /an area that does not belong to you/
+    end
+
   end
   
   describe "for logged-in vendor-users, associated with the vendor company" do
@@ -374,7 +500,9 @@ describe ResourcesController do
       end
       
       it "should include a text area to add up to 15 related tags" do
-        pending
+        get :new, :group => "Job"
+        response.should have_selector("input",  :name => "resource[feature_list]",
+                                                :value => "")
       end
     end
     
@@ -524,7 +652,8 @@ describe ResourcesController do
       end
       
       it "should set the 'current_resource' cookie to the current resource.id" do
-        pending "to be added"
+        get :show, :id => @resource1
+        response.cookies["resource_id"].should == @resource1.id.to_s
       end
       
       it "should have a link to add a new resource for this vendor" do
@@ -592,11 +721,15 @@ describe ResourcesController do
       end
       
       it "should show that hidden resources are hidden" do
-        pending "to be added"
+        get :show, :id => @hidden_resource
+        response.should have_selector("h4", 
+                  :content => "This resource is currently hidden from public view.")
       end
       
-      it "should show that displayed resources are displayed" do
-        pending "to be added"
+      it "should show not display the hidden notice unless the resource is marked hidden" do
+        get :show, :id => @resource1
+        response.should_not have_selector("h4", 
+                  :content => "This resource is currently hidden from public view.")
       end
       
       describe "when the user has more than one vendor" do
@@ -742,6 +875,126 @@ describe ResourcesController do
     
     describe "PUT 'update'" do
       
+      before(:each) do
+        @flist_resource = Factory(:resource, :name => "Flist", :vendor_id => @vendor2.id, 
+                                    :category_id => @category2.id, :webpage => "flist@example.com",
+                                    :medium_id => @medium2.id, :description => "flist",
+                                    :feature_list => "One, Two")
+        #@good_attr = { :name => "Good name", :category_id => @category2.id, :medium_id => @medium2, 
+        #               :feature_list => "hot, sticky"}
+        @bad_attr = { :name => "" }
+        @bad_attr_features = { :feature_list => "z, y, x, w, v, u, t, s, r, q, p, o, n, m, l, k" }
+      end
+      
+      describe "success" do
+      
+        it "should update the resource attributes" do
+          put :update, :id => @resource1, :resource => @good_attr
+          resource = assigns(:resource)
+          @resource1.reload
+          @resource1.name.should == resource.name
+          @resource1.category_id.should == resource.category_id
+        end
+        
+        it "should remove any tags that have been edited out" do
+          put :update, :id => @flist_resource, :resource => @good_attr
+          resource = assigns(:resource)
+          @flist_resource.reload
+          @flist_resource.feature_list.should_not == "One, Two"
+        end
+        
+        it "should redirect to the 'Show' page" do
+          put :update, :id => @resource1, :resource => @good_attr
+          response.should redirect_to resource_path(@resource1)
+        end
+        
+        it "should display a success message" do
+          put :update, :id => @resource1, :resource => @good_attr
+          flash[:success].should =~ /Your resource was successfully updated/
+        end
+        
+      end
+      
+      describe "failure" do
+        
+        it "should not update the resource attributes" do
+          put :update, :id => @resource1, :resource => @bad_attr
+          resource = assigns(:resource)
+          @resource1.reload
+          @resource1.name.should_not == resource.name
+        end
+        
+        it "should not accept an overlong tag string" do
+          put :update, :id => @flist_resource, :resource => @bad_attr_features
+          resource = assigns(:resource)
+          @flist_resource.reload
+          @flist_resource.feature_list.should_not == resource.feature_list
+        end
+        
+        it "should render the 'Edit' page" do
+          put :update, :id => @resource1, :resource => @bad_attr
+          response.should render_template("edit")
+        end
+          
+        it "should display an appropriate error message" do
+          put :update, :id => @resource1, :resource => @bad_attr
+          response.should have_selector("div#error_explanation", :content => "There were problems")
+        end
+        
+        it "should have the right title" do
+          put :update, :id => @resource1, :resource => @bad_attr
+          response.should have_selector("title", :content => "Edit resource") 
+        end
+      end
+      
+    end
+    
+    describe "DELETE 'destroy'" do
+      
+      before(:each) do
+        @deletable_resource = Factory(:resource, :name => "Deletable", :vendor_id => @vendor2.id, 
+                                     :category_id => @category1.id, :medium_id => @medium1.id)
+      end
+      
+      describe "when not associated with a schedule" do
+      
+        describe "success" do
+        
+          it "should delete the resource" do
+            original_count = Resource.count(:all)
+            delete :destroy, :id => @deletable_resource
+            new_count = Resource.count(:all)
+            new_count.should == original_count - 1
+          end
+          
+          it "should redirect to the index page" do
+            @vendor = Vendor.find(@resource1.vendor_id)
+            delete :destroy, :id => @resource1
+            response.should redirect_to vendor_resources_path(@vendor)
+          end
+          
+          it "should have a success message, showing which resource has been deleted" do
+            delete :destroy, :id => @resource1
+            flash[:success].should == "'#{@resource1.name}' deleted."
+          end
+        end   
+      end
+      
+      describe "when associated with a schedule" do
+        
+        it "should not delete the resource" do
+          pending "until schedule is added"
+        end
+        
+        it "should re-display the index page" do
+          pending "until schedule is added"
+        end
+        
+        it "should display an error message" do
+          pending "until schedule is added"
+        end
+      end
+      
     end
   end
   
@@ -755,6 +1008,8 @@ describe ResourcesController do
       @resource5 = Factory(:resource, :name => "Resource5", :vendor_id => @vendor4.id, 
                                         :category_id => @category1.id, :webpage => "resource5@example.com",
                                         :medium_id => @medium1.id, :description => "This is a")
+      #@good_attr = { :name => "Good name", :category_id => @category2.id, :medium_id => @medium2, 
+      #                 :feature_list => "hot, sticky"}
       test_log_in(@wrong_user)
       test_vendor_cookie(@wrong_user)
     end
@@ -798,14 +1053,43 @@ describe ResourcesController do
     describe "PUT 'update'" do
       
       it "should not change the resource attributes" do
-        pending
+        put :update, :id => @resource1, :resource => @good_attr
+        @resource1.reload
+        @resource1.name.should_not == "Good name"
+      end
+      
+      it "should redirect to the business home path" do
+        put :update, :id => @resource1, :resource => @good_attr
+        response.should redirect_to business_home_path
+      end
+      
+      it "should display an error message" do
+        put :update, :id => @resource1, :resource => @good_attr
+        flash[:error].should =~ /an area that does not belong to you/
       end
     end
     
     describe "DELETE 'destroy'" do
+      before(:each) do
+        @non_deletable_resource = Factory(:resource, :name => "Deletable", :vendor_id => @vendor2.id, 
+                                     :category_id => @category1.id, :medium_id => @medium1.id)
+      end
       
       it "should not delete the resource" do
-        pending
+        original_count = Resource.count(:all)
+        delete :destroy, :id => @non_deletable_resource
+        new_count = Resource.count(:all)
+        original_count.should == new_count
+      end
+      
+      it "should redirect to the business home path" do
+        delete :destroy, :id => @non_deletable_resource
+        response.should redirect_to business_home_path
+      end
+      
+      it "should display an error message" do
+        delete :destroy, :id => @non_deletable_resource
+        flash[:error].should =~ /an area that does not belong to you/
       end
     end
   end
