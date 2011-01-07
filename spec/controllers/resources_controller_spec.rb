@@ -140,9 +140,21 @@ describe ResourcesController do
     end
   end
   
-  describe "for logged-in vendors" do
+  describe "for logged-in vendor-users, associated with the vendor company" do
     
     before(:each) do
+      @tagged_resource1 = Factory(:resource, :name => "Tagged1", :vendor_id => @vendor2.id, 
+                                    :category_id => @category1.id, 
+                                    :medium_id => @medium1.id,
+                                    :feature_list => "good, nice, fun")
+      @tagged_resource2 = Factory(:resource, :name => "Tagged2", :vendor_id => @vendor2.id, 
+                                    :category_id => @category1.id, 
+                                    :medium_id => @medium1.id,
+                                    :feature_list => "brave, strong")
+      @tagged_noncat_resource = Factory(:resource, :name => "OtherCatTagged", :vendor_id => @vendor2.id, 
+                                    :category_id => @category2.id, 
+                                    :medium_id => @medium1.id,
+                                    :feature_list => "sad, wrong")                              
       test_log_in(@user)
       test_vendor_cookie(@user)
     end
@@ -361,7 +373,7 @@ describe ResourcesController do
         pending
       end
       
-      it "should include a text area to add up to 10 related tags" do
+      it "should include a text area to add up to 15 related tags" do
         pending
       end
     end
@@ -501,8 +513,14 @@ describe ResourcesController do
         response.should have_selector("a", :href => edit_resource_path(@resource1))
       end
       
-      it "should include a list of keywords associated with the resource" do
-        pending "till keywords added"
+      it "should include a list of associated keywords" do
+        get :show, :id => @tagged_resource1
+        response.should have_selector("div#features", :content => "good, nice, fun")
+      end
+      
+      it "should not include non-associated keywords" do
+        get :show, :id => @tagged_resource1
+        response.should_not have_selector("div#features", :content => "brave, strong")
       end
       
       it "should set the 'current_resource' cookie to the current resource.id" do
@@ -562,6 +580,8 @@ describe ResourcesController do
       end
    
       it "should warn that no records will be displayed for an unverified vendor" do
+        @other_representation = Factory(:representation, :user_id => @user.id,
+                    :vendor_id => @vendor.id)
         get :show, :id => @other_vendor_resource
         response.should have_selector(".two_column_left", :content => "this resource will not be seen")
       end
@@ -601,6 +621,192 @@ describe ResourcesController do
                                                :content => "another of your vendors")
         end
       end        
+    end
+    
+    describe "GET 'edit'" do
+      
+      it "should be successful" do
+        get :edit, :id => @resource1
+        response.should be_success
+      end
+      
+      it "should have the right title" do
+        get :edit, :id => @resource1
+        response.should have_selector("title", :content => "Edit resource")
+      end
+      
+      it "should display the correct vendor name" do
+         get :edit, :id => @resource1
+        response.should have_selector(".h_tag", :content => @vendor2.name)
+      end
+      
+      it "should have a visible, editable text-box for the resource name" do
+         get :edit, :id => @resource1
+        response.should have_selector("input",  :name => "resource[name]",
+                                                :value => @resource1.name)
+      end
+      
+      it "should have a select field for Categories with the correct Category displayed" do
+        get :edit, :id => @resource1
+        response.should have_selector("option", :value => @resource1.category_id.to_s,
+                                                :selected => "selected",
+                                                :content => @resource1.category.category)
+      end
+      
+      it "should have the correct selection options for the category select box" do
+        get :edit, :id => @resource1
+        @categories[0..2].each do |category|
+          response.should have_selector("option", :content => category.category)
+        end
+      end
+      
+      it "should not have the wrong selection options for the category select box" do
+        get :edit, :id => @resource1
+        response.should_not have_selector("option", :content => @category4.category)
+      end
+      
+      it "should have a select field for Media with the correct Medium displayed" do
+        get :edit, :id => @resource1
+        response.should have_selector("option", :value => @resource1.medium_id.to_s,
+                                                :selected => "selected",
+                                                :content => @resource1.medium.medium)
+      end
+      
+      it "should have the correct selection options for the Format (=Medium) select box" do
+        get :edit, :id => @resource1
+        @media[0..1].each do |medium|
+          response.should have_selector("option", :content => medium.medium)
+        end
+      end
+      
+      it "should not have the wrong selection options for the Format select box" do
+        get :edit, :id => @resource1
+        response.should_not have_selector("option", :content => @medium3.medium)
+      end
+      
+      it "should have the correct length_unit in a select-box" do
+        get :edit, :id => @resource1
+        response.should have_selector("option", :value => @resource1.length_unit,
+                                                :selected => "selected",
+                                                :content => @resource1.length_unit)
+      end
+      
+      it "should have the correct selection options for the length_unit select box" do
+        get :edit, :id => @resource1
+        response.should have_selector("option", :content => "Page")
+      end
+      
+      it "should have the correct Length in a text-box" do
+        get :edit, :id => @resource1
+        response.should have_selector("input",  :name => "resource[length]",
+                                                :value => @resource1.length.to_s)
+      end
+      
+      it "should have the correct Description in a text area" do
+        get :edit, :id => @resource1
+        response.should have_selector("textarea",  :name => "resource[description]",
+                                                   :content => @resource1.description)
+      end
+      
+      it "should have the correct Webpage reference in a text-box" do
+        get :edit, :id => @resource1
+        response.should have_selector("input",  :name => "resource[webpage]",
+                                                :content => @resource1.webpage)
+      end
+      
+      it "should have a 'Confirm changes' button" do
+        get :edit, :id => @resource1
+        response.should have_selector("input", :value => "Confirm changes")
+      end
+      
+      it "should have a link to the new category form" do
+        pending
+      end
+      
+      it "should have a link to the new media (Format) form" do
+        pending
+      end
+      
+      it "should include a text area to add up to 15 related tags" do
+        get :edit, :id => @tagged_resource1
+        response.should have_selector("input", :name => "resource[feature_list]",
+                                               :value => "good, nice, fun")
+      end
+      
+      it "should not include non-associated tags" do
+        get :edit, :id => @tagged_resource1
+        response.should_not have_selector("input", :name => "resource[feature_list]",
+                                               :value => "strong, brave")
+      end  
+    end
+    
+    describe "PUT 'update'" do
+      
+    end
+  end
+  
+  describe "for logged in vendor-users, not associated with the vendor company" do
+    
+    before(:each) do
+      @wrong_user = Factory(:user, :email => "wrong_user@example.com", :country_id => @country.id, 
+                                   :vendor => true)
+      @vendor4 = Factory(:vendor, :name => "Vendor4", :country_id => @country.id)
+      @representation4 = Factory(:representation, :user_id => @wrong_user.id, :vendor_id => @vendor4.id) 
+      @resource5 = Factory(:resource, :name => "Resource5", :vendor_id => @vendor4.id, 
+                                        :category_id => @category1.id, :webpage => "resource5@example.com",
+                                        :medium_id => @medium1.id, :description => "This is a")
+      test_log_in(@wrong_user)
+      test_vendor_cookie(@wrong_user)
+    end
+    
+    describe "GET 'show'" do 
+      
+      it "should not be successful" do
+        get :show, :id => @resource1
+        response.should_not be_success
+      end
+      
+      it "should redirect to the business home path" do
+        get :show, :id => @resource1
+        response.should redirect_to business_home_path
+      end
+      
+      it "should display an error message" do
+        get :show, :id => @resource1
+        flash[:error].should =~ /an area that does not belong to you/
+      end
+    end
+    
+    describe "GET 'edit'" do
+      
+      it "should not be successful" do
+        get :edit, :id => @resource1
+        response.should_not be_success
+      end
+      
+      it "should redirect to the business home path" do
+        get :edit, :id => @resource1
+        response.should redirect_to business_home_path
+      end
+      
+      it "should display an error message" do
+        get :edit, :id => @resource1
+        flash[:error].should =~ /an area that does not belong to you/
+      end
+    end
+    
+    describe "PUT 'update'" do
+      
+      it "should not change the resource attributes" do
+        pending
+      end
+    end
+    
+    describe "DELETE 'destroy'" do
+      
+      it "should not delete the resource" do
+        pending
+      end
     end
   end
 end

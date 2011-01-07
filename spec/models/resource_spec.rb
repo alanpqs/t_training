@@ -114,4 +114,10 @@ describe Resource do
     @long_webpage = Resource.new(@attr.merge(:webpage => @long_w))
     @long_webpage.should_not be_valid
   end
+  
+  it "should reject more than 15 word in the feature_list field" do
+    @tags = %w(a, b, c, d, e, f, g, h, i, j x y, k, l, m, n)
+    @long_tags = Resource.new(@attr.merge(:feature_list => @tags))
+    @long_tags.should_not be_valid
+  end
 end

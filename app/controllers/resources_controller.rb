@@ -1,8 +1,9 @@
 class ResourcesController < ApplicationController
   
-  before_filter :authenticate,            :except => [:create]    
+  before_filter :authenticate,            :except => [:create, :update]    
+  before_filter :user_authorization,      :only   => [:show, :edit, :update, :destroy]
   before_filter :vendor_legality_check,   :only   => [:create]
-  before_filter :vendor_user,             :except => [:create]
+  before_filter :vendor_user,             :only => [:index, :new]
     
   
   def index
@@ -95,4 +96,21 @@ class ResourcesController < ApplicationController
     flash[:success] = "#{@resource_name} deleted."
     redirect_to(vendor_resources_path(@vendor))
   end
+  
+  private
+  
+    def user_authorization
+      msg = "You're trying to access an area that does not belong to you.  Please don't!!"
+      if logged_in?
+        @resource = Resource.find(params[:id])
+        @vendor = Vendor.find(@resource.vendor_id)
+        unless @vendor.is_associated_with?(current_user.id)
+          flash[:error] = msg
+          select_home_path
+        end
+      else
+        flash[:error] = msg
+        redirect_to root_path
+      end
+    end
 end
