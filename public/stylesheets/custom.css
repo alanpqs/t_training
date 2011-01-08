@@ -192,6 +192,14 @@ textarea {
   float: left; 
 }
 
+.two_column_right_scroll {
+  width:45%;
+  padding-left: 1em;
+  float: right;
+  height: 350px;  
+  overflow: auto;  
+}
+
 .actions {
   clear:both;
   padding-top: 10px;

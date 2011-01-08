@@ -11,7 +11,9 @@
     </div>
     <div class="field">
       <span class="loud">* </span>
-      <%= f.label :medium_id, "Format" %> <small> &nbsp;(suggest a new format <%= link_to "here", "#" %>)</small><br />
+      <%= f.label :medium_id, "Format" %> 
+        <small> &nbsp;(suggest a new format <%= link_to "here", new_business_medium_path %>)</small>
+        <br />
       <%= collection_select(:resource, :medium_id, @media, :id, :medium, :prompt => true) %>
     </div>
     <div class="field">

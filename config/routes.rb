@@ -1,5 +1,13 @@
 TTraining::Application.routes.draw do
 
+  get "categories/new"
+
+  get "categories/index"
+
+  get "media/new"
+
+  get "media/index"
+
   get "resources/show"
 
   get "resources/index"
@@ -14,15 +22,17 @@ TTraining::Application.routes.draw do
   
   namespace "business" do
     resources :vendors
-    resources :pages, { :duplicate_to_vendors => :post }
+    resources :pages,       { :duplicate_to_vendors => :post }
+    resources :media,       :only => [:new, :create]
+    resources :categories,  :only => [:new, :create]
   end
   
-  resources :users,       :except => :index
-  resources :sessions,    :only => [:new, :create, :destroy]
+  resources :users,         :except => :index
+  resources :sessions,      :only => [:new, :create, :destroy]
   resources :categories
   
   resources :vendors do
-    resources :resources, :shallow => true
+    resources :resources,   :shallow => true
   end
   
   match '/confirm/:code',       :to => 'vendors#confirm', :constraints => { :code => /[A-Za-z0-9]{18}/ }

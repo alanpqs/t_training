@@ -161,7 +161,7 @@ describe ResourcesController do
         response.should_not be_success
       end
       
-      it "should redirect to the root path" do
+      it "should redirect to the user home page" do
         get :index
         response.should redirect_to @non_vendoruser
       end
@@ -496,7 +496,8 @@ describe ResourcesController do
       end
       
       it "should have a link to the new media (Format) form" do
-        pending
+        get :new, :group => "Job"
+        response.should have_selector("a",  :href => new_business_medium_path)     
       end
       
       it "should include a text area to add up to 15 related tags" do
@@ -857,7 +858,8 @@ describe ResourcesController do
       end
       
       it "should have a link to the new media (Format) form" do
-        pending
+        get :edit, :id => @resource1
+        response.should have_selector("a",  :href => new_business_medium_path)                 
       end
       
       it "should include a text area to add up to 15 related tags" do

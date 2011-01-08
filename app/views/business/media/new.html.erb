@@ -1,0 +1,52 @@
+<h1><%= @title %></h1>
+
+<%= form_for [:business, @medium] do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  
+  <div class="two_column_left">
+    
+    <div class="notes">  
+      There are lots of different ways of delivering training - the list on the right shows what we've thought
+      of so far.  But maybe you've come up with a different approach that's not in the list.
+      <br /><br />
+      If so, suggest your new format to us.  Make sure you don't duplicate an existing format, and keep your
+      entry as short as possible.  We'll then check your suggestion, and send you an email either confirming
+      that we've added it to the T4T Formats list ... or explaining why we haven't approved it.
+      <br /><br />
+      Please allow up to 24 hours for us to respond.
+      <br /><br /><hr />
+    </div>
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :medium, "Your proposed format" %><br />
+      <%= f.text_field :medium %>
+    </div>
+    
+    <%= f.hidden_field :user_id %> 
+   
+  </div>
+  <div class="two_column_right_scroll">
+    <h5>Formats: current list</h5>
+    <small><i style = color:#BBB>(italics = not yet approved)</i></small>
+    <br />
+    <div class="notes">
+      <ul>
+        <% @media.each do |medium| %>
+          <li> 
+            <% if medium.authorized? %>
+              <%= medium.medium %>
+            <% else %>
+              <i style = color:#BBB><%= medium.medium %></i>
+            <% end %>
+          </li>  
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <div class="actions">
+    <%= submit_button(@tag_name) %>
+  </div>
+  <div class="redirects">
+    <%= link_to "no suggestions - back to previous form", session[:return_to] %>
+  </div>
+<% end %>
