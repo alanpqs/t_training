@@ -13,7 +13,7 @@
       entry as short as possible.  We'll then check your suggestion, and send you an email either confirming
       that we've added it to the T4T Formats list ... or explaining why we haven't approved it.
       <br /><br />
-      Please allow up to 24 hours for us to respond.
+      We may take 24 hours to respond, so for now, set a temporary format for your resource.
       <br /><br /><hr />
     </div>
     <div class="field">
@@ -47,6 +47,6 @@
     <%= submit_button(@tag_name) %>
   </div>
   <div class="redirects">
-    <%= link_to "no suggestions - back to previous form", session[:return_to] %>
+    <%= link_to "(no suggestions - back to previous form)", session[:return_to] %>
   </div>
 <% end %>

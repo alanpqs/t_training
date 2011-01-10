@@ -75,13 +75,15 @@ describe Category do
     empty_user.should_not be_valid
   end
   
-  it "should not accept an empty 'submitted_name' field" do
-    empty_submitted_name = Category.new(@attr.merge(:submitted_name => "")) 
-    empty_submitted_name.should_not be_valid
+  it "should automatically form the correct 'submitted_name' field on record creation" do
+    empty_submitted_name = Category.create(@attr.merge(:category => "Submitted", :submitted_name => "")) 
+    @new_category = Category.find(:last)
+    @new_category.submitted_name.should == "Submitted"
   end
   
-  it "should not accept an empty 'submitted_group' field" do
-    empty_submitted_group = Category.new(@attr.merge(:submitted_group => "")) 
-    empty_submitted_group.should_not be_valid
+  it "should automatically form the correct 'submitted_group' field on record creation" do
+    empty_submitted_group = Category.create(@attr.merge(:target => "World", :submitted_group => "")) 
+    @new_category = Category.find(:last)
+    @new_category.submitted_group.should == "World"
   end
 end

@@ -20,6 +20,11 @@ class Category < ActiveRecord::Base
   
   attr_accessible :category, :target, :authorized, :user_id, :message, :submitted_name, :submitted_group
   
+  before_validation(:on => :create) do
+    self.submitted_name = self.category
+    self.submitted_group = self.target
+  end
+
   cat_regex = /\A(\w+(\s?([&]\s)?))+\Z/
   
   TARGET_TYPES = [ "Business", "Job", "Personal", "World", "Fun" ]
@@ -205,5 +210,11 @@ class Category < ActiveRecord::Base
       end
     end 
   end
-                  
+   
+  private
+  
+    def make_submissions
+      self.submitted_name = self.category
+      self.submitted_group = self.target
+    end               
 end

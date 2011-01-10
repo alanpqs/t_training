@@ -1,2 +1,57 @@
-<h1>Business::Categories#new</h1>
-<p>Find me in app/views/business/categories/new.html.erb</p>
+<h1><%= @title %>
+  <span class="h_tag">for the <u class="loud"><%= @group %></u> group</span>
+</h1>
+
+<%= form_for [:business, @category] do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  
+  <div class="two_column_left">
+    
+    <div class="notes">  
+      You need to assign each training resource to a group, then a category in the group, to help users
+      find it easily.  Categories are meant to be general, so that the list (shown for '<%= @group %>' 
+      opposite) - doesn't get too long.
+      <br /><br />
+      If you can't find a suitable category in the list, then suggest a new one.  Please don't 
+      duplicate an existing category, and keep your entry as short as possible.  We'll then check your 
+      suggestion, and send you an email either confirming that we've added it to the public T4T 
+      list ... or explaining why we haven't.
+      <br /><br />
+      We may take 24 hours to respond, so for now, set a temporary category for your resource.
+      <br /><br /><hr />
+    </div>
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :category, "Your proposed category" %><br />
+      <%= f.text_field :category %>
+    </div>
+    
+    <%= f.hidden_field :target %> 
+    <%= f.hidden_field :user_id %>
+   
+  </div>
+  <div class="two_column_right_scroll">
+    <h5>Current categories for '<%= @group %>'</h5>
+    <small><i style = color:#BBB>(italics = not yet approved)</i></small>
+    <br />
+    <div class="notes">
+      <ul>
+        <% @categories.each do |category| %>
+          <li> 
+            <% if category.authorized? %>
+              <%= category.category %>
+            <% else %>
+              <i style = color:#BBB><%= category.category %></i>
+            <% end %>
+          </li>  
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <div class="actions">
+    <%= submit_button(@tag_name) %>
+  </div>
+  <div class="redirects">
+    <%= link_to "(no suggestions - back to previous form)", session[:return_to] %>
+  </div>
+<% end %>

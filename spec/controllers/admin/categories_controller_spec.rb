@@ -513,16 +513,14 @@ describe Admin::CategoriesController do
                                                   :target => @target_name, 
                                                   :message_sent => true,
                                                   :user_id => @user.id)
-        @change_name = Factory(:category, :category => "Cnc",
+        @change_name = Factory(:category,         :category => "Cnc",
                                                   :target => @target_name, 
                                                   :authorized => true,
-                                                  :user_id => @user.id,
-                                                  :submitted_name => "Cn1")
+                                                  :user_id => @user.id)
         @change_group = Factory(:category, :category => "Cgc",
                                                   :target => @target_name, 
                                                   :authorized => true,
-                                                  :user_id => @user.id,
-                                                  :submitted_group => "Cg1")
+                                                  :user_id => @user.id)
         @no_change_cat = Factory(:category, :category => "No change",
                                                   :target => @target_name, 
                                                   :authorized => true,
@@ -605,15 +603,17 @@ describe Admin::CategoriesController do
       end
       
       it "should show changes to the Category name originally submitted" do
-        get :edit, :id => @change_name
+        @category.update_attribute(:category, "Cnc1")
+        get :edit, :id => @category
         response.should have_selector(".mail_quote", 
-          :content => "from '#{@change_name.submitted_name}' to '#{@change_name.category}'")
+          :content => "from '#{@category.submitted_name}' to '#{@category.category}'")
       end
         
       it "should show changes to the Group originally submitted" do
-        get :edit, :id => @change_group
+        @category.update_attribute(:target, "World")
+        get :edit, :id => @category
         response.should have_selector(".mail_quote", 
-          :content => "from '#{@change_group.submitted_group}' to '#{@change_group.target}'")
+          :content => "from '#{@category.submitted_group}' to '#{@category.target}'")
       end      
     end
     

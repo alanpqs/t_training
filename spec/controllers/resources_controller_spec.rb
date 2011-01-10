@@ -492,7 +492,8 @@ describe ResourcesController do
       end
       
       it "should have a link to the new category form" do
-        pending
+        get :new, :group => "Job"
+        response.should have_selector("a",  :href => new_business_category_path)    
       end
       
       it "should have a link to the new media (Format) form" do
@@ -854,7 +855,8 @@ describe ResourcesController do
       end
       
       it "should have a link to the new category form" do
-        pending
+        get :edit, :id => @resource1
+        response.should have_selector("a",  :href => new_business_category_path)    
       end
       
       it "should have a link to the new media (Format) form" do

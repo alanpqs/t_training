@@ -6,7 +6,9 @@
     </div>
     <div class="field">
       <span class="loud">* </span>
-      <%= f.label :category_id %> <small> &nbsp;(suggest a new category <%= link_to "here", "#" %>)</small><br />
+      <%= f.label :category_id %> 
+        <small> &nbsp;(suggest a new category <%= link_to "here", new_business_category_path %>)</small>
+        <br />
       <%= collection_select(:resource, :category_id, @categories, :id, :category, :prompt => true) %>
     </div>
     <div class="field">
