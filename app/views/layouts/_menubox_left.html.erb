@@ -7,8 +7,22 @@
       <ul>
         <li><%= link_to "Regions", admin_regions_path %></li>
         <li><%= link_to "Countries", admin_countries_path %></li>
-        <li><%= link_to "Categories", categories_admin_path %></li>
-        <li><%= link_to "Training media", admin_media_path %></li>
+        <li>  
+           <%= link_to "Categories", categories_admin_path %> 
+           <% if Category.approvals_needed? %>
+             <div id="alert" style ="float:right; font-weight: bold">
+               <%= link_to "NEW", admin_category_approvals_path %>
+             </div>
+           <% end %>
+        </li>
+        <li>
+          <%= link_to "Training formats", admin_media_path %>
+          <% if Medium.approvals_needed? %>
+             <div id="alert" style ="float:right; font-weight: bold">
+               <%= link_to "NEW", admin_media_path %>
+             </div>
+          <% end %>
+        </li>
         <li><%= link_to "Review questions", "#" %></li>
       </ul>
     <% elsif current_user.vendor? %>

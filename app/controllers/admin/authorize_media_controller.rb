@@ -7,7 +7,7 @@ class Admin::AuthorizeMediaController < ApplicationController
   def edit
     @medium = Medium.find(params[:id])
     @tag_name = "Confirm changes"
-    @title = "Authorize training medium"
+    @title = "Authorize training format"
   end
 
   def update
@@ -31,7 +31,7 @@ class Admin::AuthorizeMediaController < ApplicationController
       redirect_to admin_media_path
     else
       @tag_name = "Confirm changes"
-      @title = "Authorize training medium"
+      @title = "Authorize training format"
       render 'edit'
     end
   end

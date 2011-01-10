@@ -36,7 +36,7 @@ class UserMailer < ActionMailer::Base
     @original = original
     @modification = modification
     mail( :to       => "#{@user.name} <#{@user.email}>", 
-          :subject  => "'Tickets for Training': Training Medium accepted - but changed")
+          :subject  => "'Tickets for Training': Training Format accepted - but changed")
     
   end
   
@@ -44,7 +44,7 @@ class UserMailer < ActionMailer::Base
     @user = user
     @medium = submission
     mail( :to       => "#{@user.name} <#{@user.email}>", 
-          :subject  => "'Tickets for Training': Training Medium not accepted")
+          :subject  => "'Tickets for Training': Training Format not accepted")
   end
   
   def new_password(user, pass)

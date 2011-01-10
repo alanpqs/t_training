@@ -35,8 +35,8 @@ Factory.define :category do |category|
   category.category             "HR"
   category.target               "Job"
   category.association :user
-  category.submitted_name       "HR"
-  category.submitted_group      "Job"
+  #category.submitted_name       "HR"
+  #category.submitted_group      "Job"
 end
 
 Factory.sequence :category do |n|

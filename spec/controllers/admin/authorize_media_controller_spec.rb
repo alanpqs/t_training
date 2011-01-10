@@ -102,7 +102,7 @@ describe Admin::AuthorizeMediaController do
       
       it "should have the right title" do
         get :edit, :id => @medium
-        response.should have_selector("title", :content => "Authorize training medium")
+        response.should have_selector("title", :content => "Authorize training format")
       end
       
       it "should have a correctly-filled input box for the media name" do
@@ -234,7 +234,7 @@ describe Admin::AuthorizeMediaController do
           
             it "should have the correct subject for the email" do
               put :update, :id => @medium, :medium => @attr
-              @email.should have_subject("'Tickets for Training': Training Medium accepted - but changed")
+              @email.should have_subject("'Tickets for Training': Training Format accepted - but changed")
             end  
           end  
         end
@@ -295,7 +295,7 @@ describe Admin::AuthorizeMediaController do
           
             it "should have the correct subject for the email" do
               put :update, :id => @medium, :medium => @attr
-              @email.should have_subject("'Tickets for Training': Training Medium not accepted")
+              @email.should have_subject("'Tickets for Training': Training Format not accepted")
             end  
           end
         end
@@ -347,7 +347,7 @@ describe Admin::AuthorizeMediaController do
           
         it "should have the right title" do
           put :update, :id => @medium, :medium => @attr
-          response.should have_selector("title", :content => "Authorize training medium")
+          response.should have_selector("title", :content => "Authorize training format")
         end
         
         it "should display an error message" do

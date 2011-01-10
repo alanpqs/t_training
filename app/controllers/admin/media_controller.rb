@@ -5,12 +5,12 @@ class Admin::MediaController < ApplicationController
   before_filter :admin_user
   
   def index
-    @title = "Training media"
+    @title = "Training formats"
     @media = Medium.all(:order => "medium")
   end
 
   def new
-    @title = "New training medium"
+    @title = "New training format"
     @tag_name = "Create"
     @medium = Medium.new
     @medium.user_id = current_user.id
@@ -22,7 +22,7 @@ class Admin::MediaController < ApplicationController
       flash[:success] = "'#{@medium.medium}' successfully created"
       redirect_to admin_media_path
     else
-      @title = "New training medium"
+      @title = "New training format"
       @tag_name = "Create"
       render "new"
     end
@@ -31,7 +31,7 @@ class Admin::MediaController < ApplicationController
   def edit
     @medium = Medium.find(params[:id])
     @tag_name = "Confirm change"
-    @title = "Modify training medium"
+    @title = "Modify training format"
   end
 
   def update
@@ -41,7 +41,7 @@ class Admin::MediaController < ApplicationController
       redirect_to admin_media_path
     else
       @tag_name = "Confirm change"
-      @title = "Modify training medium"
+      @title = "Modify training format"
       render 'edit'
     end
   end
@@ -52,7 +52,7 @@ class Admin::MediaController < ApplicationController
     if @medium.destroy
       flash[:success] = "'#{@name}' deleted"
     else
-      flash[:error] = "'#{@name}' cannot be deleted.  (You can only delete rejected media)."
+      flash[:error] = "'#{@name}' cannot be deleted.  (You can only delete rejected formats)."
     end
     redirect_to admin_media_path
   end

@@ -17,8 +17,8 @@ describe "AdminLinks" do
     response.should have_selector("title", :content => "Countries")
     click_link "Categories"
     response.should have_selector("title", :content => "Training categories")
-    click_link "Training media"
-    response.should have_selector("title", :content => "Training media") 
+    click_link "Training formats"
+    response.should have_selector("title", :content => "Training formats") 
   end
     
     
@@ -40,9 +40,44 @@ describe "AdminLinks" do
                                         :content => "Countries")
   end
   
-  it "should have a Training media link" do
+  it "should have a 'Training formats' link" do
     visit admin_home_path
     response.should have_selector("a",  :href => admin_media_path,
-                                        :content => "Training media")
+                                        :content => "Training formats")
+  end
+  
+  describe "Training format' submission status" do
+    
+    it "should display a 'NEW' link to the admin_media_path if there's a new 'format'submission" do
+      @medium = Factory(:medium, :user_id => @user.id)
+      visit admin_home_path
+      response.should have_selector("a",  :href => admin_media_path,
+                                          :content => "NEW")  
+    end
+    
+    it "should not display a NEW link to the admin_media_path if there's not a new 'format' submission" do
+      @medium = Factory(:medium, :user_id => @user.id, :authorized => true)
+      visit admin_home_path
+      response.should_not have_selector("a",  :href => admin_media_path,
+                                              :content => "NEW")  
+    end 
+  end
+  
+  describe "'category' submission status" do
+    
+    it "should display a 'NEW' link to the admin_category_approvals_path if there's a new submission" do
+      @category = Factory(:category, :user_id => @user.id)
+      visit admin_home_path
+      response.should have_selector("a",  :href => admin_category_approvals_path,
+                                          :content => "NEW")  
+    end
+    
+    it "should not display a 'NEW' link to the admin_category_approvals_path if there's no new submission" do
+      @category = Factory(:category, :user_id => @user.id, :authorized => true)
+      visit admin_home_path
+      response.should_not have_selector("a",  :href => admin_category_approvals_path,
+                                              :content => "NEW")  
+    end 
+    
   end                                     
 end

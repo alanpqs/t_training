@@ -53,6 +53,11 @@ class Medium < ActiveRecord::Base
     self.find(:all, :conditions => ["authorized = ?", true], :order => "medium")
   end
   
+  def self.approvals_needed?
+    found = self.count(:all, :conditions => ["authorized = ?", false])
+    found >0
+  end
+  
   private
   
     def has_been_rejected?

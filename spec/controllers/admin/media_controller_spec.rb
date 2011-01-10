@@ -246,7 +246,7 @@ describe Admin::MediaController do
       
       it "should have the right title" do
         get :index
-        response.should have_selector("title", :content => "Training media")
+        response.should have_selector("title", :content => "Training formats")
       end
       
       it "should have an element for each medium" do
@@ -259,7 +259,7 @@ describe Admin::MediaController do
       it "should have a 'New medium' button" do
         get :index
         response.should have_selector("a",    :href     => "/admin/media/new",
-                                                :content  => "New medium")
+                                                :content  => "New format")
       end
       
       
@@ -348,7 +348,7 @@ describe Admin::MediaController do
       
       it "should have the right title" do
         get :new
-        response.should have_selector("title", :content => "New training medium")
+        response.should have_selector("title", :content => "New training format")
       end
       
       it "should have an empty input box for the media name" do
@@ -417,7 +417,7 @@ describe Admin::MediaController do
         
         it "should have the right title" do
           post :create, :medium => @bad_attr
-          response.should have_selector("title", :content => "New training medium")
+          response.should have_selector("title", :content => "New training format")
         end
         
         it "should display a failure message" do
@@ -438,7 +438,7 @@ describe Admin::MediaController do
       
       it "should have the right title" do
         get :edit, :id => @authorized_medium
-        response.should have_selector("title", :content => "Modify training medium")
+        response.should have_selector("title", :content => "Modify training format")
       end
       
       it "should have a correctly-filled input box for the media name" do
@@ -504,7 +504,7 @@ describe Admin::MediaController do
         
         it "should have the correct title" do
           put :update, :id => @authorized_medium, :medium => @attr
-          response.should have_selector("title", :content => "Modify training medium")
+          response.should have_selector("title", :content => "Modify training format")
         end
         
         it "should display an error message" do
