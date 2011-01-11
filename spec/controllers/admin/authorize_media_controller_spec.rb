@@ -129,6 +129,14 @@ describe Admin::AuthorizeMediaController do
          :content => @medium.created_at.strftime('%d-%b-%Y'))
       end
       
+      it "should have a radio button for 'scheduled', set to false" do
+        get :edit, :id => @medium
+        response.should have_selector("input", :name => "medium[scheduled]", :type => "radio", 
+                                               :value => "true")
+        response.should have_selector("input", :name => "medium[scheduled]", :type => "radio", 
+                                               :value => "false", :checked => "checked")
+      end
+      
       it "should have a 'rejection' text area" do
         get :edit, :id => @medium
         response.should have_selector("textarea", :name => "medium[rejection_message]")
@@ -153,7 +161,7 @@ describe Admin::AuthorizeMediaController do
         describe "when the entry is authorized with no other changes" do
           
           before(:each) do
-            @attr = { :authorized => true}
+            @attr = { :authorized => true, :scheduled => true}
           end
           
           it "should change the medium's attributes" do
@@ -161,6 +169,7 @@ describe Admin::AuthorizeMediaController do
             medium = assigns(:medium)
             @medium.reload
             @medium.authorized.should == medium.authorized
+            @medium.scheduled.should == medium.scheduled
           end
           
           it "should redirect to the admin_media_path" do

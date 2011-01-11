@@ -42,7 +42,7 @@ describe "BusinessLinks" do
       response.should have_selector('title', :content => "Training supplier - home")
       click_link "Vendor profile"
       response.should have_selector('title', :content => "#{@vendor.name}")
-      click_link "Products & services"
+      click_link "Training resources"
       response.should have_selector('title', :content => "Resources")
       click_link "Add a new vendor"
       response.should have_selector('title', :content => "New vendor") 
@@ -74,9 +74,9 @@ describe "BusinessLinks" do
       response.should_not have_selector("a", :content => "Vendor profile")  
     end
     
-    it "should not have a 'Products & Services' link" do
+    it "should not have a 'Training resources' link" do
       visit business_home_path
-      response.should_not have_selector("a", :content => "Products & services")  
+      response.should_not have_selector("a", :content => "Training resources")  
     end 
   end
 end

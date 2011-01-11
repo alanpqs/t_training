@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101231102028) do
+ActiveRecord::Schema.define(:version => 20110111104631) do
 
   create_table "categories", :force => true do |t|
     t.string   "category"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20101231102028) do
     t.text     "rejection_message"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "scheduled",         :default => false
   end
 
   create_table "regions", :force => true do |t|

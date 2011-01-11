@@ -6,6 +6,14 @@
   <div class="two_column_left">
     <%= render 'medium', :f => f %>
     <%= render 'authorize_instructions', :f => f %>
+    
+    <div class="field">
+      <%= f.label :scheduled, "Are resources in this format scheduled events?" %><br />
+      <div class="notes">
+        <%= f.radio_button( :scheduled, :true ) %> Yes<br />
+        <%= f.radio_button( :scheduled, :false ) %> No, they're available all the time 
+      </div> 
+    </div>
   </div>
   <div class="two_column_right">   
     <% if @medium.unauthorized? %>

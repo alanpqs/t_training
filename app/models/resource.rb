@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20101217135841
+# Schema version: 20110111104631
 #
 # Table name: resources
 #
@@ -8,7 +8,7 @@
 #  vendor_id   :integer
 #  category_id :integer
 #  medium_id   :integer
-#  length_unit :string(255)     default("hour")
+#  length_unit :string(255)     default("Hour")
 #  length      :integer         default(1)
 #  description :string(255)
 #  webpage     :string(255)

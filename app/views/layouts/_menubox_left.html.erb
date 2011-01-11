@@ -33,9 +33,9 @@
         <li><%= link_to "Home", business_home_path %></li>
         <% if current_vendor? %>
            <li><%= link_to "Vendor profile", business_vendor_path(current_vendor) %></li>
-           <li><%= link_to "Products & services", vendor_resources_path(current_vendor) %></li>
+           <li><%= link_to "Training resources", vendor_resources_path(current_vendor) %></li>
         <% end %>
-        <li>Schedule</li>
+        <li>Schedule and pricing</li>
         <li>Tickets</li>
         <li>Reviews</li>
         <li>History</li>

@@ -9,6 +9,12 @@
   </div>
   
   <div class="field">
+      <%= f.label :scheduled, "Are resources in this format scheduled events?" %><br />
+        <%= f.radio_button( :scheduled, :true ) %> Yes<br />
+        <%= f.radio_button( :scheduled, :false ) %> No, they're available all the time  
+  </div>
+  
+  <div class="field">
     <%= f.hidden_field :user_id %>
   </div>
   

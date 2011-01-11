@@ -233,7 +233,8 @@ describe Admin::MediaController do
       @medium2 = Factory(:medium, :medium => "Def", :user_id => @admin.id)
       @rejected_medium = Factory(:medium, :medium => "jkl", :user_id => @admin.id, 
                                  :authorized => false, :rejection_message => "No good")
-      @authorized_medium = Factory(:medium, :medium => "mno", :user_id => @admin.id, :authorized => true)
+      @authorized_medium = Factory(:medium, :medium => "mno", :user_id => @admin.id, 
+                                   :authorized => true, :scheduled => true)
       @media = [@medium1, @medium2, @rejected_medium, @authorized_medium]
     end
     
@@ -356,6 +357,14 @@ describe Admin::MediaController do
         response.should have_selector("input", :name => "medium[medium]")
       end
       
+      it "should have a radio button for 'scheduled', set to false" do
+        get :new
+        response.should have_selector("input", :name => "medium[scheduled]", :type => "radio", 
+                                               :value => "true")
+        response.should have_selector("input", :name => "medium[scheduled]", :type => "radio", 
+                                               :value => "false", :checked => "checked")
+      end
+      
       it "should have a hidden input box for the user_id containing the current user's id" do
         get :new
         response.should have_selector("input", :name => "medium[user_id]",
@@ -447,6 +456,14 @@ describe Admin::MediaController do
                                                :value => @authorized_medium.medium)
       end
       
+      it "should have a radio button for 'scheduled', set to true (for @authorized_medium)" do
+        get :edit, :id => @authorized_medium
+        response.should have_selector("input", :name => "medium[scheduled]", :type => "radio", 
+                                               :value => "true", :checked => "checked")
+        response.should have_selector("input", :name => "medium[scheduled]", :type => "radio", 
+                                               :value => "false")
+      end
+      
       it "should have an 'Confirm change' button" do
         get :edit, :id => @authorized_medium
         response.should have_selector("input", :value => "Confirm change")
@@ -463,7 +480,7 @@ describe Admin::MediaController do
       describe "success" do
         
         before(:each) do
-          @attr = { :medium => "New" }  
+          @attr = { :medium => "New", :scheduled => false }  
         end
         
         it "should successfully change the medium's attributes" do
@@ -471,6 +488,7 @@ describe Admin::MediaController do
           medium = assigns(:medium)
           @authorized_medium.reload
           @authorized_medium.medium.should == medium.medium
+          @authorized_medium.scheduled.should == medium.scheduled
         end
         
         it "should redirect to the index page" do
