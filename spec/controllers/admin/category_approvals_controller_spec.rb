@@ -163,7 +163,7 @@ describe Admin::CategoryApprovalsController do
       it "should have the right title" do
         get :index
         response.should have_selector(:title, 
-                    :content => "Unauthorized training categories" )
+                    :content => "Training categories recently submitted" )
       end
              
       it "should include all non-authorized Categories, including rejections" do
@@ -403,8 +403,8 @@ describe Admin::CategoryApprovalsController do
           
             it "should have a reference to the original submission in the email" do
               put :update, :id => @category, :category => @email_attr
-              @email.should have_body_text("Thank you for submitting #{@category.category} as a 
-                  new Category in the #{@category.target} group.")
+              @email.should have_body_text("Thank you for submitting '#{@category.category}' as a 
+                  new Category in the '#{@category.target}' group.")
             end
           
             it "should include the correct content in the email" do
@@ -430,23 +430,77 @@ describe Admin::CategoryApprovalsController do
             end
           end
         
-          describe "if the Category has been authorized" do
+          describe "if the Category has been authorized with no changes" do
           
             before(:each) do
-              @no_email_attr = {  :category => "Not emailable", :target => @target_name, 
-                                  :authorized => true,
-                                  :message_sent => false, :user_id => @user.id,
-                                  :submitted_name => "Not emailable", :submitted_group => @target_name }
-              @email = UserMailer.category_not_authorized(@user, @category)
+              @authorized_attr = { :authorized => true }
+              @email = UserMailer.category_authorized_no_change(@user, @category)
             end
 
+            it "should deliver an email to the submitter" do
+              put :update, :id => @category, :category => @authorized_attr
+              @email.should deliver_to(@user.email)
+            end
           
+            it "should show the submitter's name in the email" do
+              put :update, :id => @category, :category => @authorized_attr
+              @email.should have_body_text(@user.name)
+            end
+          
+            it "should include the correct content in the email" do
+              put :update, :id => @category, :category => @authorized_attr
+              @email.should have_body_text("We're pleased to tell you that your submission has now 
+                                            been authorized")
+            end
+          
+            it "should have the correct subject for the email" do
+              put :update, :id => @category, :category => @authorized_attr
+              @email.should have_subject("'Tickets for Training': Category submission authorized")
+            end
+            
+            
             it "should post a flash message showing that the Category has been authorized" do
-              pending
+              put :update, :id => @category, :category => @authorized_attr
+              flash[:success].should =~ /authorized without change - email confirmation sent/
             end
           
           end
         
+          describe "if the Category has been authorized but with changes" do
+          
+            before(:each) do
+              @new_name_attr = { :category => "New name", :authorized => true }
+              @email = UserMailer.category_authorized_with_changes(@user, @category)
+            end
+
+            it "should deliver an email to the submitter" do
+              put :update, :id => @category, :category => @new_name_attr
+              @email.should deliver_to(@user.email)
+            end
+          
+            it "should show the submitter's name in the email" do
+              put :update, :id => @category, :category => @new_name_attr
+              @email.should have_body_text(@user.name)
+            end
+          
+            it "should include the correct content in the email" do
+              put :update, :id => @category, :category => @new_name_attr
+              @email.should have_body_text("but with this change")
+            end
+          
+            it "should have the correct subject for the email" do
+              put :update, :id => @category, :category => @new_name_attr
+              @email.should have_subject("'Tickets for Training': your Category submission")
+            end
+                       
+            it "should post a flash message showing that the Category has been authorized" do
+              put :update, :id => @category, :category => @new_name_attr
+              flash[:success].should =~ /authorized - email change-notification sent/
+            end
+          
+          end
+          
+          
           describe "if the Category has been previously rejected" do
           
             it "should not send an email message" do

@@ -21,12 +21,13 @@ class Admin::AuthorizeMediaController < ApplicationController
         flash[:success] = "'#{@medium.medium}' has been rejected and an explanatory email sent."
       elsif @medium.authorized_with_changes?(@authorization_status, @medium_name, @medium.medium)
         UserMailer.medium_accepted_with_changes(@user, @medium_name, @medium.medium).deliver
-        flash[:success] = "'#{@medium.medium}' has been authorized after changes - a notification has been emailed 
-            to the submitter."
+        flash[:success] = "'#{@medium.medium}' has been authorized after changes - a notification has been 
+            emailed to the submitter."
       elsif @medium.unauthorized?
         flash[:notice] = "Changes to '#{@medium.medium}' have been made, but it remains unauthorized."
       else
-        flash[:success] = "'#{@medium.medium}' has been authorized - there were no changes so no email has been sent."
+        UserMailer.medium_accepted_no_change(@user, @medium).deliver
+        flash[:success] = "'#{@medium.medium}' has been authorized and a confirmatory email sent."
       end
       redirect_to admin_media_path
     else

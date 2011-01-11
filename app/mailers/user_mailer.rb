@@ -17,6 +17,13 @@ class UserMailer < ActionMailer::Base
           :subject  => "'Tickets for Training': your Category submission")
   end
   
+  def category_authorized_no_change(user, category)
+    @member = user
+    @category = category
+    mail( :to       => "#{@member.name} <#{@member.email}>", 
+          :subject  => "'Tickets for Training': Category submission authorized")
+  end
+  
   def category_now_accepted(user, category)
     @member = user
     @category = category
@@ -38,6 +45,13 @@ class UserMailer < ActionMailer::Base
     mail( :to       => "#{@user.name} <#{@user.email}>", 
           :subject  => "'Tickets for Training': Training Format accepted - but changed")
     
+  end
+  
+  def medium_accepted_no_change(user, medium)
+    @user = user
+    @medium = medium.medium
+    mail( :to       => "#{@user.name} <#{@user.email}>", 
+          :subject  => "'Tickets for Training': Training Format accepted")
   end
   
   def medium_rejected(user, submission)

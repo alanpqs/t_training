@@ -170,7 +170,7 @@ describe Admin::AuthorizeMediaController do
           
           it "should display a success message" do
             put :update, :id => @medium, :medium => @attr
-            flash[:success].should =~ /authorized - there were no changes so no email has been sent/
+            flash[:success].should =~ /has been authorized and a confirmatory email sent/
           end
           
           it "should not send an email notification" do
@@ -199,7 +199,7 @@ describe Admin::AuthorizeMediaController do
           
           it "should display a success message" do
             put :update, :id => @medium, :medium => @attr
-            flash[:success].should =~ /authorized after changes - a notification has been emailed/
+            flash[:success].should =~ /has been authorized after changes/
           end
           
           describe "send an email notification" do

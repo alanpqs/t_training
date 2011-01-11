@@ -6,7 +6,7 @@ class Admin::CategoryApprovalsController < ApplicationController
   
   
   def index
-    @title = "Unauthorized training categories" 
+    @title = "Training categories recently submitted" 
     @categories = Category.all_approvals_needed
     @other_groups = Category::TARGET_TYPES
   end
@@ -44,14 +44,14 @@ class Admin::CategoryApprovalsController < ApplicationController
             @category.update_attributes(:message_sent => true, :message => nil)
           end      
         else
-          
-          #authorization with changes
           if @category.should_mail_authorization_message?(@category.submitted_name, @category.submitted_group)
+            # authorization with changes
             UserMailer.category_authorized_with_changes(@user, @category).deliver
             @category.update_attributes(:message_sent => true, :message => nil)
+          else
+            # no changes, only add to the authorized list - confirmation email
+            UserMailer.category_authorized_no_change(@user, @category).deliver
           end
-          #if simply authorized with no changes, only add to the authorized list - no email
-        
         end
       else
         #rejections

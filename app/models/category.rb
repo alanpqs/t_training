@@ -160,7 +160,7 @@ class Category < ActiveRecord::Base
     
     @cat = name
     
-    message =  ["'#{@cat}' authorized without change - no email confirmation sent.",         #0
+    message =  ["'#{@cat}' authorized without change - email confirmation sent.",            #0
                 "'#{@cat}' updated.",                                                        #1      
                 "'#{@cat}' changed to rejected - no email sent.",                            #2
                 "'#{@cat}' rejected and email sent.",                                        #3
