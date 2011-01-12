@@ -32,9 +32,12 @@ class Resource < ActiveRecord::Base
   belongs_to :category
   belongs_to :medium
   
+  has_many   :items, :dependent => :destroy
+  
   validates :name,            :presence       => true,
                               :length         => { :maximum => 50 },
-                              :uniqueness     => { :scope => [:vendor_id, :category_id], :case_sensitive => false }
+                              :uniqueness     => { :scope => [:vendor_id, :category_id], 
+                                                   :case_sensitive => false }
   validates :vendor_id,       :presence       => true
   validates :category_id,     :presence       => true
   validates :medium_id,       :presence       => true

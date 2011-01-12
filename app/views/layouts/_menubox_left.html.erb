@@ -32,15 +32,17 @@
       <ul>
         <li><%= link_to "Home", business_home_path %></li>
         <% if current_vendor? %>
-           <li><%= link_to "Vendor profile", business_vendor_path(current_vendor) %></li>
-           <li><%= link_to "Training resources", vendor_resources_path(current_vendor) %></li>
+          <li><%= link_to "Vendor profile", business_vendor_path(current_vendor) %></li>
+          <li><%= link_to "Training resources", vendor_resources_path(current_vendor) %></li>
+          <% unless current_vendor.resourceless? %>
+            <li><%= link_to "Schedule and pricing", resource_activation_path %></li>
+            <li>Tickets</li>
+            <li>Reviews</li>
+            <li>History</li>
+          <% end %>
+          <li>Your colleagues</li>
+          <li><%= link_to "Add a new vendor", new_business_vendor_path %></li>
         <% end %>
-        <li>Schedule and pricing</li>
-        <li>Tickets</li>
-        <li>Reviews</li>
-        <li>History</li>
-        <li>Your colleagues</li>
-        <li><%= link_to "Add a new vendor", new_business_vendor_path %></li>
       </ul>
    
     <% end %>

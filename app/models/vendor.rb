@@ -97,4 +97,28 @@ class Vendor < ActiveRecord::Base
     end
     return result
   end
+  
+  def has_scheduled_resources?
+    result = false
+    unless self.unverified? || self.inactive?
+      total = self.resources.count(:all, :joins => :medium, 
+                                   :conditions => { :media => { :scheduled => true } })
+      result = true if total > 0
+    end
+    return result
+  end
+  
+  def has_permanent_resources?
+    result = false
+    unless self.unverified? || self.inactive?
+      total = self.resources.count(:all, :joins => :medium, 
+                                   :conditions => { :media => { :scheduled => false } })
+      result = true if total > 0
+    end
+    return result
+  end
+  
+  def resourceless?
+    !self.has_permanent_resources? && !self.has_scheduled_resources?
+  end
 end

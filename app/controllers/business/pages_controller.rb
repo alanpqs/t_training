@@ -62,6 +62,12 @@ class Business::PagesController < ApplicationController
     redirect_to resource_path(@resource)
   end
   
+  def resource_activation
+    @title = "Opening for business"
+    @vendor = Vendor.find(cookies[:vendor_id])
+    
+  end
+  
   def keyword_help
     @title = "Keyword help"
   end

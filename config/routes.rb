@@ -60,7 +60,8 @@ TTraining::Application.routes.draw do
   match 'popular_keywords',     :to => 'business/pages#popular_keywords'
   match 'select_category',      :to => 'business/pages#select_category'
   match 'category_selected',    :to => 'business/pages#category_selected'
-
+  match 'resource_activation',  :to => 'business/pages#resource_activation'
+  
   root :to => 'pages#home'
 
   # The priority is based upon order of creation:
