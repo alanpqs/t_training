@@ -121,4 +121,18 @@ class Vendor < ActiveRecord::Base
   def resourceless?
     !self.has_permanent_resources? && !self.has_scheduled_resources?
   end
+  
+  def phone_with_code
+    a = []
+    a << self.phone.scan(/./)
+    a = a.flatten
+    if a.shift == "0"
+      new_number = "(0)"
+      a.each {|i| new_number << i}
+      display_number = new_number.strip
+    else
+      display_number = self.phone
+    end
+    self.country.phone_code + " " + display_number
+  end
 end

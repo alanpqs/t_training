@@ -1,0 +1,61 @@
+<h1><%= @title %><br />
+  <b class="h_tag"><u>Event reference: <%= @item.ref %></u></b>
+</h1>
+
+<div class="notes">
+  <div class="two_column_left">
+    <%= render "shared/resource_intro" %>
+  </div>
+  
+  <div class="two_column_right">
+    <%= render "shared/resource_description" %>
+  </div>
+
+  <hr />
+  
+  <div class="two_column_left">
+    <h5>EVENT DETAILS - <%= @item.ref %></h5>
+    <b>Starts:</b> &nbsp;<%= display_date(@item.start) %><br />
+    <b>Ends:</b> &nbsp;<%= display_date(@item.end) %><br />
+    <% unless @item.days.blank? %>
+      <b>Days:</b> &nbsp;<%= @item.days %>
+      <% unless @item.time_of_day.blank? %>
+        - <%= @item.time_of_day %>
+      <% end %>
+      <br />
+    <% else %>
+      <% unless @item.time_of_day.blank? %>
+        <b>Timings:</b> &nbsp; <%= @item.time_of_day %>
+        <br />
+      <% end %>
+    <% end %>    
+    <br />
+    <b>Venue:</b> &nbsp; <%= @item.venue %>
+    <br /><br />
+  </div>
+  
+  <div class="two_column_right">
+    <b>Notes:</b><br />
+    <div class="description">
+      <%= @item.notes %>
+    </div>  
+    <br />
+    <b>Price</b> &nbsp;<%= @item.formatted_price(@vendor) %> &nbsp;
+      <% unless @item.conversion_to_dollars(@vendor.id) == "Unknown" %>
+        <i>(approx US$ <%= @item.conversion_to_dollars(@vendor.id) %>)</i>
+      <% end %>    
+    <br />
+    <b>Places available?</b> &nbsp;<%= @item.availability %>
+    <br /><br />
+  </div>
+  <hr />
+  
+  <div class="two_column_left"
+    <h5>CONTACTS</h5>
+    <b>Phone:</b>&nbsp;<%= @vendor.phone_with_code %><br /><br />
+    <b>Email:</b><br /><%= @vendor.email %><br /><br />
+    <% unless @vendor.website.blank? %>
+      <b>Website:</b><br /><%= link_to @vendor.website, @vendor.website, :target => "_blank" %>
+    <% end %>
+  </div>  
+</div>  

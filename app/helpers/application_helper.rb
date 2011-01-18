@@ -41,4 +41,8 @@ module ApplicationHelper
     link_to "(previous page)", path
     
   end
+  
+  def display_date(date)
+    date.strftime('%d-%b-%y')
+  end
 end

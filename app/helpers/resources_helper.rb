@@ -7,9 +7,15 @@ module ResourcesHelper
        reply."
     else
       if @resource.hidden?
-        "This resource is hidden from public view."
+        "NO LONGER AVAILABLE."
       else
-        "This resource is displayed to the public."
+        if @resource.has_current_events?
+          "In progress"
+        elsif @resource.has_scheduled_events?
+          "Next scheduled"
+        else
+          "NONE PLANNED"
+        end  
       end
     end
   end

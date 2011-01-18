@@ -75,6 +75,16 @@ module SessionsHelper
     !cookies[:vendor_id].blank?
   end
   
+  def current_resource
+    if current_resource?
+      Resource.find(cookies[:resource_id])
+    end
+  end
+  
+  def current_resource?
+    !cookies[:resource_id].blank?
+  end
+  
   def store_location
     session[:return_to] = request.fullpath
   end

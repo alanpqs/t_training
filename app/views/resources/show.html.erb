@@ -5,23 +5,11 @@
   <h4>This resource is currently <u class="loud">hidden</u> from public view.</h4>
 <% end %>
 <div class="notes">
-  <div class="two_column_left">
-    <%= @resource.medium.medium %> from<br /> 
-    <%= @vendor.name.upcase %><br />
-    <%= @vendor.address %>, <%= @vendor.country.name %>
-    <br /><br />
-    <strong>Group - Category:</strong><br />
-     <%= @resource.category.in_group %> - <%= @resource.category.category %>
-    <br /><br />
-    <strong>Length:</strong> <%= pluralize(@resource.length, @resource.length_unit.downcase) %>
-    <br /><br />
-    <% unless @resource.webpage.blank? %>
-      <strong>More info:</strong> <br />
-      <%= link_to @resource.webpage, @resource.webpage, :target => "_blank" %>
-      <br /<br />
-    <% end %>
-    <i><%= display_status %></i>
+
+  <div class="two_column_left"> 
+    <%= render "shared/resource_intro" %>
   </div>
+  
   <div class="two_column_right">
     <div class="description">
       <% if @resource.description.blank? %>
@@ -37,7 +25,34 @@
     <div id="features">
       <%= @resource.feature_list %>
     </div>
-    <br /><br />
+  </div> 
+  <hr />
+  
+  <div class="two_column_left"> 
+    <h5>EVENTS</h5>
+    <div class="cloud">
+      <b class="loud"><%= display_status %></b><br />
+    
+      <% if @resource.has_current_events? %>
+        <%= render "event_list", :collection => @current_events %>
+      <% end %>
+    
+      <% if @resource.has_scheduled_events? %>
+        <% if @resource.has_current_events? %>
+          <b class="loud">Next scheduled</b>   
+        <% end %>
+        <%= render "event_list", :collection => @scheduled_events %>
+      <% end %>
+    
+      <%= link_to "Add a new event", new_resource_item_path(@resource) if @resource.vendor.verified? %><br />
+      <% if @resource.has_scheduled_events? %>  
+        <%= link_to "All planned events", resource_items_path(@resource) %><br />
+      <% end %>
+      <%= link_to "Previous events", "#" if @resource.has_past_events? %>
+    </div>
+  </div>
+  
+  <div class="two_column_right"> 
     <h5>OTHER ACTIONS</h5>
     <div class="indent">
       <% unless current_user.single_company_vendor? %>

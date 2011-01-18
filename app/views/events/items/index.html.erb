@@ -1,0 +1,12 @@
+<h1><%= @title %>
+  <span class="h_tag">(<%= @vendor.name %>)</span>
+</h1>
+
+<table>
+  <% @events.each do |event| %>
+    <tr>
+      <td><%= event.resource.name %></td>
+    </tr>
+  <% end %>
+
+</table>

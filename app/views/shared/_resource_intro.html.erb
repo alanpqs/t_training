@@ -1,0 +1,14 @@
+    <%= @resource.medium.medium %> from<br /> 
+    <%= @vendor.name.upcase %><br />
+    <%= @vendor.address %>, <%= @vendor.country.name %>
+    <br /><br />
+    <strong>Group - Category:</strong><br />
+     <%= @resource.category.in_group %> - <%= @resource.category.category %>
+    <br /><br />
+    <strong>Length:</strong> <%= pluralize(@resource.length, @resource.length_unit.downcase) %>
+    <br /><br />
+    <% unless @resource.webpage.blank? %>
+      <strong>More info:</strong> <br />
+      <%= link_to @resource.webpage, @resource.webpage, :target => "_blank" %>
+      <br /><br />
+    <% end %>

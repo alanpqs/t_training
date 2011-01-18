@@ -67,6 +67,13 @@ Factory.define :resource do |resource|
   resource.association :medium
   resource.length_unit          "Hour"
   resource.length               24
-  
 end
 
+Factory.define :item do |item|
+  item.association :resource
+  item.start                    Time.now + 7.days
+  item.end                      Time.now + 34.days
+  item.cents                    15000
+  item.currency                 "GBP"
+  item.venue                    "Holiday Inn, Cambridge"
+end

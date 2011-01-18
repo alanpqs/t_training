@@ -260,7 +260,7 @@ describe Admin::MediaController do
       it "should have a 'New medium' button" do
         get :index
         response.should have_selector("a",    :href     => "/admin/media/new",
-                                                :content  => "New format")
+                                                :content  => "Add a new format")
       end
       
       

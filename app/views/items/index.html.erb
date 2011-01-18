@@ -1,0 +1,30 @@
+<h1><%= @title %>
+   <span class="header_link"><%= link_to "(return to main Resource page)", resource_path(@resource) %></span>
+</h1>
+<h4><%= @vendor.name %> - <%= @resource.name %></h4>
+
+<%= will_paginate %>
+<table>
+  <tr>
+    <th>Ref no</th>
+    <th>Starts</th>
+    <th>Ends</th>
+    <th>Venue</th>
+    <th>Price</th>
+    <th></th>
+  </tr>
+  <% @items.each do |item| %>
+    <tr>
+      <td><%= link_to item.ref, item_path(item), :title => "View full details" %></td>
+      <td><%= display_date(item.start) %></td>
+      <td><%= display_date(item.end) %></td>
+      <td><%= item.venue %></td>
+      <td><%= item.formatted_price(@vendor.id) %></td>
+      <td><small><%= link_to "delete", item_path(item),  :method => :delete,
+                        :confirm => "You sure?",
+                        :title => "Delete event #{item.ref}" %></small></td> 
+    </tr>
+  <% end %>
+
+</table>
+<%= will_paginate %>

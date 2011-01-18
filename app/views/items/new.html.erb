@@ -1,0 +1,78 @@
+<h1><%= @title %></h1>
+<h4><%= @vendor.name %>: <%= @resource.name %></h4>
+
+<%= form_for [@resource, @item] do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  
+  <div class="two_column_left">
+    <div class="field">
+      <%= f.label :reference, "Ref no" %> <small>(automatically assigned if not entered)</small><br />
+      <%= f.text_field :reference, :size => 8 %>
+    </div>
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :start, "Start-date" %><br />
+      <%= f.date_select :start %>
+    </div>
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :end, "End-date" %><br />
+      <%= f.date_select :end %>
+    </div>
+    <div class="field">
+      <label>Attendance days required</label><br />
+      <div style="float:left; padding-left:20px">  
+        <% @weekdays[0..3].each do |weekday| %>
+          <li style="font-size:0.8em; list-style-type: none">
+            <%= f.check_box "day_#{weekday}".to_sym, {}, "true", nil %>
+            <%= weekday.camelcase %></span>
+           </li>
+        <% end %> 
+      </div>  
+      <div style="float:right">
+        <% @weekdays[4..6].each do |weekday| %>
+          <li style="font-size:0.8em; padding-right:60px; list-style-type: none">
+            <%= f.check_box "day_#{weekday}".to_sym, {}, "true", nil %>
+            <%= weekday.camelcase %></span>
+           </li>
+        <% end %>  
+      </div>
+    </div
+    <div class="field" style="clear:both">
+      <%= f.label :time_of_day %>&nbsp;&nbsp; 
+      <%= select(:item, :time_of_day, 
+                 options_for_select(Item::DAYTIME_TYPES, @item.time_of_day), 
+                 :prompt => true) %>
+    </div>
+  </div>
+
+  <div class="two_column_right">
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :price  %> <small>(value in <%= @vendor.country.currency_symbol %>)</small><br />
+      <%= f.text_field :price, :size => 8 %>
+    </div>
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :venue,  %><br />
+      <%= f.text_field :venue %>
+    </div>
+    <div class="field">
+      <%= f.label :notes,  %><br />
+      <%= f.text_area :notes %>
+    </div>
+    <div class="field">
+      <%= f.label :filled, "Availability?" %> 
+        <br />
+        <small><%= f.radio_button( :filled, :true ) %> Fully booked &nbsp; &nbsp;
+        <%= f.radio_button( :filled, :false ) %> Places available</small>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= submit_button(@tag_name) %>
+  </div>
+  <div class="redirects">
+    <%= link_to "(drop addition - back to main Resource page)", resource_path(@resource) %>
+  </div>
+<% end %>

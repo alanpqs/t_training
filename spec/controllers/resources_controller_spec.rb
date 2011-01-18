@@ -366,7 +366,7 @@ describe ResourcesController do
       end
       
       it "should successfully paginate the data" do
-        30.times do
+        31.times do
           @resources << Factory(:resource, :name => Factory.next(:name), 
                                 :vendor_id => @vendor2.id, :medium_id => @medium1.id,
                                 :category_id => @category1.id)
@@ -374,9 +374,9 @@ describe ResourcesController do
         get :index
         response.should have_selector("div.pagination")
         response.should have_selector("span.disabled", :content => "Previous")
-        response.should have_selector("a",  :href => "/resources/index?page=2",
+        response.should have_selector("a",  :href => "/resources?page=2",
                                             :content => "2")
-        response.should have_selector("a",  :href => "/resources/index?page=2",
+        response.should have_selector("a",  :href => "/resources?page=2",
                                             :content => "Next")
       end
       

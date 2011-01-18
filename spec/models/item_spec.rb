@@ -8,15 +8,19 @@ describe Item do
     @user = Factory(:user, :country_id => @country.id)
     @vendor = Factory(:vendor, :country_id => @country.id)
     @category = Factory(:category, :user_id => @user.id)
-    @medium = Factory(:medium, :user_id => @user.id)
-    @resource = Factory(:resource, :vendor_id => @vendor.id, :category_id => @category.id,
-                                   :medium_id => @medium.id)
-    @attr_event = { :resource_id => @resource.id, :scheduled => true, :start => "2011-02-13",
+    @unscheduled_medium = Factory(:medium, :user_id => @user.id)
+    @scheduled_medium = Factory(:medium, :medium => "Efg", :user_id => @user.id, :scheduled => true)
+    @unscheduled_resource = Factory(:resource, :vendor_id => @vendor.id, :category_id => @category.id,
+                                   :medium_id => @unscheduled_medium.id)
+    @scheduled_resource = Factory(:resource, :name => "Scheduled", :vendor_id => @vendor.id, 
+                                             :category_id => @category.id,
+                                             :medium_id => @scheduled_medium.id)        
+    @attr_event = { :resource_id => @scheduled_resource.id, :start => "2011-02-13",
                                                   :end => "2011-03-13", :days => "Mon/Wed/Fri",
-                                                  :time_of_day => "Evenings", :price => 245,
-                                                  :venue => "Our premises" }
-    @attr_ongoing = { :resource_id => @resource.id, :start => "2010-08-13", :price => 20,
-                                                  :venue => "Directly from us"  }
+                                                  :time_of_day => "Evenings", :cents => 24500,
+                                                  :currency => "USD", :venue => "Our premises" }
+    @attr_ongoing = { :resource_id => @unscheduled_resource.id, :start => "2010-08-13", :cents => 20000,
+                                                  :currency => "USD", :venue => "Directly from us"  }
   end
   
   
@@ -29,7 +33,7 @@ describe Item do
   end
   
   it "should not accept an empty 'resource_id' field" do
-    @no_name = Item.new(@attr_event.merge(:resource_id => nil))
+    @no_name = Item.new(@attr_ongoing.merge(:resource_id => ""))
     @no_name.should_not be_valid
   end
   
@@ -38,6 +42,18 @@ describe Item do
     @no_start_date.should_not be_valid
   end
     
+  it "should not accept a duplicate start-date for the same resource in the same venue" do
+    Item.create!(@attr_event)
+    @duplicate_start = Item.new(@attr_event.merge(:reference => "B21")) 
+    @duplicate_start.should_not be_valid
+  end
+  
+  it "should accept a duplicate start-date for the same resource but with a different venue" do
+    Item.create!(@attr_event)
+    @duplicate_ok = Item.new(@attr_event.merge(:reference => "B21", :venue => "Training center")) 
+    @duplicate_ok.should be_valid
+  end
+  
   it "should not accept a blank end-date for an event" do
     @no_end_date = Item.new(@attr_event.merge(:end => ""))
     @no_end_date.should_not be_valid
@@ -77,23 +93,38 @@ describe Item do
     @daytime_blank.should be_valid
   end
   
-  it "should not accept an empty 'price' attribute" do
-    @price_blank = Item.new(@attr_event.merge(:price => ""))
+  it "should not accept an empty 'cents' attribute" do
+    @price_blank = Item.new(@attr_event.merge(:cents => ""))
     @price_blank.should_not be_valid
   end
   
-  it "should not accept a nil 'price' attribute" do
-    @price_nil = Item.new(@attr_event.merge(:price => nil))
+  it "should not accept a nil 'cents' attribute" do
+    @price_nil = Item.new(@attr_event.merge(:cents => nil))
     @price_nil.should_not be_valid
   end
   
-  it "should not accept decimal fractions for the 'price' attribute" do
-    @price_fraction = Item.new(@attr_event.merge(:price => 2.75))
+  it "should not accept a nil 'currency' attribute" do
+    @currency_nil = Item.new(@attr_event.merge(:currency => nil))
+    @currency_nil.should_not be_valid
+  end
+  
+  it "should not accept a blank 'currency' attribute" do
+    @currency_blank = Item.new(@attr_event.merge(:currency => ""))
+    @currency_blank.should_not be_valid
+  end
+  
+  it "should not accept a long 'currency' attribute" do
+    @currency_long = Item.new(@attr_event.merge(:currency => "USD2"))
+    @currency_long.should_not be_valid
+  end
+  
+  it "should not accept decimal fractions for the 'cents' attribute" do
+    @price_fraction = Item.new(@attr_event.merge(:cents => 2.75))
     @price_fraction.should_not be_valid
   end
   
-  it "should accept an integer for 'price'" do
-    @price_ok = Item.new(@attr_event.merge(:price => 1000000))
+  it "should accept an integer for 'cents'" do
+    @price_ok = Item.new(@attr_event.merge(:cents => 1000000))
     @price_ok.should be_valid
   end
   

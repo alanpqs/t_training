@@ -12,7 +12,7 @@ class ResourcesController < ApplicationController
     @vendor = Vendor.find(current_vendor)
     @resources = @vendor.resources.paginate(:page => params[:page],
                                   :order => :name)
-    @users = User.paginate(:page => params[:page])
+    #@users = User.paginate(:page => params[:page])
 
 
   end
@@ -55,7 +55,8 @@ class ResourcesController < ApplicationController
     @resource = Resource.find(params[:id])
     @vendor = Vendor.find(@resource.vendor_id)
     @title = @resource.name
-    #resource_cookie(@resource.id)
+    @current_events = @resource.current_events
+    @scheduled_events = @resource.scheduled_events
     cookies[:resource_id] = @resource.id
   end
   

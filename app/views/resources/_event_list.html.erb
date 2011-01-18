@@ -1,0 +1,15 @@
+
+       <table>
+        <tr>
+          <th>Ref no</th>
+          <th>Start</th>
+          <th>End</th>
+        </tr>
+        <% collection.each do |event| %>
+          <tr>
+            <td><%= event.ref %></td>
+            <td><%= display_date(event.start) %></td>
+            <td><%= display_date(event.end) %></td>
+          </tr>
+        <% end %>  
+      </table> 

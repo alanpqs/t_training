@@ -55,5 +55,56 @@ class Resource < ActiveRecord::Base
   
   validates_associated :vendor, :category, :medium
 
-
+  def has_scheduled_events?     #only for resources with medium.scheduled == true
+    if self.medium.scheduled?
+      found = self.items.count(:all, :conditions => ["items.start >?", Time.now])
+      if found > 0
+        return true
+      else
+        return false
+      end
+    else
+      return false
+    end
+  end
+  
+  def scheduled_events
+    self.items.find(:all, :conditions => ["items.start >?", Time.now], :order => "items.start", :limit => 1)
+  end
+  
+  def has_current_events?
+    if self.medium.scheduled?
+      found = self.items.count(:all, 
+           :conditions => ["items.start <=? and items.end >=?", Time.now, Time.now])
+      if found > 0
+        return true
+      else
+        return false
+      end
+    else
+      return false
+    end
+  end
+  
+  def current_events
+    self.items.find(:all, :conditions => ["items.start <=? and items.end >=?", Time.now, Time.now])
+  end
+  
+  def current_and_scheduled_events
+    self.items.find(:all, :conditions => ["items.end >=?", Time.now])
+  end
+  
+  def has_past_events?
+    if self.medium.scheduled?
+      found = self.items.count(:all, 
+           :conditions => ["items.end <?", Time.now])
+      if found > 0
+        return true
+      else
+        return false
+      end
+    else
+      return false
+    end
+  end
 end

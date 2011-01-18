@@ -52,9 +52,9 @@
       <%= f.text_field :webpage %>
     </div>
     <div class="field">
-      <%= f.label :hidden, "Do you want to hide this resource?" %> 
+      <%= f.label :hidden, "Archive this resource?" %> 
         <br />
-        <small><%= f.radio_button( :hidden, :true ) %> Hidden
-        <%= f.radio_button( :hidden, :false ) %> Displayed</small>
+        <small><%= f.radio_button( :hidden, :true ) %> No longer offered &nbsp; &nbsp;
+        <%= f.radio_button( :hidden, :false ) %> On current list</small>
     </div>
   </div>
