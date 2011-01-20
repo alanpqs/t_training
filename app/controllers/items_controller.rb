@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   def index
-    @title = "All scheduled events"
+    @title = "Current & future events"
     @resource = current_resource
     @vendor = current_vendor
     #@items = Item.find_all_by_resource_id(@resource).paginate(:page => params[:page])
@@ -19,10 +19,11 @@ class ItemsController < ApplicationController
   def create
     @resource = Resource.find(params[:resource_id])
     @item = @resource.items.new(params[:item])
-    @price = params[:item][:price]
-    @cent_value = @price.to_d * 100
     @vendor = current_vendor
     @currency = @vendor.country.currency_code
+    @multiplier = @vendor.country.currency_multiplier
+    @price = params[:item][:price]
+    @cent_value = @price.to_d * @multiplier
     money = Money.new(@cent_value, @currency)
     @mon = params[:item][:day_mon]
     @tue = params[:item][:day_tue]
@@ -47,6 +48,7 @@ class ItemsController < ApplicationController
       @vendor = current_vendor 
       @media = Medium.all_authorized
       @tag_name = "Create event"
+      @weekdays = Item::WEEKDAY_TYPES
       render "new"
     end  
   end
@@ -59,11 +61,46 @@ class ItemsController < ApplicationController
   end
   
   def edit
-    @item = Item.find(params[:id])  
+    @item = Item.find(params[:id])
+    @title = "Edit Event ##{@item.ref}"
+    @tag_name = "Confirm changes"
+    @item.split_days_array
+    @resource = current_resource
+    @vendor = current_vendor
+    @weekdays = Item::WEEKDAY_TYPES  
   end
   
   def update
-    @item = Item.find(params[:id])  
+    @item = Item.find(params[:id]) 
+    @vendor = current_vendor
+    @currency = @vendor.country.currency_code
+    @multiplier = @vendor.country.currency_multiplier
+    @price = params[:item][:price]
+    @cent_value = @price.to_d * @multiplier
+    money = Money.new(@cent_value, @currency)
+    @mon = params[:item][:day_mon]
+    @tue = params[:item][:day_tue]
+    @wed = params[:item][:day_wed]
+    @thu = params[:item][:day_thu]
+    @fri = params[:item][:day_fri]
+    @sat = params[:item][:day_sat]
+    @sun = params[:item][:day_sun]
+    @item.build_days_array(@mon, @tue, @wed, @thu, @fri, @sat, @sun) 
+    @item.cents = money.cents
+    @item.currency = money.currency
+
+    if @item.update_attributes(params[:item])
+      flash[:success] = "The event details have been successfully updated."
+      redirect_to @item
+    else
+      @tag_name = "Confirm changes"
+      @title = "Edit Event ##{@item.ref}"
+      @tag_name = "Confirm changes"
+      @resource = current_resource
+      @vendor = current_vendor
+      @weekdays = Item::WEEKDAY_TYPES  
+    end
+     
   end
   
   def destroy

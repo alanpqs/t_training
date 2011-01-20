@@ -8,7 +8,7 @@
     <strong>Length:</strong> <%= pluralize(@resource.length, @resource.length_unit.downcase) %>
     <br /><br />
     <% unless @resource.webpage.blank? %>
-      <strong>More info:</strong> <br />
+      <strong>More program information:</strong> <br />
       <%= link_to @resource.webpage, @resource.webpage, :target => "_blank" %>
       <br /><br />
     <% end %>

@@ -45,8 +45,8 @@
       <% end %>
     
       <%= link_to "Add a new event", new_resource_item_path(@resource) if @resource.vendor.verified? %><br />
-      <% if @resource.has_scheduled_events? %>  
-        <%= link_to "All planned events", resource_items_path(@resource) %><br />
+      <% if @resource.has_current_and_scheduled_events? %>  
+        <%= link_to "All current and future events", resource_items_path(@resource) %><br />
       <% end %>
       <%= link_to "Previous events", "#" if @resource.has_past_events? %>
     </div>

@@ -45,4 +45,8 @@ module ApplicationHelper
   def display_date(date)
     date.strftime('%d-%b-%y')
   end
+  
+  def display_decimals(field, val)
+    sprintf("%{val}", "#{field}")
+  end
 end

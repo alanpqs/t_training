@@ -72,8 +72,16 @@ end
 Factory.define :item do |item|
   item.association :resource
   item.start                    Time.now + 7.days
-  item.end                      Time.now + 34.days
+  item.finish                   Time.now + 34.days
   item.cents                    15000
-  item.currency                 "GBP"
+  item.currency                 "USD"
   item.venue                    "Holiday Inn, Cambridge"
+end
+
+Factory.sequence :start do |n|
+  Time.now + (n + 3).days
+end
+
+Factory.sequence :finish do |f|
+  Time.now + (f + 10).days
 end

@@ -64,6 +64,22 @@ class Country < ActiveRecord::Base
     "None"
   end
   
+  def currency_multiplier
+    currency = Money.new(1000, self.currency_code).currency
+    currency.subunit_to_unit
+  end
+  
+  def decimal_places
+    if self.currency_multiplier == 1000
+      n = 3
+    elsif self.currency_multiplier == 100
+      n = 2
+    else
+      n = 0
+    end
+    return n
+  end
+  
   def exchange_rate
     require 'money/bank/google_currency'
     @code = self.currency_code

@@ -75,7 +75,7 @@ class Resource < ActiveRecord::Base
   def has_current_events?
     if self.medium.scheduled?
       found = self.items.count(:all, 
-           :conditions => ["items.start <=? and items.end >=?", Time.now, Time.now])
+           :conditions => ["items.start <=? and items.finish >=?", Time.now, Time.now])
       if found > 0
         return true
       else
@@ -87,17 +87,31 @@ class Resource < ActiveRecord::Base
   end
   
   def current_events
-    self.items.find(:all, :conditions => ["items.start <=? and items.end >=?", Time.now, Time.now])
+    self.items.find(:all, :conditions => ["items.start <=? and items.finish >=?", Time.now, Time.now])
   end
   
   def current_and_scheduled_events
-    self.items.find(:all, :conditions => ["items.end >=?", Time.now])
+    self.items.find(:all, :conditions => ["items.finish >=?", Time.now])
+  end
+  
+  def has_current_and_scheduled_events?
+    if self.medium.scheduled?
+      found = self.items.count(:all, 
+           :conditions => ["items.finish >=?", Time.now])
+      if found > 0
+        return true
+      else
+        return false
+      end
+    else
+      return false
+    end
   end
   
   def has_past_events?
     if self.medium.scheduled?
       found = self.items.count(:all, 
-           :conditions => ["items.end <?", Time.now])
+           :conditions => ["items.finish <?", Time.now])
       if found > 0
         return true
       else

@@ -36,13 +36,19 @@ section h1 .h_tag {
   color: #666;       
 }
 
+section h4 .h_tag {
+  font-size: 0.7em; 
+  color: #666;      
+}
+
 section h5 {
   margin-bottom: 0.5em;    
 }
 
 .header_link {
-  font-size: 0.6em; 
-  padding-left: 10px;  
+  font-size: 0.5em; 
+  padding-left: 10px;
+  color: #666;  
 }
 
 /* Links */

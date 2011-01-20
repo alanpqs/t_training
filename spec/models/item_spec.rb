@@ -16,7 +16,7 @@ describe Item do
                                              :category_id => @category.id,
                                              :medium_id => @scheduled_medium.id)        
     @attr_event = { :resource_id => @scheduled_resource.id, :start => "2011-02-13",
-                                                  :end => "2011-03-13", :days => "Mon/Wed/Fri",
+                                                  :finish => "2011-03-13", :days => "Mon/Wed/Fri",
                                                   :time_of_day => "Evenings", :cents => 24500,
                                                   :currency => "USD", :venue => "Our premises" }
     @attr_ongoing = { :resource_id => @unscheduled_resource.id, :start => "2010-08-13", :cents => 20000,
@@ -55,12 +55,12 @@ describe Item do
   end
   
   it "should not accept a blank end-date for an event" do
-    @no_end_date = Item.new(@attr_event.merge(:end => ""))
+    @no_end_date = Item.new(@attr_event.merge(:finish => ""))
     @no_end_date.should_not be_valid
   end
   
   it "should accept a blank end-date for a permanent resource" do
-    @no_end_date = Item.new(@attr_ongoing.merge(:end => ""))
+    @no_end_date = Item.new(@attr_ongoing.merge(:finish => ""))
     @no_end_date.should be_valid
   end
   
@@ -118,10 +118,10 @@ describe Item do
     @currency_long.should_not be_valid
   end
   
-  it "should not accept decimal fractions for the 'cents' attribute" do
-    @price_fraction = Item.new(@attr_event.merge(:cents => 2.75))
-    @price_fraction.should_not be_valid
-  end
+  #it "should not accept decimal fractions for the 'cents' attribute" do
+  #  @price_fraction = Item.new(@attr_event.merge(:cents => 2.75))
+  #  @price_fraction.should_not be_valid
+  #end
   
   it "should accept an integer for 'cents'" do
     @price_ok = Item.new(@attr_event.merge(:cents => 1000000))
@@ -137,5 +137,9 @@ describe Item do
     @long = "a" * 101
     @long_venue = Item.new(@attr_event.merge(:venue => @long))
     @long_venue.should_not be_valid
+  end
+  
+  it "should not accept a start-date after an end-date if the end-date is entered" do
+    pending "custom validation required"
   end 
 end

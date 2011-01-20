@@ -7,10 +7,10 @@
 #  resource_id :integer
 #  reference   :string(255)
 #  start       :date
-#  end         :date
+#  finish      :date
 #  days        :text
 #  time_of_day :string(255)
-#  cents       :integer
+#  cents       :decimal(, )
 #  currency    :string(255)
 #  venue       :string(255)
 #  filled      :boolean
@@ -21,7 +21,7 @@
 
 class Item < ActiveRecord::Base
   
-  attr_accessible :resource_id, :start, :end, :days, :reference,
+  attr_accessible :resource_id, :start, :finish, :days, :reference,
                   :time_of_day, :venue, :filled, :notes, :cents, :currency
   
   attr_accessor :dollar_value, :day_mon, :day_tue, :day_wed, :day_thu, :day_fri, :day_sat, :day_sun, 
@@ -41,15 +41,18 @@ class Item < ActiveRecord::Base
   
   validates :resource_id,       :presence       => true
   validates :start,             :presence       => true,
-                                :uniqueness     => { :scope => [:resource_id, :venue] }
-  validates :end,               :presence       => true, :if => :event?
+                                :uniqueness     => { :scope => [:resource_id, :venue],
+                                                    :message => "must not be a duplicate.  If you really want
+                                                    to enter the same program starting on the same day, enter
+                                                    a different venue" }               
+  validates :finish,            :presence       => true, :if => :event?                  
   validates :days,              :length         => { :maximum => 28, :allow_blank => true },
                                 :format         => { :with => days_regex }
   validates :time_of_day,       :inclusion      => { :in => DAYTIME_TYPES, :allow_blank => true }
   validates :venue,             :presence       => true,
                                 :length         => { :maximum => 100 }
-  validates :cents,             :numericality   => { :only_integer => true },
-                                :presence       => true
+  validates :cents,             :presence       => true,
+                                :numericality   => true
   validates :currency,          :presence       => true,
                                 :length         => { :maximum => 3 }
   
@@ -64,7 +67,7 @@ class Item < ActiveRecord::Base
   
   def self.scheduled_events(vendor)
     self.find(:all, :include => [{:resource => :medium}], 
-      :conditions => ["media.scheduled = ? and end > ? and resources.vendor_id = ?", true, Time.now, vendor ] )
+  :conditions => ["media.scheduled = ? and finish > ? and resources.vendor_id = ?", true, Time.now, vendor ] )
   end
   
   def build_days_array(mon, tue, wed, thu, fri, sat, sun)
@@ -94,6 +97,30 @@ class Item < ActiveRecord::Base
     self.days = req_days
   end
   
+  def split_days_array
+    @days = self.days.downcase.split("/")
+    @days_of_week = WEEKDAY_TYPES
+    @days_of_week.each do |dw|
+      if @days.include?(dw)
+        if dw == "mon"
+          self.day_mon = true
+        elsif dw == "tue"
+          self.day_tue = true 
+        elsif dw == "wed"
+          self.day_wed = true   
+        elsif dw == "thu"
+          self.day_thu = true 
+        elsif dw == "fri"
+          self.day_fri = true 
+        elsif dw == "sat"
+          self.day_sat = true 
+        elsif dw == "sun"
+          self.day_sun = true
+        end
+      end        
+    end
+  end
+  
   def currency_symbol(vendor)
     @vendor = Vendor.find(vendor)
     @country = Country.find(@vendor.country_id)
@@ -104,8 +131,15 @@ class Item < ActiveRecord::Base
     return sym
   end
   
+  def decplaces(vendor)
+    @vendor = Vendor.find(vendor)
+    @country = Country.find(@vendor.country_id)
+    @dp = @country.decimal_places
+  end
+  
   def formatted_price(vendor)
-    "#{self.currency_symbol(vendor)} #{self.price}"
+    prc = sprintf("%.#{self.decplaces(vendor)}f", self.price)
+    "#{self.currency_symbol(vendor)} #{prc}"
   end
   
   def availability
@@ -124,7 +158,7 @@ class Item < ActiveRecord::Base
     Money.default_bank = Money::Bank::GoogleCurrency.new
     currency = Money.new(1000, @code).currency
     n = self.cents.to_money(@code)
-    n.exchange_to(:USD) / 100
+    n.exchange_to(:USD) / @country.currency_multiplier
   rescue
     "Unknown"
   end

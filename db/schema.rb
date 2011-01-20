@@ -42,10 +42,10 @@ ActiveRecord::Schema.define(:version => 20110112001028) do
     t.integer  "resource_id"
     t.string   "reference"
     t.date     "start"
-    t.date     "end"
+    t.date     "finish"
     t.text     "days"
     t.string   "time_of_day"
-    t.integer  "cents"
+    t.decimal  "cents"
     t.string   "currency"
     t.string   "venue"
     t.boolean  "filled",      :default => false

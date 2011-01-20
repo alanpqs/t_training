@@ -1,6 +1,13 @@
-<h1><%= @title %><br />
-  <b class="h_tag"><u>Event reference: <%= @item.ref %></u></b>
-</h1>
+<h1><%= @title %></h1>
+
+<h4><u>Full details: Event #<%= @item.ref %></u> &nbsp;
+  <span class="h_tag"> (update <%= link_to "vendor", edit_business_vendor_path(@vendor) %> - 
+      <%= link_to "resource", edit_resource_path(@resource) %> - 
+      <%= link_to "event", edit_item_path(@item) %>)
+      &nbsp; &nbsp; &nbsp;
+      (back to <%= link_to "Events list", resource_items_path(@resource) %>)
+  </span>
+</h4>
 
 <div class="notes">
   <div class="two_column_left">
@@ -14,9 +21,9 @@
   <hr />
   
   <div class="two_column_left">
-    <h5>EVENT DETAILS - <%= @item.ref %></h5>
+    <h5>SCHEDULE & PRICING</h5>
     <b>Starts:</b> &nbsp;<%= display_date(@item.start) %><br />
-    <b>Ends:</b> &nbsp;<%= display_date(@item.end) %><br />
+    <b>Ends:</b> &nbsp;<%= display_date(@item.finish) %><br />
     <% unless @item.days.blank? %>
       <b>Days:</b> &nbsp;<%= @item.days %>
       <% unless @item.time_of_day.blank? %>
@@ -55,7 +62,7 @@
     <b>Phone:</b>&nbsp;<%= @vendor.phone_with_code %><br /><br />
     <b>Email:</b><br /><%= @vendor.email %><br /><br />
     <% unless @vendor.website.blank? %>
-      <b>Website:</b><br /><%= link_to @vendor.website, @vendor.website, :target => "_blank" %>
+      <b>Company website:</b><br /><%= link_to @vendor.website, @vendor.website, :target => "_blank" %>
     <% end %>
   </div>  
 </div>  

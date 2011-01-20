@@ -755,6 +755,124 @@ describe ResourcesController do
           response.should_not have_selector("a", :href => "/duplicate_resource_to_vendor",
                                                :content => "another of your vendors")
         end
+      end
+      
+      describe "when the resource is of the event type" do  #has medium set to scheduled
+      
+        describe "when there are no planned or past events" do
+        
+          it "should display a 'NONE PLANNED' label" do
+            get :show, :id => @resource1
+            response.should have_selector(".loud", :content => "NONE PLANNED")
+          end
+        
+          it "should not display an 'In progress' label" do
+            get :show, :id => @resource1
+            response.should_not have_selector(".loud", :content => "In progress")
+          end
+        
+          it "should not display a 'Next scheduled' label" do
+            get :show, :id => @resource1
+            response.should_not have_selector(".loud", :content => "Next scheduled")
+          end
+        
+          it "should not display a table for current or next scheduled events" do
+            get :show, :id => @resource1
+            response.should_not have_selector("th", :content => "Ref no")
+          end
+        
+          it "should display an 'Add a new event' link" do
+            get :show, :id => @resource1
+            response.should have_selector("a", :href => new_resource_item_path(@resource1),
+                                                 :content => "Add a new event")
+          end
+        
+          it "should not display an 'All planned events' link" do
+            get :show, :id => @resource1
+            response.should_not have_selector("a", :href => resource_items_path(@resource1),
+                                                 :content => "All planned events")
+          end
+        
+          it "should not display an 'All past events' link" do
+            pending "till past events added"
+          end
+        end
+      
+        describe "when there are current events but no future or past events" do
+        
+          before(:each) do
+            @item = Factory(:item, :start => Time.now - 2.days, :finish => Time.now + 2.days, 
+                                   :resource_id => @resource1.id)
+          end
+        
+          it "should not display a 'NONE PLANNED' label" do
+            get :show, :id => @resource1
+            response.should_not have_selector(".loud", :content => "NONE PLANNED")
+          end
+        
+          it "should display an 'In progress' label" do
+            get :show, :id => @resource1
+            response.should have_selector(".loud", :content => "In progress")
+          end
+        
+          it "should not display a 'Next scheduled' label" do
+            get :show, :id => @resource1
+            response.should_not have_selector(".loud", :content => "Next scheduled")
+          end
+        
+          it "should display a table for current events" do
+            get :show, :id => @resource1
+            response.should have_selector("th", :content => "Ref no")
+          end
+        
+          it "should display an 'Add a new event' link" do
+            get :show, :id => @resource1
+            response.should have_selector("a", :href => new_resource_item_path(@resource1),
+                                                 :content => "Add a new event")
+          end
+        
+          it "should not display an 'All planned events' link" do
+            get :show, :id => @resource1
+            response.should_not have_selector("a", :href => resource_items_path(@resource1),
+                                                 :content => "All planned events")
+          end
+        
+          it "should not display an 'All past events' link" do
+            pending "till past events added"
+          end
+        end
+      
+        describe "when there are current and future events but no past events" do
+        
+        end
+      
+        describe "when there are current and past events but no future events" do
+        
+        end
+      
+        describe "when there are current, past and future events" do
+        
+        end
+      
+        describe "when there are past events but no current or future events" do
+        
+        end
+      
+        describe "when there are future events but no current or past events" do
+        
+        end
+      
+        describe "when there are past and future events but no current events" do
+        
+        end
+      end
+      
+      describe "when the resource is not a scheduled event" do      #i.e. medium not set to scheduled
+        
+        it "should not have a 'Next scheduled' label" do
+          pending "till non-events are added"
+        end 
+        
       end        
     end
     
