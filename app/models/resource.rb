@@ -132,4 +132,8 @@ class Resource < ActiveRecord::Base
       return false
     end
   end
+  
+  def past_events
+    self.items.find(:all, :conditions => ["items.finish <?", Time.now])
+  end
 end

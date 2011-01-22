@@ -1,4 +1,8 @@
-<h1><%= @title %></h1>
+<h1><%= @title %>
+  <span class=h_tag>
+    (Follow <%= link_to "this link", new_resource_item_path(@resource) %> to create a NEW event)
+  </span>
+</h1>
 <h4><u><%= @resource.name %></u> <br /><span class="h_tag">from <%= @vendor.name %></span></h4>
 
 <%= form_for @item do |f| %>

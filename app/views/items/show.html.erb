@@ -4,7 +4,13 @@
   <span class="h_tag">
       <%= link_to "(edit resource details)", edit_resource_path(@resource) %> 
       &nbsp; &nbsp; &nbsp;
-      (back to <%= link_to "Events list", resource_items_path(@resource) %>)
+      (back to 
+      <% if @item.finish >= Date.today %>
+        <%= link_to "Events list", resource_items_path(@resource) %>
+      <% else %>
+        <%= link_to "Events list", resource_past_events_path(@resource) %>
+      <% end %>
+      )
   </span>
 </h4>
 

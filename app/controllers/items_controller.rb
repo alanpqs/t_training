@@ -3,7 +3,6 @@ class ItemsController < ApplicationController
     @title = "Current & future events"
     @resource = current_resource
     @vendor = Vendor.find(current_vendor)
-    #@items = Item.find_all_by_resource_id(@resource).paginate(:page => params[:page])
     @items = @resource.current_and_scheduled_events.paginate(:page => params[:page])
   end
 

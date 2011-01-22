@@ -3,8 +3,10 @@
 </h1>
 <h4><u><%= @resource.name %></u><br /><span class="h_tag"> from <%= @vendor.name %></span></h4>
 
-<%= will_paginate %>
+<%= will_paginate @items %>
 
 <%= render "shared/item_list" %>
 
-<%= will_paginate %>
+<%= will_paginate @items %>
+
+

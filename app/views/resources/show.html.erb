@@ -64,7 +64,7 @@
         <% if @resource.has_current_and_scheduled_events? %>  
           <%= link_to "View/modify all current and future events", resource_items_path(@resource) %><br />
         <% end %>
-        <%= link_to "Previous events", "#" if @resource.has_past_events? %>
+        <%= link_to "Previous events", resource_past_events_path(@resource) if @resource.has_past_events? %>
       </div>
     
     <% else %>

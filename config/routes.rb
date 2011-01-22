@@ -1,5 +1,11 @@
 TTraining::Application.routes.draw do
 
+  get "past_events/index"
+
+  get "past_events/show"
+
+  get "past_events/edit"
+
   namespace "admin" do
     resources :regions, :countries, :categories, :category_approvals, :media
     resources :users,     :only => [:index, :show, :edit, :update, :destroy]
@@ -28,6 +34,7 @@ TTraining::Application.routes.draw do
   resources :resources do
     resources :items,             :shallow => true
     resources :unscheduled_items, :shallow => true
+    resources :past_events,       :only => :index
   end
   
   match '/confirm/:code',       :to => 'vendors#confirm', :constraints => { :code => /[A-Za-z0-9]{18}/ }
