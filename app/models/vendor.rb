@@ -123,16 +123,20 @@ class Vendor < ActiveRecord::Base
   end
   
   def phone_with_code
-    a = []
-    a << self.phone.scan(/./)
-    a = a.flatten
-    if a.shift == "0"
-      new_number = "(0)"
-      a.each {|i| new_number << i}
-      display_number = new_number.strip
+    unless self.phone.blank?
+      a = []
+      a << self.phone.scan(/./)
+      a = a.flatten
+      if a.shift == "0"
+        new_number = "(0)"
+        a.each {|i| new_number << i}
+        display_number = new_number.strip
+      else
+        display_number = self.phone
+      end
+      return self.country.phone_code + " " + display_number
     else
-      display_number = self.phone
+      return nil
     end
-    self.country.phone_code + " " + display_number
   end
 end

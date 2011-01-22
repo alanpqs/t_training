@@ -1,5 +1,7 @@
 <h1><%= @resource.name %>
-   <span class="header_link"><%= link_to "(edit details)", edit_resource_path(@resource) %></span>
+   <span class="header_link">
+      <%= link_to "(edit resource details)", edit_resource_path(@resource) %>
+   </span>
 </h1>
 <% if @resource.hidden? %>
   <h4>This resource is currently <u class="loud">hidden</u> from public view.</h4>
@@ -29,27 +31,107 @@
   <hr />
   
   <div class="two_column_left"> 
-    <h5>EVENTS</h5>
-    <div class="cloud">
-      <b class="loud"><%= display_status %></b><br />
     
-      <% if @resource.has_current_events? %>
-        <%= render "event_list", :collection => @current_events %>
-      <% end %>
+    <% if @resource.schedulable? %>
+      
+      <h5>EVENTS</h5>
+      <div class="cloud">
+        <b class="loud"><%= display_status %></b><br />
     
-      <% if @resource.has_scheduled_events? %>
         <% if @resource.has_current_events? %>
-          <b class="loud">Next scheduled</b>   
+          <%= render "event_list", :collection => @current_events %>
         <% end %>
-        <%= render "event_list", :collection => @scheduled_events %>
-      <% end %>
     
-      <%= link_to "Add a new event", new_resource_item_path(@resource) if @resource.vendor.verified? %><br />
-      <% if @resource.has_current_and_scheduled_events? %>  
-        <%= link_to "All current and future events", resource_items_path(@resource) %><br />
-      <% end %>
-      <%= link_to "Previous events", "#" if @resource.has_past_events? %>
-    </div>
+        <% unless @resource.hidden? %>
+          <% if @resource.has_scheduled_events? %>
+            <% if @resource.has_current_events? %>
+              <b class="loud">Next scheduled</b>   
+            <% end %>
+            <%= render "event_list", :collection => @scheduled_events %>
+          <% end %>
+        <% end %>
+        
+        <% if @resource.hidden? %>
+          <span class="loud">
+            No new events may be added. <br />Planned events are no longer displayed.
+          </span>
+          <br /><br />
+        <% else %>
+          <%= link_to "Add a new event", new_resource_item_path(@resource) if @resource.vendor.verified? %>
+          <br />
+        <% end %>
+        
+        <% if @resource.has_current_and_scheduled_events? %>  
+          <%= link_to "View/modify all current and future events", resource_items_path(@resource) %><br />
+        <% end %>
+        <%= link_to "Previous events", "#" if @resource.has_past_events? %>
+      </div>
+    
+    <% else %>
+      
+      <h5>PRICING AND AVAILABILITY 
+        
+        <% unless @resource.requires_setup? || @resource.hidden? %>
+          <br />
+            <span class="h_tag">
+              <%= link_to "(edit pricing details)", edit_unscheduled_item_path(@item) %>
+            </span>
+        <% end %>
+      </h5>
+      
+      <% if !@resource.vendor.verified? %>
+        <div class="loud">Until the vendor has been verified, this resource will not be seen by the public, 
+            and you won't be allowed to set pricing/availability details.  We've sent an authorization 
+            request to your vendor email address.  Please reply."
+        </div>    
+      
+      <% else %>
+        
+        <% if @resource.requires_setup? %>
+        
+          <% if @resource.hidden? %>
+            <span class="loud">Pricing details not set before archiving</span>
+          <% else %>
+            <span class="loud">Please 
+              <%= link_to "enter details", new_resource_unscheduled_item_path(@resource) %> now.</span>
+          <% end %>
+      
+        <% else %>
+          <% if @resource.hidden? %>
+            <span class="loud">Details when archived</span><br />
+          <% end %>      
+        
+          <b>Price:</b> &nbsp;<%= @item.formatted_price(@vendor) %> &nbsp;
+          <i><%= dollar_conversion %></i>    
+          <br />
+          <small><%= availability_status %></small><br />
+          <br />
+          <b>Where to obtain?</b> <%= @item.venue %><br />
+          <% unless @item.notes.blank? %>
+            <br />
+            <%= @item.notes %>
+            <br /><br />
+          <% end %>
+          <% unless @item.reference.blank? %>
+            <b>Quote reference:</b> <%= @item.reference %>
+          <% end %>
+          <br /><br />
+          <hr />
+        
+          <h5>CONTACTS
+            <span class="h_tag"> 
+              <%= link_to "  (edit vendor details)", edit_business_vendor_path(@vendor) %>
+            </span>
+          </h5>
+          <b>Phone:</b>&nbsp;<%= @vendor.phone_with_code %><br /><br />
+          <b>Email:</b><br /><%= @vendor.email %><br /><br />
+          <% unless @vendor.website.blank? %>
+            <b>Company website:</b><br /><%= link_to @vendor.website, @vendor.website, :target => "_blank" %>
+          <% end %>
+      
+        <% end %>
+      <% end %>  
+    <% end %>
   </div>
   
   <div class="two_column_right"> 
@@ -57,7 +139,7 @@
     <div class="indent">
       <% unless current_user.single_company_vendor? %>
         <% unless current_user.resource_duplicated_to_all?(@resource.name) %>     
-          <li><%= link_to "Duplicate >> another of your vendors", 
+          <li><%= link_to "Duplicate to another of your vendors", 
             duplicate_resource_to_vendor_path %>    
           </li>
         <% end %>

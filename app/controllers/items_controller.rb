@@ -2,7 +2,7 @@ class ItemsController < ApplicationController
   def index
     @title = "Current & future events"
     @resource = current_resource
-    @vendor = current_vendor
+    @vendor = Vendor.find(current_vendor)
     #@items = Item.find_all_by_resource_id(@resource).paginate(:page => params[:page])
     @items = @resource.current_and_scheduled_events.paginate(:page => params[:page])
   end
@@ -90,7 +90,12 @@ class ItemsController < ApplicationController
     @item.currency = money.currency
 
     if @item.update_attributes(params[:item])
-      flash[:success] = "The event details have been successfully updated."
+      if @item.cents == 0
+        flash[:notice] = "You've set the price to 0.00.  Are you sure that's correct?  (If not, make
+           sure you enter a numeric value for price.)"
+      else
+        flash[:success] = "The event details have been successfully updated."
+      end
       redirect_to @item
     else
       @tag_name = "Confirm changes"

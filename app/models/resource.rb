@@ -23,7 +23,8 @@ class Resource < ActiveRecord::Base
         :description, :webpage, :hidden, :tag_list, :feature_list
   attr_writer :tag_list, :feature_list
   
-  LENGTH_TYPES = [ "Minute", "Hour", "Day", "Month", "Term", "Year", "Session", "Term", "Page", "Item" ]
+  LENGTH_TYPES = [ "Minute", "Hour", "Day", "Month", "Term", "Year", "Session", "Term", "Page", "Item", 
+                   "Lesson", "Chapter", "Unit", "Module" ]
   
   acts_as_taggable
   acts_as_taggable_on :features
@@ -55,6 +56,16 @@ class Resource < ActiveRecord::Base
   
   validates_associated :vendor, :category, :medium
 
+  def schedulable?
+    self.medium.scheduled?
+  end
+  
+  def requires_setup?
+    unless schedulable?
+      self.items.count(:all) == 0
+    end
+  end
+  
   def has_scheduled_events?     #only for resources with medium.scheduled == true
     if self.medium.scheduled?
       found = self.items.count(:all, :conditions => ["items.start >?", Time.now])

@@ -1,27 +1,5 @@
 TTraining::Application.routes.draw do
 
-  get "items/index"
-
-  get "items/new"
-
-  get "items/show"
-
-  get "items/edit"
-
-  #get "categories/new"
-
-  #get "categories/index"
-
-  #get "media/new"
-
-  #get "media/index"
-
-  #get "resources/show"
-
-  #get "resources/index"
-
-  #get "resources/new"
-
   namespace "admin" do
     resources :regions, :countries, :categories, :category_approvals, :media
     resources :users,     :only => [:index, :show, :edit, :update, :destroy]
@@ -35,9 +13,9 @@ TTraining::Application.routes.draw do
     resources :categories,  :only => [:new, :create]
   end
   
-  namespace "events" do
-    resources :items
-  end
+  #namespace "events" do
+  #  resources :items
+  #end
   
   resources :users,         :except => :index
   resources :sessions,      :only => [:new, :create, :destroy]
@@ -48,7 +26,8 @@ TTraining::Application.routes.draw do
   end
   
   resources :resources do
-    resources :items,       :shallow => true
+    resources :items,             :shallow => true
+    resources :unscheduled_items, :shallow => true
   end
   
   match '/confirm/:code',       :to => 'vendors#confirm', :constraints => { :code => /[A-Za-z0-9]{18}/ }

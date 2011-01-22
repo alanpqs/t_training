@@ -1,0 +1,38 @@
+  <div class= "two_column_left">
+    <div class="field">
+      <%= f.label :reference, "Ref no" %> <small>(if applicable - e.g ISBN for a book)</small><br />
+      <%= f.text_field :reference %>
+    </div>
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :start, "Date available from" %> 
+        <br /><small>(just enter a date in the past if already available)</small><br />
+      <%= f.date_select :start %>
+    </div>
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :price  %> <small>(value in <%= @vendor.country.currency_symbol %>)</small><br />
+      <%= f.text_field :price, :size => 8 %>
+    </div>
+    
+  </div>
+  <div class="two_column_right">
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :venue, "How to obtain?" %><br />
+         <small>(add further details in Notes, if necessary)</small><br />
+      <%= f.text_field :venue %>
+    </div>
+    <div class="field">
+      <%= f.label :notes,  %><br />
+      <%= f.text_area :notes %>
+    </div>
+    <div class="field">
+      <%= f.label :filled, "Availability?" %> 
+        <br />
+        <small><%= f.radio_button( :filled, :true ) %> Unavailable &nbsp;&nbsp;
+        <%= f.radio_button( :filled, :false ) %> Taking orders now</small><br /><br />
+      <small> - or <%= link_to "archive the resource", edit_resource_path(@resource) %> 
+         to hide it from public view</small>
+    </div>
+  </div>

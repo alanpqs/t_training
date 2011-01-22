@@ -1,9 +1,8 @@
 <h1><%= @title %></h1>
 
 <h4><u>Full details: Event #<%= @item.ref %></u> &nbsp;
-  <span class="h_tag"> (update <%= link_to "vendor", edit_business_vendor_path(@vendor) %> - 
-      <%= link_to "resource", edit_resource_path(@resource) %> - 
-      <%= link_to "event", edit_item_path(@item) %>)
+  <span class="h_tag">
+      <%= link_to "(edit resource details)", edit_resource_path(@resource) %> 
       &nbsp; &nbsp; &nbsp;
       (back to <%= link_to "Events list", resource_items_path(@resource) %>)
   </span>
@@ -21,7 +20,11 @@
   <hr />
   
   <div class="two_column_left">
-    <h5>SCHEDULE & PRICING</h5>
+    <h5>SCHEDULE & PRICING
+      <span class="h_tag">
+        <%= link_to "(edit event details)", edit_item_path(@item) %>
+      </span>
+    </h5>
     <b>Starts:</b> &nbsp;<%= display_date(@item.start) %><br />
     <b>Ends:</b> &nbsp;<%= display_date(@item.finish) %><br />
     <% unless @item.days.blank? %>
@@ -47,10 +50,8 @@
       <%= @item.notes %>
     </div>  
     <br />
-    <b>Price</b> &nbsp;<%= @item.formatted_price(@vendor) %> &nbsp;
-      <% unless @item.conversion_to_dollars(@vendor.id) == "Unknown" %>
-        <i>(approx US$ <%= @item.conversion_to_dollars(@vendor.id) %>)</i>
-      <% end %>    
+    <b>Price:</b> &nbsp;<%= @item.formatted_price(@vendor) %> &nbsp;
+      <i><%= dollar_conversion %></i>  
     <br />
     <b>Places available?</b> &nbsp;<%= @item.availability %>
     <br /><br />
@@ -58,7 +59,11 @@
   <hr />
   
   <div class="two_column_left"
-    <h5>CONTACTS</h5>
+    <h5>CONTACTS
+      <span class="h_tag"> 
+        <%= link_to "(edit vendor details)", edit_business_vendor_path(@vendor) %>
+      </span>
+    </h5>
     <b>Phone:</b>&nbsp;<%= @vendor.phone_with_code %><br /><br />
     <b>Email:</b><br /><%= @vendor.email %><br /><br />
     <% unless @vendor.website.blank? %>

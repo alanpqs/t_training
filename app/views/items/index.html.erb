@@ -1,7 +1,7 @@
 <h1><%= @title %>
    <span class="header_link">(return to <%= link_to "main Resource page", resource_path(@resource) %>)</span>
 </h1>
-<h4><%= @vendor.name %> - <%= @resource.name %></h4>
+<h4><u><%= @resource.name %></u><br /><span class="h_tag"> from <%= @vendor.name %></span></h4>
 
 <%= will_paginate %>
 <table>

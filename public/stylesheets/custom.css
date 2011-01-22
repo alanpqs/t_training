@@ -45,6 +45,12 @@ section h5 {
   margin-bottom: 0.5em;    
 }
 
+section h5 .h_tag {
+  font-size: 1em; 
+  color: #666;
+  font-weight: normal;      
+}
+
 .header_link {
   font-size: 0.5em; 
   padding-left: 10px;

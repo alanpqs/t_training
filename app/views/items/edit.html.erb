@@ -1,5 +1,5 @@
 <h1><%= @title %></h1>
-<h4><%= @vendor.name %>: <%= @resource.name %></h4>
+<h4><u><%= @resource.name %></u> <br /><span class="h_tag">from <%= @vendor.name %></span></h4>
 
 <%= form_for @item do |f| %>
   <%= render 'shared/error_messages', :object => f.object %>

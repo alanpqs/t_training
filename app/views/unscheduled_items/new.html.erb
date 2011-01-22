@@ -1,0 +1,15 @@
+<h1><%= @title %></h1>
+<h4><u><%= @resource.name %></u><br /> <span class="h_tag">from <%= @vendor.name %></span></h4>
+
+<%= form_for [@resource, @item], :url => resource_unscheduled_items_path(@resource) do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  
+  <%= render 'unscheduled_item', :f => f %>
+  
+  <div class="actions">
+    <%= submit_button(@tag_name) %>
+  </div>
+  <div class="redirects">
+    <%= link_to "(drop changes - back to main Resource page)", resource_path(@resource) %>
+  </div>
+<% end %>

@@ -7,7 +7,7 @@ module ResourcesHelper
        reply."
     else
       if @resource.hidden?
-        "NO LONGER AVAILABLE."
+        "RESOURCE NOW ARCHIVED"
       else
         if @resource.has_current_events?
           "In progress"
@@ -27,5 +27,13 @@ module ResourcesHelper
     else 
       @resource.description 
     end  
+  end
+  
+  def dollar_conversion
+    unless @item.currency == "USD"
+      unless @item.conversion_to_dollars(@vendor.id) == "Unknown"
+        "(approx US$ #{@item.conversion_to_dollars(@vendor.id)})"
+      end
+    end   
   end
 end

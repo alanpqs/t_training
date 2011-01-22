@@ -3,7 +3,7 @@
   <%= will_paginate %>
   <table>
     <tr>
-      <th>Title</th>
+      <th>Title <small class="loud" style="font-weight:normal">(X = Archived)</small</th>
       <th>Group</th>
       <th>Category</th>
       <th>Format</th>
@@ -12,7 +12,11 @@
     </tr>
     <% @resources.each do |resource| %>      
     <tr>
-      <td><%= link_to resource.name, resource_path(resource), :title => "View details" %></td>
+      <td><%= link_to resource.name, resource_path(resource), :title => "View details" %>
+          <% if resource.hidden %>
+            <span class="loud">(X)</span>
+          <% end %>
+      </td>
       <td><%= resource.category.in_group %></td> 
       <td><%= resource.category.category %></td>
       <td><%= resource.medium.medium %></td>

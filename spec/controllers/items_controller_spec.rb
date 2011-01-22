@@ -70,70 +70,70 @@ describe ItemsController do
         describe "GET 'index'" do
           
           it "should be successful" do
-            get :index
+            get :index, :resource_id => @resource.id
             response.should be_success
           end
           
           it "should have the correct title" do
-            get :index
+            get :index, :resource_id => @resource.id
             response.should have_selector("title", :content => "Current & future events")
           end
           
           it "should display the correct vendor name" do
-            get :index
+            get :index, :resource_id => @resource.id
             response.should have_selector("h4", :content => @vendor.name)
           end
           
           it "should display the correct Resource name" do
-            get :index
+            get :index, :resource_id => @resource.id
             response.should have_selector("h4", :content => @resource.name)
           end
           
           it "should display all current and future events for the selected resource, with a 'show' link" do
-            get :index
+            get :index, :resource_id => @resource.id
             response.should have_selector("a", :href => item_path(@item1))
             response.should have_selector("a", :href => item_path(@item2))
           end
           
           it "should not display past events for the selected resource" do
-            get :index
+            get :index, :resource_id => @resource.id
             response.should_not have_selector("a", :href => item_path(@item3))
           end
           
           it "should not display current and future events for a difference resource" do
-            get :index
+            get :index, :resource_id => @resource.id
             response.should_not have_selector("a", :href => item_path(@item_x))
           end
           
           it "should display the correct reference number if the 'reference' field is filled" do
-            get :index
+            get :index, :resource_id => @resource.id
             response.should have_selector("td", :content => "ABC1")
           end
           
           it "should display an automated reference number if the 'reference' field is not filled" do
-            get :index
+            get :index, :resource_id => @resource.id
             response.should have_selector("td", :content => "1")
           end
           
           it "should display a start-date for each element" do
-            get :index
+            get :index, :resource_id => @resource.id
             response.should have_selector("td", :content => "#{(Time.now + 7.days).strftime('%d-%b-%y')}")
             response.should have_selector("td", :content => "#{(Time.now - 2.days).strftime('%d-%b-%y')}")
           end
           
           it "should display an end-date for each element" do
-            get :index
+            get :index, :resource_id => @resource.id
             response.should have_selector("td", :content => "#{(Time.now + 10.days).strftime('%d-%b-%y')}")
             response.should have_selector("td", :content => "#{(Time.now + 34.days).strftime('%d-%b-%y')}")
           end
           
           it "should display the venue for each element" do
-            get :index
+            get :index, :resource_id => @resource.id
             response.should have_selector("td", :content => "Holiday Inn, Cambridge")
           end
           
           it "should display the correctly formatted local price for each element" do
-            get :index
+            get :index, :resource_id => @resource.id
             response.should have_selector("td", :content => "15.00")
             response.should have_selector("td", :content => "20.00")
             #Not tested for pound symbol
@@ -141,7 +141,7 @@ describe ItemsController do
           
           it "should have a 'delete' link for each element" do
             @items = [@item1, @item2]
-            get :index
+            get :index, :resource_id => @resource.id
             @items.each do |item|
               response.should have_selector("a", :href => item_path(item),
                                                :title => "Delete event #{item.ref}, but not the resource")
@@ -155,17 +155,17 @@ describe ItemsController do
                                 :start => Factory.next(:start),
                                 :finish => Factory.next(:finish))
             end
-            get :index
+            get :index, :resource_id => @resource.id
             response.should have_selector("div.pagination")
             response.should have_selector("span.disabled", :content => "Previous")
-            response.should have_selector("a",  :href => "/items/index?page=2",
+            response.should have_selector("a",  :href => "/resources/1/items?page=2",
                                                 :content => "2")
-            response.should have_selector("a",  :href => "/items/index?page=2",
+            response.should have_selector("a",  :href => "/resources/1/items?page=2",
                                                 :content => "Next")
           end
           
           it "should have a link to return to the main Resource page" do
-            get :index
+            get :index, :resource_id => @resource.id
             response.should have_selector("a", :href => resource_path(@resource), 
                                             :content => "main Resource page")
           end
@@ -173,47 +173,47 @@ describe ItemsController do
 
         describe "GET 'new'" do
           it "should be successful" do
-            get :new
+            get :new, :resource_id => @resource.id
             response.should be_success
           end
           
           it "should have the right title" do
-            get :new
+            get :new, :resource_id => @resource.id
             response.should have_selector("title", :content => "Schedule a new event")
           end
           
           it "should display the correct vendor" do
-            get :new
+            get :new, :resource_id => @resource.id
             response.should have_selector("h4", :content => @vendor.name)
           end
           
           it "should display the correct resource" do
-            get :new
+            get :new, :resource_id => @resource.id
             response.should have_selector("h4", :content => @resource.name)
           end
           
           it "should have an empty text box for 'reference'" do
-            get :new
+            get :new, :resource_id => @resource.id
             response.should have_selector("input", :name => "item[reference]",
                                                    :content => "")
           end
           
           it "should have select options for the start-date" do
-            get :new
+            get :new, :resource_id => @resource.id
             response.should have_selector("select", :name => "item[start(1i)]")
             response.should have_selector("select", :name => "item[start(2i)]")
             response.should have_selector("select", :name => "item[start(3i)]")
           end
           
           it "should have select options for the end-date" do
-            get :new
+            get :new, :resource_id => @resource.id
             response.should have_selector("select", :name => "item[finish(1i)]")
             response.should have_selector("select", :name => "item[finish(2i)]")
             response.should have_selector("select", :name => "item[finish(3i)]")
           end
           
           it "should have a set of check-boxes for 'Attendance days required" do
-            get :new
+            get :new, :resource_id => @resource.id
             response.should have_selector("input", :name => "item[day_mon]", :type => "checkbox")
             response.should have_selector("input", :name => "item[day_tue]", :type => "checkbox")
             response.should have_selector("input", :name => "item[day_wed]", :type => "checkbox")
@@ -224,7 +224,7 @@ describe ItemsController do
           end
           
           it "should have a select option for 'Time of day' with the correct options" do
-            get :new
+            get :new, :resource_id => @resource.id
             response.should have_selector("select", :name => "item[time_of_day]", :content => "Please select")
             response.should have_selector("option", :value => "Mornings")
             response.should have_selector("option", :value => "Afternoons")
@@ -233,7 +233,7 @@ describe ItemsController do
           end
           
           it "should have a text-box for price, defaulting to '0.00'" do
-            get :new
+            get :new, :resource_id => @resource.id
             response.should have_selector("input", :name => "item[price]", :value => "0.00")
           end
           
@@ -242,17 +242,17 @@ describe ItemsController do
           end
           
           it "should have an empty text-box for 'Venue'" do
-            get :new
+            get :new, :resource_id => @resource.id
             response.should have_selector("input", :name => "item[venue]")
           end
           
           it "should have an empty text-area for 'Notes'" do
-            get :new
+            get :new, :resource_id => @resource.id
             response.should have_selector("textarea", :name => "item[notes]")
           end
           
           it "should have a set of radio-buttons for 'Availability', defaulting to 'Places available'" do
-            get :new
+            get :new, :resource_id => @resource.id
             response.should have_selector("input", :name => "item[filled]", :value => "true", 
                                                    :type => "radio")
             response.should have_selector("input", :name => "item[filled]", :value => "false", 
@@ -260,13 +260,13 @@ describe ItemsController do
           end
           
           it "should have a 'Create event' submit button" do
-            get :new
+            get :new, :resource_id => @resource.id
             response.should have_selector("input", :name => "commit", 
                                                    :type => "submit", :value => "Create event")
           end
           
           it "should have a link back to the main Resource page, dropping all changes" do
-            get :new
+            get :new, :resource_id => @resource.id
             response.should have_selector("a", :href => resource_path(@resource), 
                                              :content => "drop addition - back to main Resource page")
           end 

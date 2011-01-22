@@ -58,6 +58,7 @@ class ResourcesController < ApplicationController
     @current_events = @resource.current_events
     @scheduled_events = @resource.scheduled_events
     cookies[:resource_id] = @resource.id
+    @item = Item.find_by_resource_id(@resource.id) unless @resource.schedulable?
   end
   
   def edit
