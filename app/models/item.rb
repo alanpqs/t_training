@@ -37,6 +37,8 @@ class Item < ActiveRecord::Base
                   
   belongs_to :resource
   
+  has_many   :issues, :dependent => :destroy
+  
   days_regex = /([A-Z][a-z]{2}(\W[A-Z][a-z]{2})*\Z)|\Z/
   
   validates :resource_id,       :presence       => true
@@ -67,8 +69,44 @@ class Item < ActiveRecord::Base
   
   def self.scheduled_events(vendor)
     self.find(:all, :include => [{:resource => :medium}], 
-  :conditions => ["media.scheduled = ? and finish > ? and resources.vendor_id = ?", true, Time.now, vendor ] )
+     :conditions => ["media.scheduled = ? AND finish > ? AND resources.vendor_id = ?", true, Time.now, vendor ],
+     :order => "items.start" )
   end
+  
+  def self.ticketable_events(vendor)
+    self.find(:all, :include => [{:resource => :medium}], 
+     :conditions => ["media.scheduled = ? AND finish > ? AND resources.vendor_id = ? AND items.filled = ?", 
+     true, Time.now, vendor, false ],
+     :order => "items.start" )
+  end
+  
+  def self.has_ticketable_events?(vendor)
+    result = false
+    total = self.count(:all, :joins => [{:resource => :medium}], 
+     :conditions => ["media.scheduled = ? AND finish > ? AND resources.vendor_id = ? AND items.filled = ?", 
+     true, Time.now, vendor, false ])
+    result = true if total > 0
+    return result
+  end
+  
+  def self.ticketable_resources(vendor)
+    self.find(:all, :include => [{:resource => :medium}], 
+      :conditions => ["resources.vendor_id = ? AND media.scheduled = ? AND items.filled = ?", vendor, false, false],
+      :order => "resources.name" )
+  end
+  
+  def self.has_ticketable_resources?(vendor)
+    result = false
+    total = self.count(:all, :joins => [{:resource => :medium}], 
+      :conditions => ["resources.vendor_id = ? AND media.scheduled = ? AND items.filled = ?", vendor, false, false])
+    result = true if total > 0
+    return result  
+  end
+  
+  def self.any_ticketable?(vendor)
+    self.has_ticketable_events?(vendor) || self.has_ticketable_resources?(vendor)
+  end
+    
   
   def build_days_array(mon, tue, wed, thu, fri, sat, sun)
     required_days = Array.new

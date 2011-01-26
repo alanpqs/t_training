@@ -1,0 +1,32 @@
+<% if Item.has_ticketable_events?(@vendor) %>
+  <small class="redirects">(or switch to <%= link_to "events", program_selection_path %>)</small>
+<% end %>
+
+<h1><%= @title %></h1>
+<h4><%= @vendor.name %> 
+   <br /><span class="h_tag"> (<%= pluralize(@vendor.ticket_credits, "ticket credit") %> remaining)</span>
+</h4>
+
+
+<% if !Item.any_ticketable?(@vendor) %>
+  <p>First you need to set up some future training events or permanent training resources.</p>
+<% else %>
+  <table>
+    <tr>
+      <th>Ref</th>
+      <th>Title</th>
+      <th>Format</th>
+      <th>Released</th>
+    </tr>
+    <% @items.each do |item| %>
+    <tr>
+      <td><%= link_to item.ref, "#" %></td>
+      <td><%= item.resource.name %></td>
+      <td><%= item.resource.medium.medium %></td>
+      <td><%= display_date(item.start) %></td>
+    </tr>
+    <% end %>
+  </table>
+<% end %>
+<br />
+<%= link_to "Return to Tickets menu", tickets_menu_path %>

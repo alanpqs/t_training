@@ -36,7 +36,7 @@
           <li><%= link_to "Training resources", vendor_resources_path(current_vendor) %></li>
           <% unless current_vendor.resourceless? %>
             <li><%= link_to "Schedule and pricing", resource_activation_path %></li>
-            <li>Tickets</li>
+            <li><%= link_to "Tickets", tickets_menu_path %></li>
             <li>Reviews</li>
             <li>History</li>
           <% end %>

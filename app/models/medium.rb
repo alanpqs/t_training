@@ -28,7 +28,7 @@ class Medium < ActiveRecord::Base
   validates       :user_id,           :presence     => true,
                                       :numericality => true
   validates       :rejection_message, :length       => { :maximum => 0, :if => :authorization_on?,
-                                              :message => "should be empty if you are authorizing the medium" }
+                                      :message => "should be empty if you are authorizing the medium" }
   
   def rejected?
     !self.rejection_message.blank? && self.authorized == false

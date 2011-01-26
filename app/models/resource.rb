@@ -34,6 +34,7 @@ class Resource < ActiveRecord::Base
   belongs_to :medium
   
   has_many   :items, :dependent => :destroy
+  has_many   :issues, :through => :items
   
   validates :name,            :presence       => true,
                               :length         => { :maximum => 50 },

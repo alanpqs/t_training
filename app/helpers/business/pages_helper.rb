@@ -1,5 +1,3 @@
 module Business::PagesHelper
   
-  
-  
 end

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20101211122542
+# Schema version: 20110124221804
 #
 # Table name: vendors
 #
@@ -20,40 +20,41 @@
 #  latitude          :float
 #  longitude         :float
 #  show_reviews      :boolean
+#  ticket_credits    :integer         default(50)
 #
 
 class Vendor < ActiveRecord::Base
   
   attr_accessible :name, :country_id, :address, :website, :email, :phone, :description, :verified,
-                  :verification_code, :show_reviews, :inactive, :notes
+                  :verification_code, :show_reviews, :inactive, :notes, :ticket_credits
   
   belongs_to  :country
   has_many    :representations, :dependent => :destroy
   has_many    :users, :through => :representations
   has_many    :resources, :dependent => :destroy, :order => "name"
+  has_many    :items, :through => :resources
+  has_many    :issues
 
   geocoded_by :where_is
   
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   
-  validates :name,        :presence   => true,
-                          :length     => { :maximum => 50 },
-                          :uniqueness => { :scope => :country_id, :case_sensitive => false }
-  validates :country_id,  :presence   => true
-  validates :address,     :presence   => true,
-                          :length     => { :maximum => 50 }
-  validates :email,       :presence   => true,
-                          :format     => { :with => email_regex },
-                          :length     => { :maximum => 40 }
-  validates :phone,       :length     => { :maximum => 20, :allow_blank => true }
-  validates :description, :length     => { :maximum => 255, :allow_blank => true }
-  validates :website,     :length     => { :maximum => 50, :allow_blank => true }
+  validates :name,            :presence     => true,
+                              :length       => { :maximum => 50 },
+                              :uniqueness   => { :scope => :country_id, :case_sensitive => false }
+  validates :country_id,      :presence     => true
+  validates :address,         :presence     => true,
+                              :length       => { :maximum => 50 }
+  validates :email,           :presence     => true,
+                              :format       => { :with => email_regex },
+                              :length       => { :maximum => 40 }
+  validates :phone,           :length       => { :maximum => 20, :allow_blank => true }
+  validates :description,     :length       => { :maximum => 255, :allow_blank => true }
+  validates :website,         :length       => { :maximum => 50, :allow_blank => true }
+  validates :ticket_credits,  :numericality => { :only_integer => true }
   
   after_validation :fetch_coordinates
   
-  #def contactable?
-  #  !self.email.blank? || !self.phone.blank? || !self.website.blank?
-  #end
   
   def where_is
     [address, country.name].compact.join(', ') unless country_id.nil?
@@ -138,5 +139,9 @@ class Vendor < ActiveRecord::Base
     else
       return nil
     end
+  end
+  
+  def no_tickets?
+    self.ticket_credits < 1
   end
 end

@@ -1,0 +1,30 @@
+<h1><%= @title %></h1>
+<h4><%= @vendor.name %></h4>
+<br />
+<div class="two_column_left">
+  <div class="cloud">
+    <ul>
+      <br />
+      <li><%= link_to "How the scheme works", t4t_intro_path %></li>
+      <li>
+        <% if !Item.any_ticketable?(@vendor) %>
+          <%= link_to "Issue tickets", program_selection_path %>
+        <% else %>
+          <% if Item.has_ticketable_events?(@vendor) && Item.has_ticketable_resources?(@vendor) %>
+            <%= link_to "Issue tickets", program_selection_path %>
+              <small><%= link_to "(events)", program_selection_path %>
+              <%= link_to "(other)", resource_selection_path %></small>
+          <% elsif Item.has_ticketable_events?(@vendor) %>
+            <%= link_to "Issue tickets", program_selection_path %>
+          <% else %>
+            <%= link_to "Issue tickets", resource_selection_path %>
+          <% end %>
+        <% end %>
+      </li>
+      <li><%= link_to "Confirm a sale", "#" %></li>
+      <li><%= link_to "Current ticket status", "#" %></li>
+      <li><%= link_to "Your account", vendor_account_path %></li>
+      <li><%= link_to "History", "#" %></li>
+    </ul>
+  </div>  
+</div>

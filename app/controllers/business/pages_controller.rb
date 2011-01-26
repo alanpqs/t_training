@@ -95,4 +95,36 @@ class Business::PagesController < ApplicationController
     cookies[:category_id] = @category.id
     redirect_to :popular_keywords
   end
+  
+  def tickets_menu
+    @title = "Tickets for Training"
+    @vendor = Vendor.find(current_vendor)
+  end
+  
+  def t4t_intro
+    @title = "Effective marketing with T4T"
+  end
+  
+  def program_selection
+    @vendor = Vendor.find(current_vendor)
+    if @vendor.no_tickets?
+      flash[:notice] = "You've applied to issue tickets, but you've used all your ticket credits.
+        To continue, please place an order for more tickets."
+      redirect_to vendor_account_path
+    else
+      @title = "Ticket issue: select an event"
+      @items = Item.ticketable_events(@vendor)
+    end
+  end
+  
+  def resource_selection
+    @vendor = Vendor.find(current_vendor)
+    @title = "Ticket issue: select a resource"
+    @items = Item.ticketable_resources(@vendor)
+  end
+  
+  def vendor_account
+    @vendor = Vendor.find(current_vendor)
+    @title = "Your 'Tickets' account"
+  end
 end

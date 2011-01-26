@@ -63,6 +63,11 @@ TTraining::Application.routes.draw do
   match 'select_category',      :to => 'business/pages#select_category'
   match 'category_selected',    :to => 'business/pages#category_selected'
   match 'resource_activation',  :to => 'business/pages#resource_activation'
+  match 'tickets_menu',         :to => 'business/pages#tickets_menu'
+  match 'program_selection',    :to => 'business/pages#program_selection'
+  match 'resource_selection',    :to => 'business/pages#resource_selection'
+  match 't4t_intro',            :to => 'business/pages#t4t_intro'
+  match 'vendor_account',       :to => 'business/pages#vendor_account'
   
   root :to => 'pages#home'
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110112001028) do
+ActiveRecord::Schema.define(:version => 20110126061414) do
 
   create_table "categories", :force => true do |t|
     t.string   "category"
@@ -37,6 +37,18 @@ ActiveRecord::Schema.define(:version => 20110112001028) do
 
   add_index "countries", ["country_code"], :name => "index_countries_on_country_code", :unique => true
   add_index "countries", ["name"], :name => "index_countries_on_name", :unique => true
+
+  create_table "issues", :force => true do |t|
+    t.integer  "item_id"
+    t.integer  "vendor_id"
+    t.boolean  "event"
+    t.decimal  "cents"
+    t.string   "currency"
+    t.integer  "no_of_tickets",  :default => 1
+    t.string   "contact_method", :default => "Email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "items", :force => true do |t|
     t.integer  "resource_id"
@@ -143,6 +155,7 @@ ActiveRecord::Schema.define(:version => 20110112001028) do
     t.float    "latitude"
     t.float    "longitude"
     t.boolean  "show_reviews",      :default => false
+    t.integer  "ticket_credits",    :default => 50
   end
 
 end
