@@ -101,7 +101,7 @@ describe Admin::MediaController do
                                     :authorized => false, :rejection_message => "Rejected")
       end
       
-      it "should be redirect to the login path" do
+      it "should redirect to the login path" do
         delete :destroy, :id => @rejected_medium
         response.should redirect_to(login_path)
       end

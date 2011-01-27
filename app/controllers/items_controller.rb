@@ -33,7 +33,7 @@ class ItemsController < ApplicationController
     @sun = params[:item][:day_sun]
     @item.build_days_array(@mon, @tue, @wed, @thu, @fri, @sat, @sun) 
     @item.cents = money.cents
-    @item.currency = money.currency
+    @item.currency = money.currency.to_s
     if @item.save
       if @item.cents == 0
         flash[:notice] = "You've set the price to 0.00.  Are you sure that's correct?  (If not, make
@@ -86,7 +86,7 @@ class ItemsController < ApplicationController
     @sun = params[:item][:day_sun]
     @item.build_days_array(@mon, @tue, @wed, @thu, @fri, @sat, @sun) 
     @item.cents = money.cents
-    @item.currency = money.currency
+    @item.currency = money.currency.to_s
 
     if @item.update_attributes(params[:item])
       if @item.cents == 0

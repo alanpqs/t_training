@@ -11,6 +11,14 @@ Factory.sequence :email do |n|
   "person-#{n}@example.com"
 end
 
+Factory.define :fee do |fee|
+  fee.band                      "A"
+  fee.bottom_of_range           0.00
+  fee.top_of_range              19.99
+  fee.cents                     100
+  fee.currency                  "USD"
+end
+
 Factory.define :region do |region|
   region.region                 "S America"
 end

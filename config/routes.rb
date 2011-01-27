@@ -1,13 +1,7 @@
 TTraining::Application.routes.draw do
 
-  get "past_events/index"
-
-  get "past_events/show"
-
-  get "past_events/edit"
-
   namespace "admin" do
-    resources :regions, :countries, :categories, :category_approvals, :media
+    resources :regions, :countries, :categories, :category_approvals, :media, :fees
     resources :users,     :only => [:index, :show, :edit, :update, :destroy]
     resources :authorize_media
   end

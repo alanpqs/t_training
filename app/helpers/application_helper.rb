@@ -27,6 +27,10 @@ module ApplicationHelper
     link_to "(drop changes)", route
   end
   
+  def cancellation_link(text, route)
+    link_to "(#{text})", route
+  end
+  
   def back_to_input
     link_to "(return to input form)", session[:return_to]
   end
@@ -47,6 +51,6 @@ module ApplicationHelper
   end
   
   def display_decimals(field, val)
-    sprintf("%{val}", "#{field}")
+    sprintf("%.#{val}f", "#{field}")
   end
 end

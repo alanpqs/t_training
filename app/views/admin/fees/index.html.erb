@@ -1,0 +1,42 @@
+<h1><%= @title %></h1>
+<div class="notes">
+  All values below in <b><u>US dollars</u></b> - click on Band to edit
+</div>
+<br />
+<table>
+  <tr>
+    <th>Band</th>
+    <th>Ticket price from .. </th>
+    <th>.. to</th>
+    <th>Our fee</th>
+    <th></th>
+  </tr>
+
+  <% @fees.each do |fee| %>
+    <tr>
+      <td><%= link_to fee.band, edit_admin_fee_path(fee) %></td>
+      <td style ="width:150px"><%= display_decimals(fee.bottom_of_range, "2") %></td>
+      <td>
+        <% if fee.top_of_range == 100000 %>
+           and above
+        <% else %>
+          <%= display_decimals(fee.top_of_range, "2") %>
+        <% end %>     
+      </td>
+      <td><%= fee.cost %></td>
+      <td><small><%= link_to "delete", admin_fee_path(fee), 
+                                        :method => :delete, 
+                                        :confirm => "Deleting band #{fee.band}. You sure?",
+                                        :title => "Delete band #{fee.band}" %>
+          </small>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<div class="actions">
+  <%= link_to "Add a new band", new_admin_fee_path, :class => "action_round" %>
+</div> 
+
+
+

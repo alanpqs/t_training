@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110126061414) do
+ActiveRecord::Schema.define(:version => 20110126154759) do
 
   create_table "categories", :force => true do |t|
     t.string   "category"
@@ -37,6 +37,16 @@ ActiveRecord::Schema.define(:version => 20110126061414) do
 
   add_index "countries", ["country_code"], :name => "index_countries_on_country_code", :unique => true
   add_index "countries", ["name"], :name => "index_countries_on_name", :unique => true
+
+  create_table "fees", :force => true do |t|
+    t.string   "band"
+    t.decimal  "bottom_of_range", :precision => 8, :scale => 2
+    t.decimal  "top_of_range",    :precision => 8, :scale => 2
+    t.decimal  "cents",           :precision => 8, :scale => 2
+    t.string   "currency",                                      :default => "USD"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "issues", :force => true do |t|
     t.integer  "item_id"

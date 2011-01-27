@@ -1,0 +1,38 @@
+<%= form_for [:admin, @fee] do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  <div class="notes">
+    All values below in <b><u>US dollars</u></b>
+  </div>
+  <br />
+  <div class="field">
+    <span class="loud">* </span>
+    <%= f.label :band %> <small>(a single letter)</small><br />
+    <%= f.text_field :band, :size => 5 %>
+  </div>
+  
+  <div class="field">
+    <span class="loud">* </span>
+    <%= f.label :bottom_of_range, "Client ticket price from ..."  %><br />
+    <%= f.text_field :bottom_of_range, :size => 8 %>
+  </div>
+  <div class="field">
+    <span class="loud">* </span>
+    <%= f.label :top_of_range, "... to"  %><br />
+    <%= f.text_field :top_of_range, :size => 8 %>
+  </div>
+  
+  <div class="field">
+    <span class="loud">* </span>
+    <%= f.label :cost, "Our fee"  %><br />
+    <%= f.text_field :cost, :size => 8 %>
+  </div>
+  
+  
+  <div class="actions">
+    <%= submit_button(@tag_name) %>
+  </div>
+  <div class="redirects">
+    <%= cancellation_link(@drop, admin_fees_path) %>
+  </div>
+  
+<% end %>
