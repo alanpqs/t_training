@@ -1,0 +1,11 @@
+    <br />
+    <b>Price:</b> &nbsp;<%= @item.formatted_price(@vendor) %> &nbsp;
+      <i><%= dollar_conversion %></i>  
+    <br />
+    <b>Places available?</b> &nbsp;<%= @item.availability %>
+    <br />
+    <b>Notes:</b><br />
+    <div class="description">
+      <%= @item.notes %>
+    </div>  
+    <br />

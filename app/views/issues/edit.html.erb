@@ -1,0 +1,30 @@
+<h1><%= @title %></h1>
+<%= form_for @issue do |f| %>
+  <div class="redirects_top">
+    <span class="loud">Enter details of your discounted tickets</span><br />
+    <small>(<%= pluralize(@vendor.ticket_credits, "ticket credit") %> remaining)</small>
+  </div>
+  <b>Ref no:</b>  <%= @item.ref %><br />
+  <b> <%= @item.resource.name %></b><br />
+  <br />
+  <div class="two_column_left">
+    <div class='notes'>
+      <%= @item.resource.medium.medium %><br />
+      <%= pluralize(@item.resource.length, @item.resource.length_unit.downcase) %><br />
+      <br />
+      <%= render 'shared/item_schedule' %>
+      <%= render 'shared/item_pricing' %>
+    </div>
+  </div>
+  
+   <div class="two_column_right">
+     <%= render 'issue', :f => f %>
+       
+     <div class="actions">
+       <%= submit_button(@tag_name) %>
+     </div>
+     <div class="redirects">
+       <%= cancellation_link(@drop, program_selection_path) %>
+     </div>
+   </div>
+<% end %>

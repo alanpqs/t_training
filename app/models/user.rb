@@ -30,6 +30,7 @@ class User < ActiveRecord::Base
   has_many    :representations, :dependent => :destroy
   has_many    :vendors, :through => :representations
   has_many    :media
+  has_many    :issues
   
   geocoded_by :where_is
   

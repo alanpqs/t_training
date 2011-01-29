@@ -250,6 +250,11 @@ textarea {
   padding-right:20px;
 }
 
+.redirects_top {
+  float:right; 
+  padding-right:20px;
+}
+
 .rheader_highlight {
   float:right;
   width: 25em;

@@ -1,5 +1,9 @@
 TTraining::Application.routes.draw do
 
+  get "offers/index"
+
+  get "vendor_offers/index"
+
   namespace "admin" do
     resources :regions, :countries, :categories, :category_approvals, :media, :fees
     resources :users,     :only => [:index, :show, :edit, :update, :destroy]
@@ -11,6 +15,8 @@ TTraining::Application.routes.draw do
     resources :pages,       { :duplicate_to_vendors => :post }
     resources :media,       :only => [:new, :create]
     resources :categories,  :only => [:new, :create]
+    resources :offers,      :only => :index
+    #resources :issues
   end
   
   #namespace "events" do
@@ -20,6 +26,7 @@ TTraining::Application.routes.draw do
   resources :users,         :except => :index
   resources :sessions,      :only => [:new, :create, :destroy]
   resources :categories
+  resources :offers, :issues
   
   resources :vendors do
     resources :resources,   :shallow => true
@@ -29,6 +36,10 @@ TTraining::Application.routes.draw do
     resources :items,             :shallow => true
     resources :unscheduled_items, :shallow => true
     resources :past_events,       :only => :index
+  end
+  
+  resources :items do
+    resources :issues,            :shallow => true
   end
   
   match '/confirm/:code',       :to => 'vendors#confirm', :constraints => { :code => /[A-Za-z0-9]{18}/ }

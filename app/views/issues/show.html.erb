@@ -1,0 +1,83 @@
+<h1><%= @title %></h1>
+
+
+<div class="two_column_left">
+  <div class="notes">
+    <h4><%= @item.resource.name %></h4>
+    <b>From:</b> <%= @vendor.name %><br />
+    <b>Ref #:</b> <%= @item.ref %><br />
+    <b>Dates:</b>  <%= display_date(@item.start) %> to <%= display_date(@item.finish) %><br />
+      <span class="indent"><%= @item.resource.medium.medium %></span><br />
+      <span class="indent"><%= @item.time_of_day %></span><br />
+      <span class="indent">Total length - 
+         <%= pluralize(@resource.length, @resource.length_unit.downcase) %>
+      </span><br />
+    <b>At:</b> <%= truncate(@item.venue, :length => 23) %><br />  
+    <br />
+    <b>Normal price:</b> &nbsp;<%= @item.formatted_price(@vendor) %><br />
+      <span class="indent"><i><%= dollar_conversion %></i></span>  
+    <br /><br />
+    <b>Ticket price:</b> &nbsp;<%= @issue.formatted_ticket_price(@vendor) %><br />
+      <span class="indent"><i><%= doll_conversion %></i></span>  
+    <br /><br />
+    <b>No of tickets issued:</b> <%= @issue.no_of_tickets %><br />
+    <b>Applications by <%= @issue.contact_method.downcase %> to:</b><br />
+      <% if @issue.contact_method == "Email" %>
+        <%= @vendor.email %>
+      <% else %>
+        <%= @vendor.phone_with_code %>
+      <% end %>
+    <br /><br />
+    <b>Applications so far :</b>
+    <br /><br />
+    <b>Instructions issued by:</b><br />
+    <%= @issue.user.name %> on <%= display_date(@issue.created_at) %>
+  </div>
+</div>  
+
+<div class="two_column_right">  
+  <div class="notes">
+    <b>Table of TFT fees (in US$)</b><br />
+    <table style="font-size:0.8em">
+    <tr>
+        <th>Band</th>
+        <th>Ticket price from .. </th>
+        <th>.. to</th>
+        <th>T4T fee</th>
+      </tr>
+
+      <% @fees.each do |fee| %>
+      <tr>
+        <td><%= link_to fee.band, edit_admin_fee_path(fee) %></td>
+        <td><%= display_decimals(fee.bottom_of_range, "2") %></td>
+        <td>
+          <% if fee.top_of_range == 100000 %>
+            and above
+          <% else %>
+            <%= display_decimals(fee.top_of_range, "2") %>
+          <% end %>     
+        </td>
+        <td><%= fee.cost %></td>
+      </tr>
+      <% end %>
+    </table>
+      This ticket issue is at Band <%= @issue.fee.band %>, so 
+      <%= pluralize(@issue.no_of_tickets, "ticket") %> 
+      <% if @issue.no_of_tickets == 1 %>
+        costs
+      <% else %>
+        cost
+      <% end %>
+      US$ <%= @fee %> from your T4T 
+      account. (At the expiry date, your account will be recredited with the fee-value of any unsold 
+      tickets.)
+  </div>
+  <div class="redirects">
+    <hr />
+    <%= link_to "(edit)", edit_issue_path(@issue) %>  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+    <%= link_to "(all current offers)", business_offers_path %>
+     <br />
+    (your account)&nbsp; &nbsp; &nbsp;
+    <%= link_to "(tickets menu)", tickets_menu_path %>
+  </div>     
+</div>

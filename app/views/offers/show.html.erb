@@ -1,0 +1,17 @@
+<h1><%= @title %></h1>
+
+<h4><%= @issue.item.resource.name %></h4>
+<div class="notes">
+  <div class="two_column_left">
+    <%= render 'shared/resource_intro' %>
+  </div>
+  
+  <div class="two_column_right">
+    <div class="warn">
+      SAVE <%= @item.currency_symbol(@vendor) %><%= display_decimals(@savings, 2) %>
+    </div>
+    <br />
+    <%= render 'shared/item_pricing' %>
+    <%= render 'shared/item_schedule' %>
+  </div>
+</div>

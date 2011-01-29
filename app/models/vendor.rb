@@ -144,4 +144,6 @@ class Vendor < ActiveRecord::Base
   def no_tickets?
     self.ticket_credits < 1
   end
+  
+  
 end

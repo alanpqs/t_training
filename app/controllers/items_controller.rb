@@ -99,10 +99,10 @@ class ItemsController < ApplicationController
     else
       @tag_name = "Confirm changes"
       @title = "Edit Event ##{@item.ref}"
-      @tag_name = "Confirm changes"
       @resource = current_resource
       @vendor = current_vendor
-      @weekdays = Item::WEEKDAY_TYPES  
+      @weekdays = Item::WEEKDAY_TYPES
+      render 'edit'  
     end
      
   end

@@ -4,7 +4,13 @@
 
 <h1><%= @title %></h1>
 <h4><%= @vendor.name %> 
-   <br /><span class="h_tag"> (<%= pluralize(@vendor.ticket_credits, "ticket credit") %> remaining)</span>
+   <br />
+   <div class="h_tag"> (<%= pluralize(@vendor.ticket_credits, "ticket credit") %> available -
+     list below shows only events that are not fully booked.<br />
+     <img src = "/images/tick_octagon.png"> shows one or more previous ticket issues for this event;
+       click button to view or edit details.<br />
+     <i>Or</i> click on <strong>Title</strong> to issue new tickets for the event.)  
+   </div>
 </h4>
 
 
@@ -19,15 +25,25 @@
       <th>End</th>
       <th>Format</th>
       <th>Venue</th>
+      <th></th>
     </tr>
     <% @items.each do |item| %>
     <tr>
-      <td><%= link_to item.ref, "#" %></td>
-      <td><%= item.resource.name %></td>
+      <td><%= link_to item.ref, new_item_issue_path(item.id),
+            :title => "Click to issue new ticket(s) for Event #{item.ref}" %>
+      </td>
+      <td><%= link_to item.resource.name, new_item_issue_path(item.id), 
+            :title => "Click to issue new ticket(s) for Event #{item.ref}" %>
+      </td>
       <td><%= display_date(item.start) %></td>
       <td><%= display_date(item.finish) %></td>
       <td><%= item.resource.medium.medium %></td>
       <td><%= truncate(item.venue, :length => 23) %></td>
+      <td>
+        <% if item.has_issues? %>
+          <%= link_to image_tag("/images/tick_octagon.png"), item_issues_path(item) %>
+        <% end %>       
+      </td>
     </tr>
     <% end %>
   </table>

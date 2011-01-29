@@ -1,0 +1,29 @@
+<h1><%= @title %></h1>
+<h4><%= @vendor.name %></h4>
+
+<table>
+  <tr>
+    <th>Ref</th>
+    <th>Title</th>
+    <th>Event-start</th>
+    <th>Tickets offered</th>
+    <th>Taken</th>
+    <th>Offer expiry</th>
+  </tr>
+  
+  <% @issues.each do |issue| %>
+  <tr>
+    <td><%= link_to issue.item.ref, issue_path(issue),
+           :title => "View/edit ticket issue details" %>
+    </td>
+    <td><%= link_to issue.item.resource.name, issue_path(issue), 
+           :title => "View/edit ticket issue details" %>
+    </td>
+    <td><%= display_date(issue.item.start) if issue.event? %></td>
+    <td><%= issue.no_of_tickets %></td>
+    <td></td>
+    <td><%= display_date(issue.expiry_date) %></td>
+  </tr>
+  <% end %>
+</table>
+<%= link_to "Return to Tickets menu", tickets_menu_path %>

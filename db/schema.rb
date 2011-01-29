@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110126154759) do
+ActiveRecord::Schema.define(:version => 20110127173925) do
 
   create_table "categories", :force => true do |t|
     t.string   "category"
@@ -58,6 +58,9 @@ ActiveRecord::Schema.define(:version => 20110126154759) do
     t.string   "contact_method", :default => "Email"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "fee_id"
+    t.date     "expiry_date"
+    t.integer  "user_id"
   end
 
   create_table "items", :force => true do |t|

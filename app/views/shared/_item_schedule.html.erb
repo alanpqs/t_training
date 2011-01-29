@@ -1,0 +1,18 @@
+    <b>Starts:</b> &nbsp;<%= display_date(@item.start) %><br />
+    <b>Ends:</b> &nbsp;<%= display_date(@item.finish) %><br />
+    <% unless @item.days.blank? %>
+      <b>Days:</b> &nbsp;<%= @item.days %>
+      <% unless @item.time_of_day.blank? %>
+        - <%= @item.time_of_day %>
+      <% end %>
+      <br />
+    <% else %>
+      <% unless @item.time_of_day.blank? %>
+        <b>Timings:</b> &nbsp; <%= @item.time_of_day %>
+        <br />
+      <% end %>
+    <% end %>    
+    <br />
+    <b>Venue:</b> &nbsp; <%= @item.venue %>
+    <br />
+    

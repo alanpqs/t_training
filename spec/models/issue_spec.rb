@@ -5,6 +5,7 @@ describe Issue do
   before(:each) do
     @region = Factory(:region)
     @country = Factory(:country, :region_id => @region.id)
+    @fee = Factory(:fee)
     @user = Factory(:user, :country_id => @country.id, :vendor => true)
     @vendor = Factory(:vendor, :country_id => @country.id, :verified => true)
     @representation = Factory(:representation, :user_id => @user.id, :vendor_id => @vendor.id) 
@@ -21,10 +22,12 @@ describe Issue do
     @scheduled_item = Factory(:item, :resource_id => @scheduled_resource)
     
     @attr_event = { :item_id => @scheduled_item.id, :vendor_id => @vendor.id, :event => true,
-                    :cents => 14000, :currency => "USD" }
+                    :cents => 14000, :currency => "USD", :fee_id => @fee.id, 
+                    :expiry_date => Date.today + 7.days, :user_id => @user.id }
     @attr_ongoing = { :item_id => @unscheduled_item.id, :vendor_id => @vendor.id, :event => false,
-                    :cents => 14000, :currency => "USD" }
-  end
+                    :cents => 14000, :currency => "USD", :fee_id => @fee.id,
+                    :expiry_date => Date.today + 7.days, :user_id => @user.id }
+  end 
   
   it "should create an 'event' instance given valid attributes" do
     Issue.create!(@attr_event) 

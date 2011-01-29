@@ -202,6 +202,10 @@ class Item < ActiveRecord::Base
     "Unknown"
   end
   
+  def has_issues?
+    self.issues.count > 0
+  end
+  
   private
   
     def event?

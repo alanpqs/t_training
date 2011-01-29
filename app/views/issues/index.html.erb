@@ -1,0 +1,43 @@
+<h1><%= @title %></h1>
+<div class="notes">
+  <h4><%= @item.resource.name %></h4>
+  <div class="two_column_left">  
+    <b>From:</b> <%= @vendor.name %><br />
+    <b>Ref #:</b> <%= @item.ref %><br />
+    <b>Dates:</b>  <%= display_date(@item.start) %> to <%= display_date(@item.finish) %><br />
+      <span class="indent"><%= @item.resource.medium.medium %></span><br />
+      <span class="indent"><%= @item.time_of_day %></span><br />
+      <span class="indent">Total length - 
+        <%= pluralize(@resource.length, @resource.length_unit.downcase) %>
+      </span><br />
+    <b>At:</b> <%= truncate(@item.venue, :length => 23) %><br /><br /> 
+  </div>
+  <div class="two_column_right">
+    <b>Normal price:</b> &nbsp;<%= @item.formatted_price(@vendor) %><br />
+      <span class="indent"><i><%= dollar_conversion %></i></span> 
+  </div> 
+</div>
+<hr />    
+<div class="notes" style= "clear:both">
+  Click on <b>Offer #</b> to view or edit the details.
+</div>
+<table>
+  <tr>
+    <th>Offer #</th>
+    <th>Tickets offered</th>
+    <th>Ticket price</th>
+    <th>Applications</th>
+    <th>Offer expiry</th>
+  </tr>
+  
+  <% @issues.each do |issue| %>
+  <tr>
+    <td><%= link_to issue.id, issue_path(issue), :title => "View/edit offer details" %></td>   
+    <td><%= issue.no_of_tickets %></td>
+    <td><%= issue.formatted_ticket_price(@vendor) %></td>
+    <td></td>
+    <td><%= display_date(issue.expiry_date) %></td>
+  </tr>
+  <% end %>
+</table>
+<%= link_to "Return to Tickets menu", tickets_menu_path %>

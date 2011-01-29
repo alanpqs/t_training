@@ -31,36 +31,12 @@
         <%= link_to "(edit event details)", edit_item_path(@item) %>
       </span>
     </h5>
-    <b>Starts:</b> &nbsp;<%= display_date(@item.start) %><br />
-    <b>Ends:</b> &nbsp;<%= display_date(@item.finish) %><br />
-    <% unless @item.days.blank? %>
-      <b>Days:</b> &nbsp;<%= @item.days %>
-      <% unless @item.time_of_day.blank? %>
-        - <%= @item.time_of_day %>
-      <% end %>
-      <br />
-    <% else %>
-      <% unless @item.time_of_day.blank? %>
-        <b>Timings:</b> &nbsp; <%= @item.time_of_day %>
-        <br />
-      <% end %>
-    <% end %>    
+    <%= render 'shared/item_schedule' %>
     <br />
-    <b>Venue:</b> &nbsp; <%= @item.venue %>
-    <br /><br />
   </div>
   
   <div class="two_column_right">
-    <b>Notes:</b><br />
-    <div class="description">
-      <%= @item.notes %>
-    </div>  
-    <br />
-    <b>Price:</b> &nbsp;<%= @item.formatted_price(@vendor) %> &nbsp;
-      <i><%= dollar_conversion %></i>  
-    <br />
-    <b>Places available?</b> &nbsp;<%= @item.availability %>
-    <br /><br />
+    <%= render 'shared/item_pricing' %>
   </div>
   <hr />
   
