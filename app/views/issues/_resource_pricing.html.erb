@@ -1,0 +1,9 @@
+        <b>Available from:</b><br /><%= @item.venue %><br />
+        <br />
+        <b>Price:</b> &nbsp;<%= @item.formatted_price(@vendor) %> &nbsp;
+            <i><%= dollar_conversion %></i>  
+        <br /><br />
+        <b>Notes:</b><br />
+        <div class="description">
+          <%= @item.notes %>
+        </div>

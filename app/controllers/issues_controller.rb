@@ -18,10 +18,14 @@ class IssuesController < ApplicationController
     @issue.currency = @vendor.country.currency_code
     @issue.user_id = User.find(current_user).id
     @issue.fee_id = Fee.find(:first).id 
-    if @item.start > Date.today
-      @issue.expiry_date = @item.start - 1.day
+    if @item.is_event?
+      if @item.start > Date.today
+        @issue.expiry_date = @item.start - 1.day
+      else
+        @issue.expiry_date = Date.today + 1.day
+      end
     else
-      @issue.expiry_date = Date.today + 1.day
+      @issue.expiry_date = Date.today + 30.days
     end
     @title = "Issue new tickets"
     @tag_name = "Create"

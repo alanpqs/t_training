@@ -1,0 +1,5 @@
+        <%= @item.resource.medium.medium %><br />
+        <%= pluralize(@item.resource.length, @item.resource.length_unit.downcase) %><br />
+        <br />
+        <%= render 'shared/item_schedule' %>
+        <%= render 'shared/item_pricing' %>

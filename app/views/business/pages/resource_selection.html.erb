@@ -17,13 +17,23 @@
       <th>Title</th>
       <th>Format</th>
       <th>Released</th>
+      <th></th>
     </tr>
     <% @items.each do |item| %>
     <tr>
-      <td><%= link_to item.ref, "#" %></td>
-      <td><%= item.resource.name %></td>
+      <td><%= link_to item.ref, new_item_issue_path(item.id),
+            :title => "Click to issue new ticket(s) for Resource #{item.ref}" %>
+      </td>
+      <td><%= link_to item.resource.name, new_item_issue_path(item.id),
+            :title => "Click to issue new ticket(s) for Resource #{item.ref}" %>
+      </td>
       <td><%= item.resource.medium.medium %></td>
       <td><%= display_date(item.start) %></td>
+      <td>
+        <% if item.has_issues? %>
+          <%= link_to image_tag("/images/tick_octagon.png"), item_issues_path(item) %>
+        <% end %>       
+      </td>
     </tr>
     <% end %>
   </table>

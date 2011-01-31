@@ -68,6 +68,10 @@ class Item < ActiveRecord::Base
     end
   end
   
+  def is_event?
+    self.resource.medium.scheduled?
+  end
+  
   def self.scheduled_events(vendor)
     self.find(:all, :include => [{:resource => :medium}], 
      :conditions => ["media.scheduled = ? AND finish > ? AND resources.vendor_id = ?", true, Time.now, vendor ],
@@ -186,6 +190,26 @@ class Item < ActiveRecord::Base
       return "No"
     else
       return "Yes"
+    end
+  end
+  
+  def non_event_availability
+    unless self.is_event?
+      if self.start <= Date.today
+        if self.filled?
+          return "Not available at present"
+        else
+          return "Available now"
+        end
+      else
+        if self.filled?
+          return "Not available till release #{self.start.strftime('%d-%b-%y')}"
+        else
+          return "Pre-order now; release #{self.start.strftime('%d-%b-%y')}"
+        end
+      end
+    else
+      return nil
     end
   end
   

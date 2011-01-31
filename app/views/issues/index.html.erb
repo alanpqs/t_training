@@ -4,13 +4,20 @@
   <div class="two_column_left">  
     <b>From:</b> <%= @vendor.name %><br />
     <b>Ref #:</b> <%= @item.ref %><br />
-    <b>Dates:</b>  <%= display_date(@item.start) %> to <%= display_date(@item.finish) %><br />
-      <span class="indent"><%= @item.resource.medium.medium %></span><br />
-      <span class="indent"><%= @item.time_of_day %></span><br />
-      <span class="indent">Total length - 
-        <%= pluralize(@resource.length, @resource.length_unit.downcase) %>
-      </span><br />
-    <b>At:</b> <%= truncate(@item.venue, :length => 23) %><br /><br /> 
+    
+    <% if @item.is_event? %>
+      <b>Dates:</b>  <%= display_date(@item.start) %> to <%= display_date(@item.finish) %><br />
+        <span class="indent"><%= @item.resource.medium.medium %></span><br />
+        <span class="indent"><%= @item.time_of_day %></span><br />
+        <span class="indent">Total length - 
+          <%= pluralize(@resource.length, @resource.length_unit.downcase) %>
+        </span><br />
+      <b>At:</b> <%= truncate(@item.venue, :length => 23) %><br /><br />
+    <% else %>
+      <br />
+      <div class="indent"><%= render 'resource_details' %></div>
+    <% end %>
+       
   </div>
   <div class="two_column_right">
     <b>Normal price:</b> &nbsp;<%= @item.formatted_price(@vendor) %><br />

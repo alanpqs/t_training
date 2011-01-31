@@ -4,16 +4,18 @@
     <span class="loud">Enter details of your discounted tickets</span><br />
     <small>(<%= pluralize(@vendor.ticket_credits, "ticket credit") %> remaining)</small>
   </div>
-  <b>Ref no:</b>  <%= @item.ref %><br />
-  <b> <%= @item.resource.name %></b><br />
-  <br />
+  <h4><%= @item.resource.name %></h4>
   <div class="two_column_left">
-    <div class='notes'>
-      <%= @item.resource.medium.medium %><br />
-      <%= pluralize(@item.resource.length, @item.resource.length_unit.downcase) %><br />
+    <div class="notes">  
+      <b>From:</b> <%= @vendor.name %><br />
+      <b>Ref #:</b> <%= @item.ref %><br />
       <br />
-      <%= render 'shared/item_schedule' %>
-      <%= render 'shared/item_pricing' %>
+      <% if @item.is_event? %>
+        <%= render 'event_details' %>
+      <% else %>  
+        <%= render 'resource_details' %>
+        <%= render 'resource_pricing' %>
+      <% end %>
     </div>
   </div>
   
@@ -24,7 +26,11 @@
        <%= submit_button(@tag_name) %>
      </div>
      <div class="redirects">
-       <%= cancellation_link(@drop, program_selection_path) %>
+       <% if @item.is_event? %>
+         <%= cancellation_link(@drop, program_selection_path) %>
+       <% else %>
+         <%= cancellation_link(@drop, resource_selection_path) %>
+       <% end %>
      </div>
    </div>
 <% end %>
