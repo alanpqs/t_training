@@ -1,6 +1,25 @@
 <h1><%= @title %></h1>
 <h4><%= @vendor.name %></h4>
 
-<strong>Ticket credits available: </strong> <%= @vendor.ticket_credits %><br /><br />
+<div class="two_column_left">
+  <div class="info_table">
+    <table>
+      <tr>
+        <td><strong>Ticket credits - current balance: </strong></td> 
+        <td><%= @vendor.total_credit_balance %></td>
+      </tr>
+      <tr>
+        <td><strong>Credits required for current offers:</strong></td>
+        <td><%= @vendor.credits_allocated %></td>
+      </tr>
+      <tr>
+        <td><strong>Credits available:</strong></td>
+        <td><%= @vendor.credits_available %></td>
+      </tr>
+    </table>
+  </div>
+</div>
 
-<%= link_to "Return to Tickets menu", tickets_menu_path %>
+<div style="clear:both">
+  <%= link_to "Return to Tickets menu", tickets_menu_path %>
+</div>

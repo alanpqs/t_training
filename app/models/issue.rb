@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20110127173925
+# Schema version: 20110131131017
 #
 # Table name: issues
 #
@@ -16,12 +16,13 @@
 #  fee_id         :integer
 #  expiry_date    :date
 #  user_id        :integer
+#  credits        :integer         default(1)
 #
 
 class Issue < ActiveRecord::Base
   
   attr_accessible :item_id, :vendor_id, :event, :cents, :currency, 
-                  :no_of_tickets, :contact_method, :fee_id, :expiry_date, :user_id
+                  :no_of_tickets, :contact_method, :fee_id, :expiry_date, :user_id, :credits
   
   attr_accessor :ticket_price     
                 
@@ -37,6 +38,7 @@ class Issue < ActiveRecord::Base
   belongs_to :item
   belongs_to :fee
   belongs_to :user
+  has_many   :tickets
   
   
   validates :vendor_id,         :presence       => true
@@ -52,7 +54,8 @@ class Issue < ActiveRecord::Base
   validates :fee_id,            :presence       => true
   validates :expiry_date,       :presence       => true
   validates :user_id,           :presence       => true 
-                                
+  validates :credits,           :presence       => true,
+                                :numericality   => { :only_integer => true }                              
   
   def d_places(vendor)
     @vendor = Vendor.find(vendor)
@@ -100,8 +103,13 @@ class Issue < ActiveRecord::Base
     return @band
   end
   
-  def fee_charged
+  #def fee_charged
+  #  @fee = Fee.find_by_band(self.fee_band)
+  #  Money.new(@fee.cents, "USD") * self.no_of_tickets
+  #end
+  
+  def credits_charged
     @fee = Fee.find_by_band(self.fee_band)
-    Money.new(@fee.cents, "USD") * self.no_of_tickets
+    @fee.credits_required * self.no_of_tickets
   end                                                          
 end

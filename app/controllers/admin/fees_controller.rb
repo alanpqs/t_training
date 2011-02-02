@@ -18,12 +18,12 @@ class Admin::FeesController < ApplicationController
   
   def create
     @fee = Fee.new(params[:fee])
-    @cost = params[:fee][:cost]
+    #@cost = params[:fee][:cost]
     #@currency = "USD"
-    @cent_value = @cost.to_d * 100
-    money = Money.new(@cent_value, "USD")
-    @fee.cents = money.cents
-    @fee.currency = money.currency.to_s
+    #@cent_value = @cost.to_d * 100
+    #money = Money.new(@cent_value, "USD")
+    #@fee.cents = money.cents
+    #@fee.currency = money.currency.to_s
     if @fee.save
       flash[:success] = "New band created."
       redirect_to admin_fees_path
@@ -44,12 +44,12 @@ class Admin::FeesController < ApplicationController
   
   def update
     @fee = Fee.find(params[:id])
-    @cost = params[:fee][:cost]
-    @currency = "USD"
-    @cent_value = @cost.to_d * 100
-    money = Money.new(@cent_value, @currency)
-    @fee.cents = money.cents
-    @fee.currency = money.currency.to_s
+    #@cost = params[:fee][:cost]
+    #@currency = "USD"
+    #@cent_value = @cost.to_d * 100
+    #money = Money.new(@cent_value, @currency)
+    #@fee.cents = money.cents
+    #@fee.currency = money.currency.to_s
     if @fee.update_attributes(params[:fee])
       flash[:success] = "Band updated."
       redirect_to admin_fees_path

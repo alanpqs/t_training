@@ -15,8 +15,7 @@ Factory.define :fee do |fee|
   fee.band                      "A"
   fee.bottom_of_range           0.00
   fee.top_of_range              19.99
-  fee.cents                     100
-  fee.currency                  "USD"
+  fee.credits_required          1
 end
 
 Factory.define :region do |region|
@@ -92,4 +91,16 @@ end
 
 Factory.sequence :finish do |f|
   Time.now + (f + 10).days
+end
+
+Factory.define :issue do |issue|
+  issue.association :item
+  issue.association :vendor
+  issue.fee :fee
+  issue.user :user
+  issue.no_of_tickets            4
+  issue.event                    true
+  issue.cents                    400
+  issue.currency                 "USD"
+  issue.expiry_date              Time.now + 5.days
 end

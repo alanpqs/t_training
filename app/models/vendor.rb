@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20110124221804
+# Schema version: 20110131131017
 #
 # Table name: vendors
 #
@@ -20,20 +20,21 @@
 #  latitude          :float
 #  longitude         :float
 #  show_reviews      :boolean
-#  ticket_credits    :integer         default(50)
 #
 
 class Vendor < ActiveRecord::Base
   
   attr_accessible :name, :country_id, :address, :website, :email, :phone, :description, :verified,
-                  :verification_code, :show_reviews, :inactive, :notes, :ticket_credits
+                  :verification_code, :show_reviews, :inactive, :notes
   
   belongs_to  :country
   has_many    :representations, :dependent => :destroy
   has_many    :users, :through => :representations
   has_many    :resources, :dependent => :destroy, :order => "name"
   has_many    :items, :through => :resources
-  has_many    :issues
+  has_many    :issues, :dependent => :destroy
+  has_many    :credits, :dependent => :destroy
+  has_many    :tickets, :through => :issues
 
   geocoded_by :where_is
   
@@ -51,7 +52,6 @@ class Vendor < ActiveRecord::Base
   validates :phone,           :length       => { :maximum => 20, :allow_blank => true }
   validates :description,     :length       => { :maximum => 255, :allow_blank => true }
   validates :website,         :length       => { :maximum => 50, :allow_blank => true }
-  validates :ticket_credits,  :numericality => { :only_integer => true }
   
   after_validation :fetch_coordinates
   
@@ -123,6 +123,10 @@ class Vendor < ActiveRecord::Base
     !self.has_permanent_resources? && !self.has_scheduled_resources?
   end
   
+  def has_never_issued_tickets?
+    self.issues.count == 0
+  end
+  
   def phone_with_code
     unless self.phone.blank?
       a = []
@@ -141,9 +145,48 @@ class Vendor < ActiveRecord::Base
     end
   end
   
-  def no_tickets?
-    self.ticket_credits < 1
+  def total_credits
+    self.credits.sum(:quantity)
   end
   
+  def total_credits_used
+    self.tickets.sum(:credits)
+  end
   
+  def total_credit_balance
+    self.total_credits - self.total_credits_used
+  end
+  
+  def no_tickets?
+    self.total_credit_balance < 1
+  end
+  
+  def current_issues
+    self.issues.find(:all, :conditions => ["issues.expiry_date >=?", Date.today])
+  end
+  
+  def has_current_issues?
+    self.issues.count(:all, :conditions => ["issues.expiry_date >=?", Date.today]) > 0
+  end
+  
+  def has_recent_issues?
+    self.issues.count(:all, :conditions => ["issues.expiry_date >=?", Date.today - 30.days]) > 0
+  end
+  
+  def credits_required_for_current_issues
+    self.issues.sum(:credits, :conditions => ["issues.expiry_date >=?", Date.today])
+  end
+  
+  def credits_taken_for_current_issues
+    self.tickets.sum(:credits, :joins => :issue, :conditions => ["issues.expiry_date >=?", Date.today])
+  end
+  
+  def credits_allocated
+    self.credits_required_for_current_issues - self.credits_taken_for_current_issues
+  end
+  
+  def credits_available
+    self.total_credit_balance - self.credits_allocated
+  end
 end
+

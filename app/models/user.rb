@@ -31,6 +31,7 @@ class User < ActiveRecord::Base
   has_many    :vendors, :through => :representations
   has_many    :media
   has_many    :issues
+  has_many    :tickets
   
   geocoded_by :where_is
   

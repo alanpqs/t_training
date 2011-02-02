@@ -4,8 +4,7 @@ class CreateFees < ActiveRecord::Migration
       t.string :band
       t.decimal :bottom_of_range, :precision => 8, :scale => 2
       t.decimal :top_of_range, :precision => 8, :scale => 2
-      t.decimal :cents, :precision => 8, :scale => 2
-      t.string :currency, :default => "USD"
+      t.integer :credits_required
 
       t.timestamps
     end

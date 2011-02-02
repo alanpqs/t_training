@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Fee do
   
   before(:each) do
-    @attr = { :band => "A", :bottom_of_range => 0.00, :top_of_range => 20.00, :cents => 100 }
+    @attr = { :band => "A", :bottom_of_range => 0.00, :top_of_range => 20.00, :credits_required => 1 }
   end
   
   it "should create a 'fee' instance given valid attributes" do
@@ -47,9 +47,18 @@ describe Fee do
     text_top_fee.should_not be_valid
   end
   
-  it "should not accept an empty 'cents' entry" do
-    no_cents_fee = Fee.new(@attr.merge(:cents => nil))
-    no_cents_fee.should_not be_valid
+  it "should not accept an empty 'credits_required' entry" do
+    no_credits_fee = Fee.new(@attr.merge(:credits_required => nil))
+    no_credits_fee.should_not be_valid
   end
   
+  it "should accept a zero entry for 'credits_required'" do
+    zero_credits_fee = Fee.new(@attr.merge(:credits_required => 0))
+    zero_credits_fee.should be_valid
+  end
+  
+  it "should only accept an integer entered for 'credits_required'" do
+    fraction_credits_fee = Fee.new(@attr.merge(:credits_required => 1.5))
+    fraction_credits_fee.should_not be_valid
+  end
 end

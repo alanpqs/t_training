@@ -45,7 +45,9 @@ describe "BusinessLinks" do
       click_link "Training resources"
       response.should have_selector('title', :content => "Resources")
       click_link "Add a new vendor"
-      response.should have_selector('title', :content => "New vendor") 
+      response.should have_selector('title', :content => "New vendor")
+      click_link "Tickets"
+      response.should have_selector('title', :content => "Tickets for Training") 
     end
     
     it "should have a supplier menu reference in the 'loginfo' div" do
@@ -61,6 +63,11 @@ describe "BusinessLinks" do
       @vendor2 = Factory(:vendor, :name => "Vendor2", :country_id => @country.id)
       @representation2 = Factory(:representation, :user_id => @user.id, :vendor_id => @vendor2.id)
       integration_log_in(@user)
+    end
+    
+    it "should have a different 'business home' link - including 'select a vendor'" do
+      visit business_home_path
+      response.should have_selector("a", :href => business_home_path, :content => "Home / select vendor")
     end
     
     it "should not have a supplier menu reference in the 'loginfo' div" do

@@ -11,8 +11,11 @@ class VendorsController < ApplicationController
           enter the details again."
     else
       @vendor.update_attributes(:verified => true, :verification_code => nil)
+      Credit.create(:vendor_id => @vendor.id, :quantity => 50, :cents => 0, :note => "New vendor bonus")
       flash[:success] = "Thank you. #{@vendor.name} is now listed, and you can start adding your 
-            training products and services." 
+            training products and services. We've also added 50 free credits to your account, so that you
+            can try out our unique Tickets for Training Scheme.  For more details click on 'Tickets'
+            in the left-hand menu." 
     end
     
     select_home_path

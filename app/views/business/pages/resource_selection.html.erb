@@ -4,7 +4,7 @@
 
 <h1><%= @title %></h1>
 <h4><%= @vendor.name %> 
-   <br /><span class="h_tag"> (<%= pluralize(@vendor.ticket_credits, "ticket credit") %> remaining)</span>
+   <br /><span class="h_tag"> (<%= pluralize(@vendor.total_credit_balance, "ticket credit") %> remaining)</span>
 </h4>
 
 

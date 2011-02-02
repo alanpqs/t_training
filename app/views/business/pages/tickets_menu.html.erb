@@ -6,26 +6,66 @@
     <ul>
       <br />
       <li><%= link_to "How the scheme works", t4t_intro_path %></li>
-      <li>
-        <% if !Item.any_ticketable?(@vendor) %>
-          <%= link_to "Issue tickets", program_selection_path %>
+      
+      <% if !Item.any_ticketable?(@vendor) %>
+        <li><%= link_to "Issue tickets", program_selection_path %></li>
+      <% else %>
+        <% if Item.has_ticketable_events?(@vendor) && Item.has_ticketable_resources?(@vendor) %>
+          <li><%= link_to "Issue tickets", program_selection_path %>
+            <small><%= link_to "(events)", program_selection_path %>
+            <%= link_to "(other)", resource_selection_path %></small>
+          </li>  
+        <% elsif Item.has_ticketable_events?(@vendor) %>
+          <li><%= link_to "Issue tickets", program_selection_path %></li>
         <% else %>
-          <% if Item.has_ticketable_events?(@vendor) && Item.has_ticketable_resources?(@vendor) %>
-            <%= link_to "Issue tickets", program_selection_path %>
-              <small><%= link_to "(events)", program_selection_path %>
-              <%= link_to "(other)", resource_selection_path %></small>
-          <% elsif Item.has_ticketable_events?(@vendor) %>
-            <%= link_to "Issue tickets", program_selection_path %>
-          <% else %>
-            <%= link_to "Issue tickets", resource_selection_path %>
-          <% end %>
+          <li><%= link_to "Issue tickets", resource_selection_path %></li>
         <% end %>
-      </li>
-      <li><%= link_to "Current ticket offers", business_offers_path %></li>
-      <li><%= link_to "Confirm a sale", "#" %></li>
+      <% end %>
+      <% if @vendor.has_current_issues? %>
+        <li><%= link_to "Current ticket offers", business_offers_path %></li>
+      <% end %>
+      <% if @vendor.has_recent_issues? %>
+        <li><%= link_to "Confirm a sale", "#" %></li>
+      <% end %>  
       <li><%= link_to "Purchase new ticket credits", "#" %></li>
       <li><%= link_to "Your account", vendor_account_path %></li>
-      <li><%= link_to "History", "#" %></li>
+      <% unless @vendor.has_never_issued_tickets? %>
+        <li><%= link_to "History", "#" %></li>
+      <% end %>
     </ul>
   </div>  
+</div>
+
+<div class="two_column_right">
+  <div class="info_table">
+    <table>
+      <tr>
+        <td><strong>Ticket credits - current balance: </strong></td> 
+        <td><%= @vendor.total_credit_balance %></td>
+      </tr>
+      <tr>
+        <td><strong>Credits required for current offers:</strong></td>
+        <td><%= @vendor.credits_allocated %></td>
+      </tr>
+      <tr>
+        <td><strong>Credits available:</strong></td>
+        <td><%= @vendor.credits_available %></td>
+      </tr>
+    </table>
+  </div>
+  
+  <div class="notes">
+    <% if @vendor.has_never_issued_tickets? %>
+      <div class="announcement">
+        Try our unique <b>'Tickets'</b> scheme to: <br>
+        <div class="indent" style = "padding: 5px">
+          * Promote a new resource<br />
+          * Fill unsold places<br />
+          * Get valuable customer reviews<br />
+        </div>
+        FREE TO TRY!<br />
+        Full details in <i>'How the scheme works'</i>
+      </div>
+    <% end %>
+  </div>
 </div>

@@ -14,8 +14,7 @@ describe Vendor do
   end
   
   it "should award 50 ticket credits to a new vendor" do
-    new_vendor = Vendor.create(@attr)
-    new_vendor.ticket_credits.should == 50
+    pending "work in Credits offer after_create"
   end
   
   it "should not accept an empty name field" do
@@ -104,13 +103,6 @@ describe Vendor do
     long_description = "e" * 256
     long_description_vendor = Vendor.new(@attr.merge(:description => long_description))
     long_description_vendor.should_not be_valid
-  end
-  
-  it "should only accept an integer in the ticket_credits field" do
-    @bad_attr = { :name => "Abc de", :country_id => @country.id, :address => "London", 
-              :email => "vendor@example.com", :ticket_credits => 3.75 }
-    bad_ticket_credit_vendor = Vendor.create(@bad_attr)
-    bad_ticket_credit_vendor.should_not be_valid
   end
   
 end

@@ -2,7 +2,7 @@
 <%= form_for @issue do |f| %>
   <div class="redirects_top">
     <span class="loud">Enter details of your discounted tickets</span><br />
-    <small>(<%= pluralize(@vendor.ticket_credits, "ticket credit") %> remaining)</small>
+    <small>(<%= pluralize(@vendor.credits_available, "ticket credit") %> available, including this offer)</small>
   </div>
   <h4><%= @item.resource.name %></h4>
   <div class="two_column_left">

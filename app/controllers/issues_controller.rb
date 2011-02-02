@@ -46,7 +46,7 @@ class IssuesController < ApplicationController
     @issue.fee_id = @issue.fee_band
     if @issue.save
       @fee = Fee.find_by_band(@issue.fee_band)
-      @issue.update_attribute(:fee_id, @fee.id)
+      @issue.update_attributes(:fee_id => @fee.id, :credits => @issue.credits_charged)
       if @issue.cents == 0
         flash[:notice] = "You've set the price to 0.00.  Are you sure that's correct?"
       else
@@ -68,7 +68,7 @@ class IssuesController < ApplicationController
     @vendor = Vendor.find(@issue.vendor_id)
     @title = "Ticket issue"
     @fees = Fee.find(:all, :order => "bottom_of_range")
-    @fee = @issue.fee_charged
+    #@fee = @issue.fee_charged
   end
   
   def edit
@@ -92,7 +92,7 @@ class IssuesController < ApplicationController
     @issue.currency = money.currency.to_s
     if @issue.update_attributes(params[:issue])
       @fee = Fee.find_by_band(@issue.fee_band)
-      @issue.update_attribute(:fee_id, @fee.id)
+      @issue.update_attributes(:fee_id => @fee.id, :credits => @issue.credits_charged)
       if @issue.cents == 0
         flash[:notice] = "You've set the price to 0.00.  Are you sure that's correct?"
       else

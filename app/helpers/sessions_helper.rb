@@ -140,4 +140,18 @@ module SessionsHelper
         legality_warning
       end
     end
+    
+    def correct_vendor_user
+      #if logged_in?
+        #if current_user.vendor?
+          if current_vendor?
+            @nmbr = Representation.count(:all, 
+                    :conditions => ["user_id =? and vendor_id =?", current_user.id, current_vendor.id])
+            if @nmbr == 0
+              legality_warning
+            end
+          end
+        #end
+      #end
+    end
 end

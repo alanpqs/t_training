@@ -10,7 +10,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110127173925) do
+ActiveRecord::Schema.define(:version => 20110131131017) do
+
+  create_table "accounts", :force => true do |t|
+    t.integer  "vendor_id"
+    t.string   "currency",   :default => "USD"
+    t.decimal  "cents"
+    t.boolean  "credit",     :default => false
+    t.integer  "user_id"
+    t.string   "note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "categories", :force => true do |t|
     t.string   "category"
@@ -38,12 +49,21 @@ ActiveRecord::Schema.define(:version => 20110127173925) do
   add_index "countries", ["country_code"], :name => "index_countries_on_country_code", :unique => true
   add_index "countries", ["name"], :name => "index_countries_on_name", :unique => true
 
+  create_table "credits", :force => true do |t|
+    t.integer  "vendor_id"
+    t.integer  "quantity"
+    t.string   "currency",   :default => "USD"
+    t.decimal  "cents"
+    t.string   "note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "fees", :force => true do |t|
     t.string   "band"
-    t.decimal  "bottom_of_range", :precision => 8, :scale => 2
-    t.decimal  "top_of_range",    :precision => 8, :scale => 2
-    t.decimal  "cents",           :precision => 8, :scale => 2
-    t.string   "currency",                                      :default => "USD"
+    t.decimal  "bottom_of_range",  :precision => 8, :scale => 2
+    t.decimal  "top_of_range",     :precision => 8, :scale => 2
+    t.integer  "credits_required"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -61,6 +81,7 @@ ActiveRecord::Schema.define(:version => 20110127173925) do
     t.integer  "fee_id"
     t.date     "expiry_date"
     t.integer  "user_id"
+    t.integer  "credits",        :default => 1
   end
 
   create_table "items", :force => true do |t|
@@ -134,6 +155,17 @@ ActiveRecord::Schema.define(:version => 20110127173925) do
     t.string "name"
   end
 
+  create_table "tickets", :force => true do |t|
+    t.integer  "issue_id"
+    t.integer  "user_id"
+    t.integer  "quantity",          :default => 1
+    t.integer  "credits"
+    t.boolean  "confirmed",         :default => false
+    t.date     "confirmation_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "users", :force => true do |t|
     t.string   "name"
     t.string   "email"
@@ -168,7 +200,6 @@ ActiveRecord::Schema.define(:version => 20110127173925) do
     t.float    "latitude"
     t.float    "longitude"
     t.boolean  "show_reviews",      :default => false
-    t.integer  "ticket_credits",    :default => 50
   end
 
 end

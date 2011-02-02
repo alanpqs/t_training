@@ -3,6 +3,7 @@ class Business::PagesController < ApplicationController
   before_filter :authenticate#,    :except => [:create, :update]    
   #before_filter :legality_check,  :only   => [:create, :update]
   before_filter :vendor_user#,     :except => [:create, :update]   
+  before_filter :correct_vendor_user
   
   def home
     @user = current_user

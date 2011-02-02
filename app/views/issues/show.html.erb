@@ -45,13 +45,13 @@
 
 <div class="two_column_right">  
   <div class="notes">
-    <b>Table of TFT fees (in US$)</b><br />
+    <b>Credit requirements for T4T tickets</b><br />
     <table style="font-size:0.8em">
     <tr>
         <th>Band</th>
         <th>Ticket price from .. </th>
         <th>.. to</th>
-        <th>T4T fee</th>
+        <th style="text-align:center">Credits</th>
       </tr>
 
       <% @fees.each do |fee| %>
@@ -65,19 +65,19 @@
             <%= display_decimals(fee.top_of_range, "2") %>
           <% end %>     
         </td>
-        <td><%= fee.cost %></td>
+        <td style="text-align:center"><%= fee.credits_required %></td>
       </tr>
       <% end %>
     </table>
       This ticket issue is at Band <%= @issue.fee.band %>, so 
       <%= pluralize(@issue.no_of_tickets, "ticket") %> 
       <% if @issue.no_of_tickets == 1 %>
-        costs
+        uses
       <% else %>
-        cost
+        use
       <% end %>
-      US$ <%= @fee %> from your T4T 
-      account. (At the expiry date, your account will be recredited with the fee-value of any unsold 
+      <%= pluralize(@issue.credits, "credit") %> from your T4T 
+      account. (At the expiry date, your account will be recredited with the credits for any unsold 
       tickets.)
   </div>
   <div class="redirects">

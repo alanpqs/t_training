@@ -10,9 +10,9 @@ describe Admin::FeesController do
     @user = Factory(:user, :country_id => @country.id)
     @fee_a = Factory(:fee)
     @fee_b = Factory(:fee, :band => "B", :bottom_of_range => 20.00, :top_of_range => 49.99,
-                       :cents => 200)
+                       :credits_required => 2)
     @fee_c = Factory(:fee, :band => "C", :bottom_of_range => 50.00, :top_of_range => 100000,
-                       :cents => 300)
+                       :credits_required => 3)
     @fees = [@fee_a, @fee_b, @fee_c]  
   end
   
@@ -79,7 +79,7 @@ describe Admin::FeesController do
       
       before(:each) do
         @attr = { :band => "Z", :bottom_of_range => 300.00, :top_of_range => 499.99,
-                    :cost => 6.00 }  
+                    :credits_required => 6 }  
       end
       
       it "should not change the band's attributes" do
@@ -144,7 +144,7 @@ describe Admin::FeesController do
       
       before(:each) do
         @attr = { :band => "D", :bottom_of_range => 100.00, :top_of_range => 199.99,
-                                     :cost => 400.00 }
+                                     :credits_required => 4 }
       end
       
       it "should not create a new band" do
@@ -176,7 +176,7 @@ describe Admin::FeesController do
       
       before(:each) do
         @attr = { :band => "Z", :bottom_of_range => 300.00, :top_of_range => 499.99,
-                    :cost => 6.00 }  
+                    :credits_required => 6 }  
       end
       
       it "should not change the band's attributes" do
@@ -253,9 +253,9 @@ describe Admin::FeesController do
         response.should have_selector("td", :content => "and above")
       end
       
-      it "should have a 'cost' column, displaying 2 decimal places" do
+      it "should have a 'credits_required' column" do
        get :index
-        response.should have_selector("td", :content => "1.00")
+        response.should have_selector("td", :content => "1")
       end
       
       it "should have a delete control, if the band has never been used for ticket issues" do
@@ -313,10 +313,10 @@ describe Admin::FeesController do
                                                :content => "")
       end
       
-      it "should have a text-field box for 'cost' defaulting to 0.00" do
+      it "should have a text-field box for 'credits_required' defaulting to 0" do
         get :new
-        response.should have_selector("input", :name => "fee[cost]",
-                                               :value => "0.00")
+        response.should have_selector("input", :name => "fee[credits_required]",
+                                               :content => "")
       end
       
       it "should have a 'Create' submit button" do
@@ -335,9 +335,9 @@ describe Admin::FeesController do
       
       before(:each) do
         @bad_attr = { :band => "DD", :bottom_of_range => 100.00, :top_of_range => 199.99,
-                                     :cost => 400.00 }
+                                     :credits_required => 4 }
         @good_attr = { :band => "D", :bottom_of_range => 100.00, :top_of_range => 199.99,
-                                     :cost => 400.00 }
+                                     :credits_required => 4 }
       end  
         
       describe "success" do
@@ -421,10 +421,10 @@ describe Admin::FeesController do
                                                :value => "19.99")
       end
       
-      it "should have a text-field box for 'cost' with the correct current value" do
+      it "should have a text-field box for 'credits_required' with the correct current value" do
         get :edit, :id => @fee_a
-        response.should have_selector("input", :name => "fee[cost]",
-                                               :value => "1.00")
+        response.should have_selector("input", :name => "fee[credits_required]",
+                                               :value => "1")
       end
       
       it "should have a 'Confirm changes' submit button" do
@@ -445,7 +445,7 @@ describe Admin::FeesController do
       
         before(:each) do
           @attr = { :band => "Z", :bottom_of_range => 300.00, :top_of_range => 499.99,
-                    :cost => 6.00 }  
+                    :credits_required => 6 }  
         end
         
         it "should successfully change the band's attributes" do
@@ -454,7 +454,7 @@ describe Admin::FeesController do
           @fee_c.reload
           @fee_c.band.should == fee.band
           @fee_c.bottom_of_range.should == fee.bottom_of_range
-          @fee_c.cents.should == 600
+          @fee_c.credits_required.should == 6
         end
         
         it "should redirect to the index page" do
@@ -471,7 +471,7 @@ describe Admin::FeesController do
       describe "failure" do
         before(:each) do
           @attr = { :band => "ZZ", :bottom_of_range => 300.00, :top_of_range => 499.99,
-                    :cost => 6.00 }
+                    :credits_required => 6 }
         end
         
         it "should not change the band's attributes" do
