@@ -121,8 +121,14 @@ class Business::PagesController < ApplicationController
   
   def resource_selection
     @vendor = Vendor.find(current_vendor)
-    @title = "Ticket issue: select a resource"
-    @items = Item.ticketable_resources(@vendor)
+    if @vendor.no_tickets?
+      flash[:notice] = "You've applied to issue tickets, but you've used all your ticket credits.
+        To continue, please place an order for more tickets."
+      redirect_to vendor_account_path
+    else
+      @title = "Ticket issue: select a resource"
+      @items = Item.ticketable_resources(@vendor)
+    end
   end
   
   def vendor_account

@@ -4,7 +4,13 @@
 
 <h1><%= @title %></h1>
 <h4><%= @vendor.name %> 
-   <br /><span class="h_tag"> (<%= pluralize(@vendor.total_credit_balance, "ticket credit") %> remaining)</span>
+   <br /> 
+   <div class="h_tag"> (<%= pluralize(@vendor.credits_available, "ticket credit") %> available -
+      list below shows all time-unrestricted resources currently available.<br />
+     <img src = "/images/tick_octagon.png"> shows one or more previous ticket issues for this resource;
+       click button to view or edit details.<br />
+     <i>Or</i> click on the <strong>resource title</strong> to issue new tickets.)  
+   </div>
 </h4>
 
 
