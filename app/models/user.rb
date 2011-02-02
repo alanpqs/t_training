@@ -75,6 +75,12 @@ class User < ActiveRecord::Base
     end
   end
   
+  def no_vendors?
+    if self.vendor?
+      self.vendors.count == 0
+    end
+  end
+  
   def get_single_company_vendor
     if single_company_vendor?
       @representation = Representation.find(:first, :conditions => ["user_id = ?", self.id])

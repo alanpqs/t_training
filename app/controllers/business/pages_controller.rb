@@ -4,11 +4,12 @@ class Business::PagesController < ApplicationController
   #before_filter :legality_check,  :only   => [:create, :update]
   before_filter :vendor_user#,     :except => [:create, :update]   
   before_filter :correct_vendor_user
+  before_filter :vendor_selected,  :except => :home
   
   def home
     @user = current_user
     @title = "Training supplier - home"
-    cookies[:vendor_id] = @user.get_single_company_vendor   #set to blank unless only one associated company    
+    cookies[:vendor_id] = @user.get_single_company_vendor #set to blank unless only one associated company    
   end
 
   def resource_group
@@ -22,7 +23,7 @@ class Business::PagesController < ApplicationController
       if @user.vendors.count == 0
         flash[:error] = "First you need to add at least one vendor business."
       else
-        flash[:error] = "First you need to select one of your vendor businesses."
+        flash[:notice] = "First you need to select one of your vendor businesses."
       end
       redirect_to business_home_path
     end 
@@ -128,4 +129,15 @@ class Business::PagesController < ApplicationController
     @vendor = Vendor.find(current_vendor)
     @title = "Your 'Tickets' account"
   end
+  
+  private 
+  
+    def vendor_selected
+      unless current_vendor?
+        unless current_user.no_vendors?
+          flash[:notice] = "First you need to select one of your vendor businesses."
+          redirect_to business_home_path
+        end
+      end
+    end
 end

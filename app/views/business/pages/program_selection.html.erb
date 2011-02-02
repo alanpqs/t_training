@@ -5,7 +5,7 @@
 <h1><%= @title %></h1>
 <h4><%= @vendor.name %> 
    <br />
-   <div class="h_tag"> (<%= pluralize(@vendor.total_credit_balance, "ticket credit") %> available -
+   <div class="h_tag"> (<%= pluralize(@vendor.credits_available, "ticket credit") %> available -
      list below shows only events that are not fully booked.<br />
      <img src = "/images/tick_octagon.png"> shows one or more previous ticket issues for this event;
        click button to view or edit details.<br />

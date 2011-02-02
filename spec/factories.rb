@@ -99,8 +99,16 @@ Factory.define :issue do |issue|
   issue.fee :fee
   issue.user :user
   issue.no_of_tickets            4
+  issue.credits                  12
   issue.event                    true
   issue.cents                    400
   issue.currency                 "USD"
   issue.expiry_date              Time.now + 5.days
+end
+
+Factory.define :credit do |credit|
+  credit.association :vendor
+  credit.quantity                 50
+  credit.currency                 "USD"
+  credit.cents                    5000
 end

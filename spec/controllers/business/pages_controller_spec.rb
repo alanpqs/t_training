@@ -67,6 +67,18 @@ describe Business::PagesController do
       end
     end
     
+    describe "GET 'program_selection'" do
+      
+      it "should not be successful" do  
+        get :program_selection
+        response.should_not be_success
+      end
+      
+      it "should redirect to the login page" do
+        get :program_selection
+        response.should redirect_to login_path
+      end
+    end
   end
   
   describe "for logged-in users without a vendor attribute" do
@@ -146,6 +158,25 @@ describe Business::PagesController do
         flash[:notice].should =~ /If you want to sell training/
       end
     end
+    
+    describe "GET 'program_selection'" do
+      
+      it "should not be successful" do  
+        get :program_selection
+        response.should_not be_success
+      end
+      
+      it "should redirect to the user home page" do
+        get :program_selection
+        response.should redirect_to user_path(@user)
+      end
+      
+      it "should have a message explaining how to sign up as a vendor" do
+        get :program_selection
+        flash[:notice].should =~ /If you want to sell training/
+      end
+    end
+    
   end
   
   describe "for logged-in users with the vendor attribute set to true" do
@@ -290,9 +321,10 @@ describe Business::PagesController do
           before(:each) do
             @representation = Factory(:representation, :user_id => @provider.id, :vendor_id => @vendor2.id)
           end 
+          
           it "should tell the user to select a vendor" do
             get :resource_group
-            flash[:error].should == "First you need to select one of your vendor businesses."
+            flash[:notice].should == "First you need to select one of your vendor businesses."
           end
         end
       end
@@ -400,10 +432,6 @@ describe Business::PagesController do
     
     
     describe "GET 'tickets_menu" do
-      
-      describe "if the vendor_id cookie is set" do
-        
-      end
       
       describe "if the 'vendor_id' cookie is set" do
         
@@ -698,7 +726,261 @@ describe Business::PagesController do
           end
         end
       end
+      
+      describe "if the vendor_id cookie is not set" do
+        
+        before(:each) do
+            @vendor = Factory(:vendor, :country_id => @country.id)
+            @representation = Factory(:representation, :user_id => @provider.id, :vendor_id => @vendor.id)
+          end
+        
+        it "should not display successfully" do
+          get :tickets_menu
+          response.should_not be_success
+        end
+        
+        it "should redirect to the business home path" do
+          get :tickets_menu
+          response.should redirect_to business_home_path
+        end
+      end
+       
     end
+    
+    describe "GET 'program_selection'" do 
+     
+      describe "if the 'vendor_id' cookie is set" do
+        
+        describe "if the current user is not authorized to use the vendor_id cookie" do
+          
+          before(:each) do
+            @another_user = Factory(:user, :name => "Another", :email => "another@example.com",
+                                           :country_id => @country.id)
+            @vendor2 = Factory(:vendor, :name => "Another_vendor", :country_id => @country.id)
+            @representation2 = Factory(:representation, :user_id => @another_user.id, 
+                                       :vendor_id => @vendor2.id)
+            test_selected_vendor_cookie(@vendor2.id)
+          end
+          
+          it "should not display successfully" do
+            get :program_selection
+            response.should_not be_success
+          end
+          
+          it "should display a warning message" do
+            get :program_selection
+            flash[:notice].should =~ /Permission denied/
+          end
+        end
+        
+        describe "when the current logged-in user is the correct owner of the vendor_id cookie" do 
+          
+          before(:each) do
+            @vendor = Factory(:vendor, :country_id => @country.id)
+            @representation = Factory(:representation, :user_id => @provider.id, :vendor_id => @vendor.id)
             
+            @user3 = Factory(:user, :name => "User_3", :email => "user3@example.com", 
+                                   :country_id => @country.id)
+            @vendor2 = Factory(:vendor, :name => "Vendor2", :country_id => @country.id)
+            @representation2 = Factory(:representation, :user_id => @user3.id, :vendor_id => @vendor2.id)
+            
+            
+            test_selected_vendor_cookie(@vendor.id)
+            
+            @fee = Factory(:fee)    
+            @medium = Factory(:medium, :user_id => @user.id, :scheduled => true)
+            @category = Factory(:category, :user_id => @user.id, :authorized => true)
+            @resource = Factory(:resource, :vendor_id => @vendor.id, :category_id => @category.id, 
+                                       :medium_id => @medium.id)
+            @other_user_resource = Factory(:resource, :name => "Other_resource", :vendor_id => @vendor2.id,
+                                       :category_id => @category.id, :medium_id => @medium.id)          
+            @event_1 = Factory(:item, :resource_id => @resource.id, :currency => "GBP", :cents => 1500)
+            @event_2 = Factory(:item, :resource_id => @resource.id, :currency => "GBP", :cents => 1500,
+                           :start => Date.today - 20.days, :finish => Date.today + 40.days)
+            @event_1_issue = Factory(:issue, :item_id => @event_1.id, :vendor_id => @vendor.id, 
+                                   :user_id => @user.id, :fee_id => @fee.id, 
+                                   :expiry_date => Date.today + 6.days)
+            @event_finished = Factory(:item, :resource_id => @resource.id, :currency => "GBP", :cents => 1500,
+                           :start => Date.today - 20.days, :finish => Date.today - 1.day, :venue => "There")
+            @event_filled = Factory(:item, :resource_id => @resource.id, :currency => "GBP", :cents => 1500,
+                           :start => Date.today + 2.days, :finish => Date.today + 15.days, :filled => true)
+            @event_other_user = Factory(:item, :resource_id => @other_user_resource.id, :currency => "GBP",
+                           :cents => 15000, :start => Date.today, :finish => Date.today + 40.days)    
+            @events = [@event_1, @event_2]
+          end
+          
+          describe "but the vendor has no ticket credits" do
+            
+            it "should not display successfully" do
+              get :program_selection
+              response.should_not be_success
+            end
+            
+            it "should have a flash warning" do
+              get :program_selection
+              flash[:notice].should =~ /To continue, please place an order for more tickets/
+            end
+            
+            it "should redirect to the vendor account path" do
+              get :program_selection
+              response.should redirect_to vendor_account_path
+            end
+          end
+          
+          describe "and the vendor has ticket credits" do
+            
+            before(:each) do
+              @credit = Factory(:credit, :vendor_id => @vendor.id)
+            end
+            
+            it "should display successfully" do
+              get :program_selection
+              response.should be_success
+            end
+        
+            it "should have the right title" do
+              get :program_selection
+              response.should have_selector("title", :content => "Ticket issue: select an event")
+            end
+            
+            it "should display the vendor name" do
+              get :program_selection
+              response.should have_selector("h4", :content => @vendor.name)
+            end
+            
+            it "should list all the vendor's bookable current and future events, with edit links" do
+              get :program_selection
+              @events.each do |event|
+                response.should have_selector("a", :href => new_item_issue_path(event.id),
+                                                   :content => event.resource.name)
+              end
+            end
+            
+            it "should not list completed events" do
+              get :program_selection
+              response.should_not have_selector("a", :content => @event_finished.ref.to_s)
+            end
+            
+            it "should not include fully-booked events" do
+              get :program_selection
+              response.should_not have_selector("a",  :content => @event_filled.ref.to_s)
+            end
+            
+            it "should not list current and future events from other vendors" do
+              get :program_selection
+              response.should_not have_selector("a", :content => @event_other_user.resource.name)
+            end
+            
+            it "should have a clickable link with the event's reference number" do
+              get :program_selection
+              response.should have_selector("a", :href => new_item_issue_path(@event_1.id),
+                                        :content => @event_1.ref.to_s)
+            end
+            
+            it "should specify the start-date for each listed event" do
+              get :program_selection
+              @events.each do |event|
+                response.should have_selector("td", :content => event.start.strftime('%d-%b-%y'))
+              end
+            end
+            
+            it "should specify the end-date for each listed event" do
+              get :program_selection
+              @events.each do |event|
+                response.should have_selector("td", :content => event.finish.strftime('%d-%b-%y'))
+              end
+            end
+            
+            it "should include the format for each listed event" do
+              get :program_selection
+              @events.each do |event|
+                response.should have_selector("td", :content => event.resource.medium.medium)
+              end
+            end
+            
+            it "should include the venue for each listed event" do
+              get :program_selection
+              @events.each do |event|
+                response.should have_selector("td", :content => event.venue)
+              end
+            end
+            
+            it "should have a clickable link to any previous ticket issues if there have been any" do
+              get :program_selection
+              response.should have_selector("a", :href => item_issues_path(@event_1))
+                                                
+            end
+            
+            it "should not display a clickable link to other ticket issues if there have been none" do
+              get :program_selection
+              response.should_not have_selector("a", :href => item_issues_path(@event_2)) 
+            end
+            
+            it "should display the current number of ticket credits available" do
+              get :program_selection
+              response.should have_selector(".h_tag", :content => "38 ticket credits available")
+            end
+              
+            it "should not have a link to the vendor's non-event resources if there are none" do
+              get :program_selection
+              response.should_not have_selector("a",  :href => resource_selection_path,
+                                                      :content => "other resources")
+            end
+            
+            it "should have a 'Return to the tickets menu' link" do
+              get :program_selection
+              response.should have_selector("a", :href => tickets_menu_path,
+                                                 :content => "Return to Tickets menu")
+            end
+            
+            describe "when the vendor also has ticketable non-event resources" do
+              
+              before(:each) do
+                @medium_non_event = Factory(:medium, :medium => "Book", :user_id => @user.id, 
+                                                   :authorized => true, :scheduled => false)
+                @resource_non_event = Factory(:resource, :vendor_id => @vendor.id, 
+                                   :category_id => @category.id, 
+                                   :medium_id => @medium_non_event.id, :name => "A Book")
+                @new_resource = Factory(:item, :resource_id => @resource_non_event.id, :currency => "GBP", 
+                                          :cents => 1500, :finish => nil, :venue => "Publisher")
+              end
+              
+              it "should not list non-event resources" do
+                get :program_selection
+                response.should_not have_selector("a", :content => @new_resource.resource.name)
+              end
+              
+              it "should have a link to the vendor's ticketable non-event resources" do
+                get :program_selection
+                response.should have_selector("a",  :href => resource_selection_path,
+                                                      :content => "other resources")
+              end
+            end
+          end
+          
+        end
+      end
+      
+      describe "if the vendor_id cookie is not set" do
+        
+        before(:each) do
+            @vendor = Factory(:vendor, :country_id => @country.id)
+            @representation = Factory(:representation, :user_id => @provider.id, :vendor_id => @vendor.id)
+          end
+        
+        it "should not display successfully" do
+          get :program_selection
+          response.should_not be_success
+        end
+        
+        it "should redirect to the business home page" do
+          get :program_selection
+          response.should redirect_to business_home_path
+        end
+      end
+        
+      
+      
+    end        
   end
 end
