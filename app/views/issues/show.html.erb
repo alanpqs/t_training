@@ -49,27 +49,25 @@
     <table style="font-size:0.8em">
     <tr>
         <th>Band</th>
-        <th>Ticket price from .. </th>
-        <th>.. to</th>
+        <th>Your ticket price</th>
         <th style="text-align:center">Credits</th>
       </tr>
 
       <% @fees.each do |fee| %>
       <tr>
         <td><%= link_to fee.band, edit_admin_fee_path(fee) %></td>
-        <td><%= display_decimals(fee.bottom_of_range, "2") %></td>
-        <td>
-          <% if fee.top_of_range == 100000 %>
-            and above
-          <% else %>
-            <%= display_decimals(fee.top_of_range, "2") %>
-          <% end %>     
+        <td>US$ <%= display_decimals(fee.bottom_of_range, "2") %> 
+            <% if fee.top_of_range == 100000 %>
+              and above
+            <% else %>
+              - <%= display_decimals(fee.top_of_range, "2") %>
+            <% end %>  
         </td>
         <td style="text-align:center"><%= fee.credits_required %></td>
       </tr>
       <% end %>
     </table>
-      This ticket issue is at Band <%= @issue.fee.band %>, so 
+      This ticket issue is at <span class="loud"><u>BAND <%= @issue.fee.band %></u></span>, so 
       <%= pluralize(@issue.no_of_tickets, "ticket") %> 
       <% if @issue.no_of_tickets == 1 %>
         uses
@@ -82,7 +80,7 @@
   </div>
   <div class="redirects">
     <hr />
-    <%= link_to "(edit)", edit_issue_path(@issue) %>  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+    <%= link_to "(edit offer)", edit_issue_path(@issue) %>  &nbsp; &nbsp; &nbsp;
     <%= link_to "(all current offers)", business_offers_path %>
      <br />
     (your account)&nbsp; &nbsp; &nbsp;

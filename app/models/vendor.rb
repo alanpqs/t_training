@@ -162,11 +162,13 @@ class Vendor < ActiveRecord::Base
   end
   
   def current_issues
-    self.issues.find(:all, :conditions => ["issues.expiry_date >=?", Date.today])
+    self.issues.find(:all, :joins => [{:item => :resource}],
+        :conditions => ["issues.expiry_date >=? and resources.hidden =?", Date.today, false])
   end
   
   def has_current_issues?
-    self.issues.count(:all, :conditions => ["issues.expiry_date >=?", Date.today]) > 0
+    self.issues.count(:all, :joins => [{:item => :resource}],
+        :conditions => ["issues.expiry_date >=? AND resources.hidden =?", Date.today, false]) > 0
   end
   
   def has_recent_issues?
@@ -174,7 +176,8 @@ class Vendor < ActiveRecord::Base
   end
   
   def credits_required_for_current_issues
-    self.issues.sum(:credits, :conditions => ["issues.expiry_date >=?", Date.today])
+    self.issues.sum(:credits, :joins => [{:item => :resource}], 
+         :conditions => ["issues.expiry_date >=? and resources.hidden = ?", Date.today, false])
   end
   
   def credits_taken_for_current_issues

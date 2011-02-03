@@ -1,14 +1,21 @@
 <h1><%= @title %></h1>
-<h4><%= @vendor.name %></h4>
+<h4><%= @vendor.name %>
+  <div class="h_tag"> 
+    <br />You can delete an offer - but only if there are 0 applications. <br />
+          To change the offer details (eg - to change the number of tickets offered), click on the 
+          <b>resource title</b>. 
+   </div>
+</h4>
 
 <table>
   <tr>
     <th>Ref</th>
     <th>Title</th>
-    <th>Event-start</th>
-    <th>Tickets offered</th>
-    <th>Taken</th>
+    <th style ="text-align:center">Tickets offered</th>
+    <th style ="text-align:center">Applications</th>
+    <th style ="text-align:center">Confirmed</th>
     <th>Offer expiry</th>
+    <th></th>
   </tr>
   
   <% @issues.each do |issue| %>
@@ -19,10 +26,21 @@
     <td><%= link_to issue.item.resource.name, issue_path(issue), 
            :title => "View/edit ticket issue details" %>
     </td>
-    <td><%= display_date(issue.item.start) if issue.event? %></td>
-    <td><%= issue.no_of_tickets %></td>
-    <td></td>
+    <td style ="text-align:center">
+      <%= issue.no_of_tickets %> <small> ( = <%= pluralize(issue.credits, "credit")%>)</small>
+    </td>
+    <td style ="text-align:center"><%= issue.ticket_applications %></td>
+    <td style ="text-align:center"><%= issue.ticket_confirmations %></td>
     <td><%= display_date(issue.expiry_date) %></td>
+    <td>
+      <% if issue.ticket_applications == 0 %>
+      <small>
+        <%= link_to "delete", issue_path(issue),  :method => :delete,
+                        :confirm => "You sure?",
+                        :title => "Delete ticket issue for #{issue.item.resource.name} - ##{issue.item.ref}" %>
+      </small>
+      <% end %>
+    </td>
   </tr>
   <% end %>
 </table>

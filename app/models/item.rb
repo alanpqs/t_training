@@ -80,30 +80,36 @@ class Item < ActiveRecord::Base
   
   def self.ticketable_events(vendor)
     self.find(:all, :include => [{:resource => :medium}], 
-     :conditions => ["media.scheduled = ? AND finish > ? AND resources.vendor_id = ? AND items.filled = ?", 
-     true, Time.now, vendor, false ],
+     :conditions => ["media.scheduled = ? AND finish > ? AND resources.vendor_id = ? 
+          AND resources.hidden = ? AND items.filled = ?", 
+          true, Time.now, vendor, false, false ],
      :order => "items.start" )
   end
   
   def self.has_ticketable_events?(vendor)
     result = false
     total = self.count(:all, :joins => [{:resource => :medium}], 
-     :conditions => ["media.scheduled = ? AND finish > ? AND resources.vendor_id = ? AND items.filled = ?", 
-     true, Time.now, vendor, false ])
+     :conditions => ["media.scheduled = ? AND finish > ? AND resources.vendor_id = ? 
+           AND resources.hidden = ? AND items.filled = ?", 
+           true, Time.now, vendor, false, false ])
     result = true if total > 0
     return result
   end
   
   def self.ticketable_resources(vendor)
     self.find(:all, :include => [{:resource => :medium}], 
-      :conditions => ["resources.vendor_id = ? AND media.scheduled = ? AND items.filled = ?", vendor, false, false],
+      :conditions => ["resources.vendor_id = ? AND media.scheduled = ? AND items.filled = ? 
+              AND resources.hidden = ?", 
+              vendor, false, false, false],
       :order => "resources.name" )
   end
   
   def self.has_ticketable_resources?(vendor)
     result = false
     total = self.count(:all, :joins => [{:resource => :medium}], 
-      :conditions => ["resources.vendor_id = ? AND media.scheduled = ? AND items.filled = ?", vendor, false, false])
+      :conditions => ["resources.vendor_id = ? AND media.scheduled = ? AND items.filled = ?
+               AND resources.hidden = ?", 
+               vendor, false, false, false])
     result = true if total > 0
     return result  
   end

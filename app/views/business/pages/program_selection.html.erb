@@ -15,7 +15,10 @@
 
 
 <% if !Item.any_ticketable?(@vendor) %>
-  <p>First you need to set up some future training events or permanent training resources.</p>
+  <p>First you need to 
+     <%= link_to "set up some future training events or permanent training resources", 
+         vendor_resources_path(@vendor) %>.
+  </p>
 <% elsif Item.has_ticketable_events?(@vendor) %>
   <table>
     <tr>

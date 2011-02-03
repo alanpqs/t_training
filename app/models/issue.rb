@@ -111,5 +111,27 @@ class Issue < ActiveRecord::Base
   def credits_charged
     @fee = Fee.find_by_band(self.fee_band)
     @fee.credits_required * self.no_of_tickets
+  end
+  
+  def ticket_applications
+    self.tickets.sum(:quantity)
+  end
+  
+  def has_ticket_applications?
+    self.tickets.sum(:quantity) > 0
+  end
+  
+  def ticket_confirmations
+    self.tickets.sum(:quantity, :conditions => ["tickets.confirmed = ?", true])
+  end
+  
+  def restrict_tickets_to_credit_available
+    @fee = Fee.find(self.fee_id)
+    @vendor = Vendor.find(self.vendor_id)
+    @credits_available = self.credits + @vendor.credits_available
+    max_tickets = (@credits_available / @fee.credits_required).to_i
+    self.update_attribute(:no_of_tickets, max_tickets)
+    @qty_credits = @fee.credits_required * self.no_of_tickets
+    self.update_attribute(:credits, @qty_credits)
   end                                                          
 end

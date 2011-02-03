@@ -33,9 +33,7 @@ describe ResourcesController do
     @other_vendor_resource = Factory(:resource, :name => "Resource4", :vendor_id => @vendor.id, 
                                     :category_id => @category1.id, 
                                     :medium_id => @medium1.id)
-    @hidden_resource = Factory(:resource, :name => "Hidden", :vendor_id => @vendor2.id, 
-                                    :category_id => @category1.id, :webpage => "hidden@example.com",
-                                    :medium_id => @medium1.id, :hidden => true)                 
+              
     @resources = [@resource1, @resource2, @resource3, @other_vendor_resource]
     @good_attr = { :name => "Good name", :category_id => @category2.id, :medium_id => @medium2, 
                                           :feature_list => "hot, sticky"}
@@ -724,13 +722,7 @@ describe ResourcesController do
         #response.should_not have_selector(".two_column_left", :content => "this resource will not be seen")
       end
       
-      it "should show that hidden resources are hidden" do
-        get :show, :id => @hidden_resource
-        response.should have_selector("h4", 
-                  :content => "This resource is currently hidden from public view.")
-      end
-      
-      it "should show not display the hidden notice unless the resource is marked hidden" do
+      it "should show not display a hidden notice unless the resource is marked hidden" do
         get :show, :id => @resource1
         response.should_not have_selector("h4", 
                   :content => "This resource is currently hidden from public view.")
@@ -759,136 +751,244 @@ describe ResourcesController do
         end
       end
       
-      describe "when the resource is of the event type" do  #has medium set to scheduled
-      
-        describe "when there are no planned or past events" do
+      describe "when an event-type resource has been archived" do
         
-          it "should display a 'NONE PLANNED' label" do
-            get :show, :id => @resource1
-            response.should have_selector(".loud", :content => "NONE PLANNED")
-          end
-        
-          it "should not display an 'In progress' label" do
-            get :show, :id => @resource1
-            response.should_not have_selector(".loud", :content => "In progress")
-          end
-        
-          it "should not display a 'Next scheduled' label" do
-            get :show, :id => @resource1
-            response.should_not have_selector(".loud", :content => "Next scheduled")
-          end
-        
-          it "should not display a table for current or next scheduled events" do
-            get :show, :id => @resource1
-            response.should_not have_selector("th", :content => "Ref no")
-          end
-        
-          it "should display an 'Add a new event' link" do
-            get :show, :id => @resource1
-            response.should have_selector("a", :href => new_resource_item_path(@resource1),
-                                                 :content => "Add a new event")
-          end
-        
-          it "should not display an 'All planned events' link" do
-            get :show, :id => @resource1
-            response.should_not have_selector("a", :href => resource_items_path(@resource1),
-                                                 :content => "All planned events")
-          end
-        
-          it "should not display an 'All past events' link" do
-            pending "till past events added"
-          end
+        before(:each) do
+          @hidden_event = Factory(:resource, :name => "Hidden event", :vendor_id => @vendor2.id, 
+                                    :category_id => @category1.id, :webpage => "hidden@example.com",
+                                    :medium_id => @medium1.id, :hidden => true)       
         end
-      
-        describe "when there are current events but no future or past events" do
         
+        it "should display a prominent 'hidden resource' label" do
+          get :show, :id => @hidden_event
+          response.should have_selector("h4", 
+                  :content => "This resource is currently hidden from public view.")
+        end
+          
+        it "should display an 'archived' notice" do
+          get :show, :id => @hidden_event
+          response.should have_selector(".cloud", 
+                  :content => "RESOURCE NOW ARCHIVED")
+        end
+        
+        it "should not display an 'In progress' label" do
+          get :show, :id => @hidden_event
+          response.should_not have_selector(".loud", :content => "In progress")
+        end
+        
+        it "should not display a 'Next scheduled' label" do
+          get :show, :id => @hidden_event
+          response.should_not have_selector(".loud", :content => "Next scheduled")
+        end
+        
+        it "should not display an 'Add a new event' link" do
+          get :show, :id => @hidden_event
+          response.should_not have_selector("a", :href => new_resource_item_path(@resource1),
+                                                 :content => "Add a new event")
+        end
+        
+        it "should warn that no new events may be added" do
+          get :show, :id => @hidden_event
+          response.should have_selector(".loud", :content => "No new events may be added")
+        end
+        
+        it "should warn that planned events are no longer displayed" do
+          get :show, :id => @hidden_event
+          response.should have_selector(".loud", :content => "Planned events are no longer displayed")
+        end
+        
+        it "should not display an 'All planned events' link" do
+          get :show, :id => @hidden_event
+          response.should_not have_selector("a", :href => resource_items_path(@resource1),
+                                                 :content => "All planned events")
+        end
+        
+        it "should continue to show current events, and edit/modify current and future events" do
+          pending "should it do this?"
+        end
+            
+      end
+ 
+      describe "when a resource of the non-event type has been archived" do
+          
+        before(:each) do
+          @hidden_resource = Factory(:resource, :name => "Hidden resource", :vendor_id => @vendor2.id, 
+                                    :category_id => @category1.id, :webpage => "hide@example.com",
+                                    :medium_id => @medium2.id, :hidden => true)       
+        end
+        
+        it "should display a prominent 'hidden resource' label" do
+          get :show, :id => @hidden_resource
+          response.should have_selector("h4", 
+                  :content => "This resource is currently hidden from public view.")
+        end
+          
+        it "should not display an 'archived' notice" do
+          get :show, :id => @hidden_resource
+          response.should_not have_selector(".cloud", 
+                  :content => "RESOURCE NOW ARCHIVED")
+        end
+        
+        describe "and pricing details were never set" do
+        
+          it "should explain that pricing was not set" do
+            get :show, :id => @hidden_resource
+            response.should have_selector(".loud", :content => "Pricing details not set before archiving")
+          end
+          
+        end
+        
+        describe "and pricing was set before archiving" do
+          
           before(:each) do
-            @item = Factory(:item, :start => Time.now - 2.days, :finish => Time.now + 2.days, 
-                                   :resource_id => @resource1.id)
+            @price_for_hidden_resource = Factory(:item, :resource_id => @hidden_resource.id,
+                                  :finish => nil)
           end
-        
-          it "should not display a 'NONE PLANNED' label" do
-            get :show, :id => @resource1
-            response.should_not have_selector(".loud", :content => "NONE PLANNED")
-          end
-        
-          it "should display an 'In progress' label" do
-            get :show, :id => @resource1
-            response.should have_selector(".loud", :content => "In progress")
-          end
-        
-          it "should not display a 'Next scheduled' label" do
-            get :show, :id => @resource1
-            response.should_not have_selector(".loud", :content => "Next scheduled")
-          end
-        
-          it "should display a table for current events" do
-            get :show, :id => @resource1
-            response.should have_selector("th", :content => "Ref no")
-          end
-        
-          it "should display an 'Add a new event' link" do
-            get :show, :id => @resource1
-            response.should have_selector("a", :href => new_resource_item_path(@resource1),
-                                                 :content => "Add a new event")
-          end
-        
-          it "should not display an 'All planned events' link" do
-            get :show, :id => @resource1
-            response.should_not have_selector("a", :href => resource_items_path(@resource1),
-                                                 :content => "All planned events")
-          end
-        
-          it "should not display an 'All past events' link" do
-            pending "till past events added"
-          end
-        end
-      
-        describe "when there are current and future events but no past events" do
-        
-        end
-      
-        describe "when there are current and past events but no future events" do
-        
-        end
-      
-        describe "when there are current, past and future events" do
-        
-        end
-      
-        describe "when there are past events but no current or future events" do
-        
-        end
-      
-        describe "when there are future events but no current or past events" do
-        
-        end
-      
-        describe "when there are past and future events but no current events" do
-        
+          
+          it "should give pricing details before archiving" do
+            get :show, :id => @hidden_resource
+            response.should have_selector(".loud", :content => "Details when archived")
+          end   
         end
       end
       
-      describe "when the resource is not a scheduled event" do      #i.e. medium not set to scheduled
+      describe "when the resource has not been archived" do
         
-        before(:each) do
-          @unsched_resource = Factory(:resource, :name => "Unscheduled", :vendor_id => @vendor2.id, 
+        describe "when the resource is of the event type" do  #has medium set to scheduled
+      
+          describe "when there are no planned or past events" do
+        
+            it "should display a 'NONE PLANNED' label" do
+              get :show, :id => @resource1
+              response.should have_selector(".loud", :content => "NONE PLANNED")
+            end
+        
+            it "should not display an 'In progress' label" do
+              get :show, :id => @resource1
+              response.should_not have_selector(".loud", :content => "In progress")
+            end
+        
+            it "should not display a 'Next scheduled' label" do
+              get :show, :id => @resource1
+              response.should_not have_selector(".loud", :content => "Next scheduled")
+            end
+        
+            it "should not display a table for current or next scheduled events" do
+              get :show, :id => @resource1
+              response.should_not have_selector("th", :content => "Ref no")
+            end
+        
+            it "should display an 'Add a new event' link" do
+              get :show, :id => @resource1
+              response.should have_selector("a", :href => new_resource_item_path(@resource1),
+                                                 :content => "Add a new event")
+            end
+        
+            it "should not display an 'All planned events' link" do
+              get :show, :id => @resource1
+              response.should_not have_selector("a", :href => resource_items_path(@resource1),
+                                                 :content => "All planned events")
+            end
+        
+            it "should not display a 'Previous events' link" do
+              get :show, :id => @resource1
+              response.should_not have_selector("a", :href => resource_past_events_path(@resource1),
+                                                 :content => "Previous events")
+            end
+          end
+      
+          describe "when there are current events but no future or past events" do
+        
+            before(:each) do
+              @item = Factory(:item, :start => Time.now - 2.days, :finish => Time.now + 2.days, 
+                                   :resource_id => @resource1.id)
+            end
+        
+            it "should not display a 'NONE PLANNED' label" do
+              get :show, :id => @resource1
+              response.should_not have_selector(".loud", :content => "NONE PLANNED")
+            end
+        
+            it "should display an 'In progress' label" do
+              get :show, :id => @resource1
+              response.should have_selector(".loud", :content => "In progress")
+            end
+        
+            it "should not display a 'Next scheduled' label" do
+              get :show, :id => @resource1
+              response.should_not have_selector(".loud", :content => "Next scheduled")
+            end
+        
+            it "should display a table for current events" do
+              get :show, :id => @resource1
+              response.should have_selector("th", :content => "Ref #")
+            end
+        
+            it "should display an 'Add a new event' link" do
+              get :show, :id => @resource1
+              response.should have_selector("a", :href => new_resource_item_path(@resource1),
+                                                 :content => "Add a new event")
+            end
+        
+            it "should not display an 'All planned events' link" do
+              get :show, :id => @resource1
+              response.should_not have_selector("a", :href => resource_items_path(@resource1),
+                                                 :content => "All planned events")
+            end
+        
+            it "should not display a 'Previous events' link" do
+              get :show, :id => @resource1
+              response.should_not have_selector("a", :href => resource_past_events_path(@resource1),
+                                                 :content => "Previous events")
+            end
+          end
+      
+          describe "when there are current and future events but no past events" do
+            pending
+          end
+      
+          describe "when there are current and past events but no future events" do
+            pending
+          end
+      
+          describe "when there are current, past and future events" do
+            pending
+          end
+      
+          describe "when there are past events but no current or future events" do
+        
+          end
+      
+          describe "when there are future events but no current or past events" do
+            pending
+          end
+      
+          describe "when there are past and future events but no current events" do
+            pending
+          end
+        end
+      
+        describe "when the resource is not a scheduled event" do      #i.e. medium not set to scheduled
+        
+          before(:each) do
+            @unsched_resource = Factory(:resource, :name => "Unscheduled", :vendor_id => @vendor2.id, 
                                     :category_id => @category1.id, :webpage => "unsched@example.com",
                                     :medium_id => @medium3.id, :description => "Unscheduled")
           
-        end
+          end
         
-        describe "when the vendor has been verified" do
+          describe "when the vendor has been verified" do
         
-          it "should not have a 'Next scheduled' label" do
-            pending "till non-events are added"
-          end 
-        end
+            it "should not have a 'Next scheduled' label" do
+              pending "till non-events are added"
+            end 
+          end
         
-        describe "when the author has not been verified" do
+          describe "when the author has not been verified" do
           
-          it "should remind the user to verify the vendor account" do
-            pending "till non-events are added"
+            it "should remind the user to verify the vendor account" do
+              pending "till non-events are added"
+            end
           end
         end
       end        

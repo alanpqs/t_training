@@ -44,13 +44,19 @@ class IssuesController < ApplicationController
     @issue.cents = money.cents
     @issue.currency = money.currency.to_s
     @issue.fee_id = @issue.fee_band
+    
     if @issue.save
       @fee = Fee.find_by_band(@issue.fee_band)
       @issue.update_attributes(:fee_id => @fee.id, :credits => @issue.credits_charged)
       if @issue.cents == 0
         flash[:notice] = "You've set the price to 0.00.  Are you sure that's correct?"
+      elsif @vendor.credits_available < 0
+        @issue.restrict_tickets_to_credit_available
+        flash[:notice] = "Your ticket issue has been completed, but the number of tickets was reduced to 
+               #{@issue.no_of_tickets}, leaving a credit balance of #{@vendor.credits_available} in 
+               your account.  You'll need to purchase more credits before you can issue more tickets."
       else
-        flash[:success] = "Check the details of your discounted tickets offer."
+        flash[:success] = "Your ticket issue was successfully completed.  Now please check the details."
       end
       redirect_to issue_path(@issue)
     else
@@ -95,8 +101,13 @@ class IssuesController < ApplicationController
       @issue.update_attributes(:fee_id => @fee.id, :credits => @issue.credits_charged)
       if @issue.cents == 0
         flash[:notice] = "You've set the price to 0.00.  Are you sure that's correct?"
+      elsif @vendor.credits_available < 0
+        @issue.restrict_tickets_to_credit_available
+        flash[:notice] = "Your ticket issue has been updated, but the number of tickets was reduced to 
+               #{@issue.no_of_tickets}, leaving a credit balance of #{@vendor.credits_available} in 
+               your account.  You'll need to purchase more credits before you can issue more tickets."
       else
-        flash[:success] = "The ticket details have been successfully updated."
+        flash[:success] = "The ticket issue has been successfully updated."
       end
       redirect_to @issue
     else
@@ -105,5 +116,19 @@ class IssuesController < ApplicationController
       @drop = "drop changes"
       render 'edit'
     end
+  end
+  
+  def destroy
+    @issue = Issue.find(params[:id])
+    @name = @issue.item.resource.name
+    @ref = @issue.item.ref
+    if @issue.has_ticket_applications?
+      flash[:error] = "Cannot delete the ticket issue for #{@name} - ##{@ref} because you've already
+                        received applications."
+    else
+      @issue.destroy
+      flash[:success] = "Ticket issue for #{@name} - ##{@ref} deleted."
+    end
+    redirect_to(business_offers_path)
   end
 end
