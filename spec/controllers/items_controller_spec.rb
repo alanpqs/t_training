@@ -1,10 +1,12 @@
 require 'spec_helper'
 
 describe ItemsController do
-
+  
+  
   render_views
   
   require 'money'
+  
   
   before(:each) do
     @region = Factory(:region)
@@ -158,9 +160,9 @@ describe ItemsController do
             get :index, :resource_id => @resource.id
             response.should have_selector("div.pagination")
             response.should have_selector("span.disabled", :content => "Previous")
-            response.should have_selector("a",  :href => "/resources/1/items?page=2",
+            response.should have_selector("a",  :href => "/resources/#{@resource.id}/items?page=2",
                                                 :content => "2")
-            response.should have_selector("a",  :href => "/resources/1/items?page=2",
+            response.should have_selector("a",  :href => "/resources/#{@resource.id}/items?page=2",
                                                 :content => "Next")
           end
           

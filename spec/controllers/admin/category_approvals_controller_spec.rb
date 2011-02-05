@@ -12,7 +12,7 @@ describe Admin::CategoryApprovalsController do
   describe "For non-logged-in users" do
   
     before(:each) do
-      @user = Factory(:user, :country_id => @country)
+      @user = Factory(:user, :country_id => @country.id)
     end
     
     describe "GET 'index'" do

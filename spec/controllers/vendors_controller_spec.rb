@@ -19,7 +19,8 @@ describe VendorsController do
     before(:each) do
       @v_code = "123456ABCDEFabcdef"
       @url = "http://localhost:3000/confirm/#{@v_code}"
-      @vendor1 = Factory(:vendor, :verification_code => "abcdef123456ABCDEF", :country_id => @region.id)
+      @vendor1 = Factory(:vendor, :name => "First", :verification_code => "abcdef123456ABCDEF", 
+                         :country_id => @country.id)
       @vendor2 = Factory(:vendor, :name => "Second", :email => "second@mail.com",
                          :verification_code => "ABCDEF123456abcdef", :country_id => @country.id)
       @vendor3 = Factory(:vendor, :name => "Third", :email => "third@mail.com",

@@ -19,7 +19,7 @@ describe Issue do
                                              :medium_id => @scheduled_medium.id)
     @unscheduled_item = Factory(:item, :resource_id => @unscheduled_resource.id, :start => "2011-01-01",
                                        :finish => nil)
-    @scheduled_item = Factory(:item, :resource_id => @scheduled_resource)
+    @scheduled_item = Factory(:item, :resource_id => @scheduled_resource.id)
     
     @attr_event = { :item_id => @scheduled_item.id, :vendor_id => @vendor.id, :event => true,
                     :cents => 14000, :currency => "USD", :fee_id => @fee.id, 

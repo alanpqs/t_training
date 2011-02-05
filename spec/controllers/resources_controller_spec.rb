@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ResourcesController do
-
+  
   render_views
   
   before(:each) do
@@ -307,7 +307,7 @@ describe ResourcesController do
       
       it "should have a resource-name reference for each element" do
         get :index
-        @resources[0..2].each do |resource|
+        @resources[0..1].each do |resource|
           response.should have_selector("td", :content => resource.name)
         end
       end
@@ -319,14 +319,14 @@ describe ResourcesController do
       
       it "should have a link to the resource show-page for each element" do
         get :index
-        @resources[0..2].each do |resource|
+        @resources[0..1].each do |resource|
           response.should have_selector("a", :href => resource_path(resource))
         end
       end
       
       it "should have a group reference for each element" do
         get :index
-        @resources[0..2].each do |resource|
+        @resources[0..1].each do |resource|
           response.should have_selector("td", 
                   :content => "#{resource.category.in_group}")
         end
@@ -334,7 +334,7 @@ describe ResourcesController do
       
       it "should have a category reference for each element" do
         get :index
-        @resources[0..2].each do |resource|
+        @resources[0..1].each do |resource|
           response.should have_selector("td", 
                   :content => "#{resource.category.category}")
         end
@@ -342,7 +342,7 @@ describe ResourcesController do
       
       it "should have a format reference for each element" do
         get :index
-        @resources[0..2].each do |resource|
+        @resources[0..1].each do |resource|
           response.should have_selector("td", 
                   :content => resource.medium.medium)
         end
@@ -350,7 +350,7 @@ describe ResourcesController do
       
       it "should have a course-length reference for each element" do
         get :index
-        @resources[0..2].each do |resource|
+        @resources[0..1].each do |resource|
           response.should have_selector("td", :content => "24 hours")
         end
       end
@@ -1208,9 +1208,9 @@ describe ResourcesController do
           end
           
           it "should redirect to the index page" do
-            @vendor = Vendor.find(@resource1.vendor_id)
+            @vendor2 = Vendor.find(@resource1.vendor_id)
             delete :destroy, :id => @resource1
-            response.should redirect_to vendor_resources_path(@vendor)
+            response.should redirect_to vendor_resources_path(@vendor2)
           end
           
           it "should have a success message, showing which resource has been deleted" do

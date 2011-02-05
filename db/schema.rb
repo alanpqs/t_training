@@ -12,17 +12,6 @@
 
 ActiveRecord::Schema.define(:version => 20110131131017) do
 
-  create_table "accounts", :force => true do |t|
-    t.integer  "vendor_id"
-    t.string   "currency",   :default => "USD"
-    t.decimal  "cents"
-    t.boolean  "credit",     :default => false
-    t.integer  "user_id"
-    t.string   "note"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "categories", :force => true do |t|
     t.string   "category"
     t.string   "target"

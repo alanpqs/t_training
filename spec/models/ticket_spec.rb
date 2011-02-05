@@ -19,7 +19,7 @@ describe Ticket do
                                              :medium_id => @scheduled_medium.id)
     @unscheduled_item = Factory(:item, :resource_id => @unscheduled_resource.id, :start => "2011-01-01",
                                        :finish => nil)
-    @scheduled_item = Factory(:item, :resource_id => @scheduled_resource)
+    @scheduled_item = Factory(:item, :resource_id => @scheduled_resource.id)
     @scheduled_issue = Factory(:issue, :vendor_id => @vendor.id, :item_id => @scheduled_item.id, 
                               :fee_id => @fee.id, :user_id => @user.id)
     @unscheduled_issue = Factory(:issue, :vendor_id => @vendor.id, :item_id => @unscheduled_item.id, 
