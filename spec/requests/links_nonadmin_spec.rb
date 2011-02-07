@@ -3,7 +3,9 @@ require 'spec_helper'
 describe "Links for users logged in but not admins or vendors" do
 
   before(:each) do
-    @user = Factory(:user)
+    @region = Factory(:region)
+    @country = Factory(:country, :region_id => @region.id)
+    @user = Factory(:user, :country_id => @country.id) 
     integration_log_in(@user)
   end
     

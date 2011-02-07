@@ -3,7 +3,9 @@ require 'spec_helper'
 describe "AdminLinks" do
   
   before(:each) do
-    @user = Factory(:user, :admin => true)
+    @region = Factory(:region)
+    @country = Factory(:country, :region_id => @region.id)
+    @user = Factory(:user, :admin => true, :country_id => @country.id)
     integration_log_in(@user)
   end
   

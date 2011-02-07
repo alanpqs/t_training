@@ -1,33 +1,35 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.0'
+gem 'rails', '3.0.1'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-#gem 'sqlite3-ruby', '1.2.5', :require => 'sqlite3'
+gem 'sqlite3-ruby', '1.2.5', :require => 'sqlite3'
 gem 'gravatar_image_tag', '0.1.0'
 gem 'will_paginate', '3.0.pre2'
 gem 'money', '3.1.5'
-gem 'rails-geocoder', :require => 'geocoder'
+gem 'rails-geocoder', '0.9.5', :require => 'geocoder'
 gem 'google_currency', '1.0.2'
 gem 'activerecord-import', '0.2.3'
-gem 'json'
+gem 'json', '1.4.6'
 gem 'mail', '2.2.7'
-gem 'acts-as-taggable-on'
-gem 'yaml_db'
-gem 'pg'
+gem 'acts-as-taggable-on', '2.0.6'
+gem 'yaml_db', '0.2.0'
+gem 'pg', '0.10.1'
 
 group :development do
-  gem 'rspec-rails', '2.0.0.beta.18'
+  gem 'rspec-rails', '2.5.0'
   gem 'annotate-models', '1.0.4'
   gem 'faker', '0.3.1'
 end
 
 group :test do
-  gem 'rspec', '2.0.0.beta.18'
+  gem 'rspec', '2.5.0'
   gem 'factory_girl_rails', '1.0'
   gem 'email_spec', '1.0'
+  gem 'webrat', '0.7.2'
+  gem 'spork', '0.8.4'
 end
 
 

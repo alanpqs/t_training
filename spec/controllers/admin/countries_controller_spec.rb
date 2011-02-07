@@ -228,8 +228,8 @@ describe Admin::CountriesController do
       
       before(:each) do
         @region   = Factory(:region, :region => "ZYX")
-        @second   = Factory(:country, :name => "ZYZ", :country_code => "ZZZ", :region => @region )
-        @third    = Factory(:country, :name => "YZY", :country_code => "YYY", :region => @region )
+        @second   = Factory(:country, :name => "ZYZ", :country_code => "ZZZ", :region_id => @region.id )
+        @third    = Factory(:country, :name => "YZY", :country_code => "YYY", :region_id => @region.id )
         @countries = [@country, @second, @third]
       end
       
@@ -265,7 +265,7 @@ describe Admin::CountriesController do
         30.times do
           @countries << Factory(:country, :name => Factory.next(:name), 
                                 :country_code => Factory.next(:country_code),
-                                :region => @region)
+                                :region_id => @region.id)
         end
         get :index
         response.should have_selector("div.pagination")

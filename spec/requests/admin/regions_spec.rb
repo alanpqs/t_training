@@ -3,13 +3,15 @@ require 'spec_helper'
 describe "Regions" do
 
   before(:each) do
-    user = Factory(:user, :admin => true)
+    @region = Factory(:region)
+    @country = Factory(:country, :region_id => @region.id)
+    @user = Factory(:user, :admin => true, :country_id => @country.id)
     @attrs = ["Africa", "Asia", "America"]
     @attrs.each do |attr|
       Region.create!(:region => attr)
     end
     #@region = Region.find_by_region("Europe")
-    integration_log_in(user)
+    integration_log_in(@user)
   end
 
   describe "links on the Regions index page" do

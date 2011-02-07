@@ -3,7 +3,9 @@ require 'spec_helper'
 describe Category do
   
   before(:each) do
-    @user = Factory(:user)
+    @region = Factory(:region)
+    @country = Factory(:country, :region_id => @region.id)
+    @user = Factory(:user, :country_id => @country.id) 
     @attr = { :category => "Oil Gas and Energy",  :target => "Business", 
                                                   :authorized => 0,
                                                   :submitted_name => "Oil Gas and Energy",

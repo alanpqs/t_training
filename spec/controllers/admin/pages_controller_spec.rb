@@ -26,7 +26,9 @@ describe Admin::PagesController do
   describe "for logged-in non-admins" do
     
     before(:each) do
-      @user = Factory(:user)
+      @region = Factory(:region)
+      @country = Factory(:country, :region_id => @region.id)
+      @user = Factory(:user, :country_id => @country.id) 
       test_log_in(@user)
     end
     
@@ -47,7 +49,9 @@ describe Admin::PagesController do
   describe "for logged-in admins" do
     
     before(:each) do
-      @user = Factory(:user, :admin => true)
+      @region = Factory(:region)
+      @country = Factory(:country, :region_id => @region.id)
+      @user = Factory(:user, :admin => true, :country_id => @country.id) 
       test_log_in(@user)
     end
     

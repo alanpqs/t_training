@@ -43,7 +43,9 @@ describe SessionsController do
     describe "with valid email and password" do
     
       before(:each) do
-        @user = Factory(:user)
+        @region = Factory(:region)
+        @country = Factory(:country, :region_id => @region.id)
+        @user = Factory(:user, :country_id => @country.id) 
         @attr = { :email => @user.email, :password => @user.password }
       end
       
@@ -63,7 +65,9 @@ describe SessionsController do
   describe "DELETE 'destroy'" do
     
     before(:each) do
-      test_log_in(Factory(:user))
+      @region = Factory(:region)
+      @country = Factory(:country, :region_id => @region.id)
+      test_log_in(Factory(:user, :country_id => @country.id))
     end
     
     it "should log a user out" do

@@ -1,15 +1,17 @@
 require 'spec_helper'
+#require 'factory_girl_rails'
 
 describe ItemsController do
   
   
   render_views
-  
+  #require 'factory_girl'
+  #Factory.find_definitions
   require 'money'
   
   
   before(:each) do
-    @region = Factory(:region)
+    @region = Factory.create(:region)
     @country = Factory(:country, :name => "United Kingdom", :currency_code => "GBP", :region_id => @region.id)
     @user = Factory(:user, :country_id => @country.id, :vendor => true)
     @vendor = Factory(:vendor, :country_id => @country.id, :verified => true)

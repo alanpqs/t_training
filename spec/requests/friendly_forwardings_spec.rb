@@ -3,7 +3,9 @@
  describe "FriendlyForwardings" do
    
    it "should forward to the requested page after login" do
-     user = Factory(:user)
+     @region = Factory(:region)
+     @country = Factory(:country, :region_id => @region.id)
+     user = Factory(:user, :admin => true, :country_id => @country.id) 
      visit edit_user_path(user)
      #Not logged in - automatic redirect to log in page
      fill_in :email,        :with => user.email

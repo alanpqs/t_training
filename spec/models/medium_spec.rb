@@ -3,7 +3,9 @@ require 'spec_helper'
 describe Medium do
   
   before(:each) do
-    @user = Factory(:user)
+    @region = Factory(:region)
+    @country = Factory(:country, :region_id => @region.id)
+    @user = Factory(:user, :country_id => @country.id) 
     @attr = { :medium => "Abc", :user_id => @user.id}
   end
   
