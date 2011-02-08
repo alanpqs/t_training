@@ -36,6 +36,19 @@ class Resource < ActiveRecord::Base
   has_many   :items, :dependent => :destroy
   has_many   :issues, :through => :items
   
+  define_index do
+    indexes :name, :as => :resource
+    indexes description, :as => :decription
+    indexes category(:category), :as => :category
+    indexes medium(:medium), :as => :format
+    indexes features.name,  :as => :features
+    
+    has category_id
+    has medium_id
+    
+    where "hidden = false"
+  end
+  
   validates :name,            :presence       => true,
                               :length         => { :maximum => 50 },
                               :uniqueness     => { :scope => [:vendor_id, :category_id], 
