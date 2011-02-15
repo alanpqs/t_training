@@ -1,0 +1,10 @@
+<b style="text-align:center"><u>LATEST OFFERS</u></b>
+
+<% if logged_in? %>
+
+
+<% else %>
+  Discounted tickets for training - exclusively for logged-in members.<br /><br />
+  <%= link_to "Free sign-up here.", signup_path unless @title == "Sign Up" %>
+
+<% end %>

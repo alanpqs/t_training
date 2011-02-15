@@ -40,9 +40,9 @@
         </li>
         <% if current_vendor? %>
           <li><%= link_to "Vendor profile", business_vendor_path(current_vendor) %></li>
-          <li><%= link_to "Training resources", vendor_resources_path(current_vendor) %></li>
+          <li><%= link_to "Training resources", vendor_resources_path(current_vendor) if current_vendor.verified?%></li>
      <li><%= link_to "Schedule and pricing", resource_activation_path unless current_vendor.resourceless?%></li>
-          <li><%= link_to "Tickets", tickets_menu_path %></li>
+          <li><%= link_to "Tickets", tickets_menu_path if current_vendor.verified? %></li>
           <% unless current_vendor.resourceless? %>  
             <li>Reviews</li>
             <li>History</li>

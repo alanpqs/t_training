@@ -10,8 +10,10 @@
     <div class="container">
       <header>
         <%= render 'layouts/header' %>
-        </section>
       </header>
+      <div class="span-4 last" style ="float:right; background-color:#FFFF99">
+          <%= render 'layouts/right_panel' %>
+        </div>
       <%= render 'layouts/left_panel'%>
       <section class="round">
         <div class="span-15">
@@ -20,7 +22,7 @@
           <% end %>
           <%= yield %>
         </div>
-        <%= render 'layouts/right_panel' %>
+        
       </section>
       <footer class="span-24">
          <%= debug(params) if Rails.env.development? %>

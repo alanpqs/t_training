@@ -1,5 +1,9 @@
 TTraining::Application.routes.draw do
 
+  get "resources/index"
+
+  get "resources/show"
+
   get "offers/index"
 
   get "vendor_offers/index"
@@ -19,6 +23,9 @@ TTraining::Application.routes.draw do
     #resources :issues
   end
   
+  namespace "guest" do
+    resources :resources,   :only => [:index, :show]  
+  end
   #namespace "events" do
   #  resources :items
   #end

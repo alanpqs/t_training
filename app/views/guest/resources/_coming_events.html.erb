@@ -1,0 +1,21 @@
+
+       <table>
+        <tr>
+          <th>Ref #</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Days</th>
+          <th>Venue</th>
+          <th>Price</th>
+        </tr>
+        <% @scheduled_events.each do |event| %>
+          <tr>
+            <td><%= event.ref %></td>
+            <td><%= display_date(event.start) %></td>
+            <td><%= display_date(event.finish) %></td>
+            <td><%= event.days %> - <%= event.time_of_day %></td>
+            <td><%= event.venue %></td>
+            <td><%= event.formatted_price(@vendor.id) %></td>
+          </tr>
+        <% end %>  
+      </table> 

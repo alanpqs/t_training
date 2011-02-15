@@ -1,0 +1,36 @@
+<h1><%= @title %></h1>
+
+<%= form_tag guest_resources_path, :method => 'get' do %>
+<p>
+    <%= text_field_tag :search, params[:search] %> &nbsp; &nbsp; &nbsp;
+    <%= submit_button(@tag_name) %>
+   
+  </p>
+<% end %>
+
+
+<small><%= will_paginate %>
+<table>
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th>Category</th>
+    <th>Vendor</th>
+    <th>Location</th>
+    <th>Format</th>
+    <th>Rating</th>
+  </tr>
+  <% @resources.each do |resource| %>
+  <tr>
+    <td><%= link_to resource.name, guest_resource_path(resource) %></td>
+    <td><%= image_tag "tick_octagon.png" if resource.place_order_now? %></td>
+    <td><%= resource.category.category %></td> 
+    <td><%= resource.vendor.name %></td>
+    <td><%= resource.vendor.where_is %></td>
+    <td><%= resource.medium.medium %></td>
+    <td></td>
+  </tr>
+  <% end %>
+ 
+</table>
+<%= will_paginate %></small>

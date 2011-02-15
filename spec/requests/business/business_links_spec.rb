@@ -6,9 +6,9 @@ describe "BusinessLinks" do
     @region = Factory(:region)
     @country = Factory(:country, :region_id => @region.id)
     @user = Factory(:user, :vendor => true, :country_id => @country.id)
-    @vendor = Factory(:vendor, :country_id => @country.id)
+    @vendor = Factory(:vendor, :country_id => @country.id, :verified => true)
     @representation = Factory(:representation, :user_id => @user.id, :vendor_id => @vendor.id)
-    integration_log_in(@user)
+    #integration_log_in(@user)
   end
   
   describe "in all circumstances" do
@@ -30,7 +30,7 @@ describe "BusinessLinks" do
     end
   end
   
-  describe "when 'vendor_id' cookie is set" do
+  describe "when 'vendor_id' cookie is set and the vendor has been verified" do
     
     before(:each) do
       integration_log_in(@user)
@@ -55,6 +55,14 @@ describe "BusinessLinks" do
       response.should have_selector("div#loginfo", :content => "Menu:")
       response.should have_selector("div#loginfo", :content => @vendor.name)
     end
+  end
+  
+  describe "when the vendor_id cookie is set but the vendor has not been verified" do
+    
+    it "should have the right links on the layout" do
+      pending "until all the menu items have been designed - then also update section above"
+    end
+    
   end
   
   describe "when 'vendor_id' cookie is not set" do

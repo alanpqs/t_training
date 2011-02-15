@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110131131017) do
+ActiveRecord::Schema.define(:version => 20110215135406) do
 
   create_table "categories", :force => true do |t|
     t.string   "category"
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(:version => 20110131131017) do
     t.date     "expiry_date"
     t.integer  "user_id"
     t.integer  "credits",        :default => 1
+    t.boolean  "subscribed",     :default => false
   end
 
   create_table "items", :force => true do |t|
@@ -162,7 +163,7 @@ ActiveRecord::Schema.define(:version => 20110131131017) do
     t.datetime "updated_at"
     t.string   "encrypted_password"
     t.string   "salt"
-    t.boolean  "admin"
+    t.boolean  "admin",              :default => false
     t.integer  "country_id"
     t.string   "location"
     t.float    "latitude"

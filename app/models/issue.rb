@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20110131131017
+# Schema version: 20110215135406
 #
 # Table name: issues
 #
@@ -17,12 +17,13 @@
 #  expiry_date    :date
 #  user_id        :integer
 #  credits        :integer         default(1)
+#  subscribed     :boolean
 #
 
 class Issue < ActiveRecord::Base
   
   attr_accessible :item_id, :vendor_id, :event, :cents, :currency, 
-                  :no_of_tickets, :contact_method, :fee_id, :expiry_date, :user_id, :credits
+                  :no_of_tickets, :contact_method, :fee_id, :expiry_date, :user_id, :credits, :subscribed
   
   attr_accessor :ticket_price     
                 
@@ -133,5 +134,12 @@ class Issue < ActiveRecord::Base
     self.update_attribute(:no_of_tickets, max_tickets)
     @qty_credits = @fee.credits_required * self.no_of_tickets
     self.update_attribute(:credits, @qty_credits)
+  end
+  
+  def discount
+    ticket_price = self.cents
+    original_price = self.item.cents
+    difference = original_price - ticket_price
+    difference.to_f / original_price.to_f * 100
   end                                                          
 end

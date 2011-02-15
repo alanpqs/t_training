@@ -7,16 +7,19 @@
 
 <hr />
 <div id="rubric" class="round">
-  This is what members will see when they view the record.  But you can choose whether to display
-   <strong>Reviews</strong> or not.  Click on <i>Reviews</i> in the <i>Supplier Menu</i> to set your 
-   instructions.  
-  <br /><br />
+  
   <% if @vendor.unverified? %>
-    Before the vendor details can appear on our live listings, we need a response to the note we sent
-    to the email address above.  If we don't receive your verification with 72 hours, the record will
-    be deleted and you'll need to start again.  Please make sure the email address is correct, and then
-    check your Inbox.
+    Before you can start entering details of the training resources you offer, we need a response to the 
+    note we sent to the email address above.  If we don't receive your verification with 72 hours, 
+    the record will be deleted and you'll need to start again.  Please make sure the email address is
+    correct, and then check your Inbox.  
+    <br /><br />
+    As soon as you've sent the verification, your account will be live.
   <% else %>
+    This is what users will see when they view your company profile.  But you can choose whether to display
+    <strong>Reviews</strong> or not.  Click on <i>Reviews</i> in the <i>Supplier Menu</i> to set your 
+    instructions.  
+    <br /><br />
     <%= other_users %> currently authorized to input and edit data for this vendor.  For details, 
     and instructions on how to add and remove users, click on <i>Your colleagues</i> in the menu.
   <% end %>

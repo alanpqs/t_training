@@ -67,7 +67,7 @@ describe "LinksLayout" do
     click_link "FAQs"
     response.should have_selector('title', :content => "FAQs")
     click_link "Find training"
-    response.should have_selector('title', :content => "Find Training")
+    response.should have_selector('title', :content => "Find a training resource")
     click_link "Sign up"
     response.should have_selector('title', :content => "Sign Up")
     click_link "Log in"
@@ -90,7 +90,7 @@ describe "LinksLayout" do
     
     it "should have a Find training link" do
       visit root_path
-      response.should have_selector("a",  :href => find_training_path,
+      response.should have_selector("a",  :href => guest_resources_path,
                                           :content => "Find training")
     end
     
