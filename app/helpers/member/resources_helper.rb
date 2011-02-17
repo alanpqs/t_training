@@ -1,0 +1,3 @@
+module Member::ResourcesHelper
+  
+end

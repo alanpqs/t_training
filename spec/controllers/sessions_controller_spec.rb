@@ -55,9 +55,9 @@ describe SessionsController do
         controller.should be_logged_in
       end
       
-      it "should redirect to the user show page" do
+      it "should redirect to the member home-page" do
         post :create, :session => @attr
-        response.should redirect_to(user_path(@user))
+        response.should redirect_to(member_home_path)
       end  
     end
   end

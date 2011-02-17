@@ -1,4 +1,8 @@
 <div class="span-5">
   <%= render 'layouts/login_panel' %>
   <%= render 'layouts/menubox_left' %>
+  <br />
+  <% if @instructions %>
+    <%= render 'layouts/instructions_left' %> 
+  <% end %>
 </div>

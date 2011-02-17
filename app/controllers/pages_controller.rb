@@ -10,6 +10,8 @@ class PagesController < ApplicationController
         redirect_to admin_home_path
       elsif current_user.vendor?
         redirect_to business_home_path
+      else
+        redirect_to member_home_path
       end
     end
   end

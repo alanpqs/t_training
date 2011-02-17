@@ -150,7 +150,16 @@ describe Guest::ResourcesController do
         get :index, :search => ""
         response.should have_selector("input", :value => "Search")
       end
-    
+      
+      it "should have a link to the 'effective searches' page" do
+        pending
+      end
+      
+      it "should have page guidance" do
+        get :index, :search => ""
+        response.should have_selector("h5", :content => "Guidance for this page")
+      end
+      
       it "should paginate the entries to allow display only 20 resources per page" do
         20.times do
           @resources << Factory(:resource, :name => Factory.next(:name), :vendor_id => @verified_vendor.id, 

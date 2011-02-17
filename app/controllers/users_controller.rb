@@ -28,8 +28,11 @@ class UsersController < ApplicationController
       flash[:success] = "Welcome to Tickets for Training!"
       if @user.vendor?
         redirect_to business_home_path
-      else
-        redirect_to @user
+      elsif @user.admin?
+        redirect_to admin_home_path
+      else  
+        #redirect_to @user
+        redirect_to member_home_path
       end
     else
       @title = "Sign Up"

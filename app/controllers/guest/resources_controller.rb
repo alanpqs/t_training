@@ -1,4 +1,5 @@
 class Guest::ResourcesController < ApplicationController
+  
   def index
     @resources = Resource.publicly_listed.paginate(:page => params[:page], :per_page => 20)
 

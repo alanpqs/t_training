@@ -196,6 +196,7 @@ textarea {
   width:45%;
   padding-left: 1em;
   float: right;
+  margin-right: 2em;
 }
 
 .two_column_left {
@@ -206,7 +207,7 @@ textarea {
 
 .two_column_right_scroll {
   width:45%;
-  padding-left: 1em;
+  padding-left: 1em; 
   float: right;
   height: 350px;  
   overflow: auto;  
@@ -377,9 +378,22 @@ td.sidebar {
   -moz-border-radius:    10px;
   -webkit-border-radius: 10px;
   border-radius:         10px; 
-  background: transparent url(../images/page-bg.png);
+  background: transparent url(../images/blueybg.png);
+  /*background-color: #999; */
+  color: #000;
   border: 1px solid #eee;
-  border-top: 0; 
+  border-top: 0;
+  padding: 1em;
+}
+
+.rounded_box {
+  -moz-border-radius:    10px;
+  -webkit-border-radius: 10px;
+  border-radius:         10px; 
+  /*background-color: #999; */
+  color: #000;
+  border: 2px solid #ddd;
+  border-top: 0;
   padding: 1em;
 }
 

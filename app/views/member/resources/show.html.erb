@@ -1,0 +1,73 @@
+<h1><u><%= @title %></u></h1>
+
+<div class="notes">
+
+  <div class="two_column_left"> 
+    <%= render "shared/resource_intro" %>
+  </div>
+  
+  <div class="two_column_right">
+    <% unless @resource.description.blank? %>
+      <div class="description">
+        <%= @resource.description %>
+      </div>
+      <br />
+    <% end %>
+    <% unless @resource.feature_list.blank? %>
+      <strong>Keywords:</strong><br />
+      <div id="features">
+        <%= @resource.feature_list %>
+      </div>
+    <% end %>  
+  </div>
+  <hr />
+  
+ 
+  <% if @resource.schedulable? %> 
+    <% if @resource.has_current_and_scheduled_events? %>
+      <b class="loud">Scheduled events</b> &nbsp; &nbsp;
+        <small>( <%= image_tag("ticket_icon.png") %> shows tickets are now available at a price lower than
+                listed here.  Click for details.) 
+        </small>
+      <%= render "coming_events", :collection => @scheduled_events %>
+    <% else %>
+      <b>No events currently scheduled</b>
+    <% end %>
+  <% else %>
+    <div class="two_column_left">
+      <h5>PRICING AND AVAILABILITY</h5>   
+      
+      <% if @resource.requires_setup? %>
+        Sorry - details not available
+    
+      <% else %>
+        <b>Price:</b> &nbsp;<%= @item.formatted_price(@vendor) %> &nbsp;
+        <i><%= dollar_conversion %></i>    
+        <br />
+        <small><%= availability_status %></small><br />
+        <br />
+        <b>Where to obtain?</b> <%= @item.venue %><br />
+        <% unless @item.notes.blank? %>
+          <br />
+          <%= @item.notes %>
+          <br /><br />
+        <% end %>
+        <% unless @item.reference.blank? %>
+          <b>Quote reference:</b> <%= @item.reference %>
+        <% end %>
+        <br /><br />
+      <% end %>
+    </div>
+    <div class="two_column_right">
+      <h5>CONTACTS</h5>
+        
+      <b>Phone:</b>&nbsp;<%= @vendor.phone_with_code %><br /><br />
+      <b>Email:</b><br /><%= @vendor.email %><br /><br />
+      <% unless @vendor.website.blank? %>
+        <b>Company website:</b><br /><%= link_to @vendor.website, @vendor.website, :target => "_blank" %>
+      <% end %>
+      
+    </div>
+  <% end %>   
+  <hr />
+</div>  

@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
       elsif current_user.vendor?
         redirect_back_or business_home_path
       else
-        redirect_back_or user
+        redirect_back_or member_home_path
       end
     end
   end

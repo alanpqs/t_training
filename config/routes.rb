@@ -1,13 +1,5 @@
 TTraining::Application.routes.draw do
 
-  get "resources/index"
-
-  get "resources/show"
-
-  get "offers/index"
-
-  get "vendor_offers/index"
-
   namespace "admin" do
     resources :regions, :countries, :categories, :category_approvals, :media, :fees
     resources :users,     :only => [:index, :show, :edit, :update, :destroy]
@@ -25,6 +17,10 @@ TTraining::Application.routes.draw do
   
   namespace "guest" do
     resources :resources,   :only => [:index, :show]  
+  end
+  
+  namespace "member" do
+    resources :resources,   :only => [:index, :show]
   end
   #namespace "events" do
   #  resources :items
@@ -80,6 +76,7 @@ TTraining::Application.routes.draw do
   match 'resource_selection',    :to => 'business/pages#resource_selection'
   match 't4t_intro',            :to => 'business/pages#t4t_intro'
   match 'vendor_account',       :to => 'business/pages#vendor_account'
+  match 'member_home',          :to => 'member/pages#home'
   
   root :to => 'pages#home'
 

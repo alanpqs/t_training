@@ -129,9 +129,9 @@ describe UsersController do
         end.should change(User, :count).by(1)
       end
       
-      it "should redirect to the user show page" do
+      it "should redirect to the member home page (unless marked as a vendor)" do
         post :create, :user => @attr
-        response.should redirect_to(user_path(assigns(:user)))
+        response.should redirect_to member_home_path
       end
       
       it "should have a welcome message" do

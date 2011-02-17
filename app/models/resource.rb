@@ -197,4 +197,10 @@ class Resource < ActiveRecord::Base
     end
   end
   
+  def has_current_issues?
+    nmbr = self.issues.count(:conditions => ["expiry_date >=? and subscribed =?", Date.today, false])
+    nmbr > 0
+  end
+    
+  
 end

@@ -51,7 +51,22 @@
         <% end %>
         <li><%= link_to "Add a new vendor", new_business_vendor_path %></li>
       </ul>
-   
+    
+    <% else %> 
+      <div class="title">
+        Member Menu
+      </div>
+      <ul>
+        <li><%= link_to "Home", member_home_path %></li>
+        <li><%= link_to "Your preferences", "#" %></li>
+        <li><%= link_to "Recommended training", "#" %></li>
+        <li><%= link_to "Hot tickets", "#" %></li>
+        <li><%= link_to "All training", member_resources_path %></li>
+        <li><%= link_to "All tickets", "#" %></li>
+        <li><%= link_to "Your reviews", "#" %></li>
+        <li><%= link_to "Your favorites", "#" %></li>
+        <li><%= link_to "Training news & views", "#" %></li>
+      </ul> 
     <% end %>
   <% else %>
   <div class="title">
