@@ -35,7 +35,7 @@ describe ResourcesController do
                                     :medium_id => @medium1.id)
               
     @resources = [@resource1, @resource2, @resource3, @other_vendor_resource]
-    @good_attr = { :name => "Good name", :category_id => @category2.id, :medium_id => @medium2, 
+    @good_attr = { :name => "Good name", :category_id => @category2.id, :medium_id => @medium2.id, 
                                           :feature_list => "hot, sticky"}
                                     
   end

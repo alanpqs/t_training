@@ -4,7 +4,7 @@
 <p>
     <%= text_field_tag :search, params[:search] %> &nbsp; &nbsp; &nbsp;
     <%= submit_button(@tag_name) %>
-   
+    <%= image_tag "info.png" %><small><%= link_to "(effective searches)", "#" %></small>
   </p>
 <% end %>
 
@@ -14,16 +14,19 @@
   <tr>
     <th>Name</th>
     <th></th>
+    <th></th>
     <th>Category</th>
     <th>Vendor</th>
     <th>Location</th>
     <th>Format</th>
     <th>Rating</th>
+    <th></th>
   </tr>
   <% @resources.each do |resource| %>
   <tr>
     <td><%= link_to resource.name, guest_resource_path(resource) %></td>
     <td><%= image_tag "tick_octagon.png" if resource.place_order_now? %></td>
+    <td><%= image_tag "ticket_icon.png" if resource.has_current_issues? %></td>
     <td><%= resource.category.category %></td> 
     <td><%= resource.vendor.name %></td>
     <td><%= resource.vendor.where_is %></td>

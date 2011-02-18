@@ -51,6 +51,28 @@ class Resource < ActiveRecord::Base
   #  where "hidden = false"
   #end
   
+  searchable do
+    text :name
+    text :description
+    text :category_name do
+      category.category
+    end
+    text :vendor_name do
+      vendor.name
+    end
+    text :format do
+      medium.medium
+    end
+    text :vendor_country do
+      vendor.country.name
+    end
+    text :vendor_place do
+      vendor.address
+    end
+    boolean :hidden
+    text :feature_list  
+  end
+  
   validates :name,            :presence       => true,
                               :length         => { :maximum => 50 },
                               :uniqueness     => { :scope => [:vendor_id, :category_id], 
@@ -71,6 +93,7 @@ class Resource < ActiveRecord::Base
 
   
   validates_associated :vendor, :category, :medium
+
 
   def schedulable?
     self.medium.scheduled?
@@ -201,6 +224,5 @@ class Resource < ActiveRecord::Base
     nmbr = self.issues.count(:conditions => ["expiry_date >=? and subscribed =?", Date.today, false])
     nmbr > 0
   end
-    
   
 end

@@ -38,27 +38,27 @@ describe Member::ResourcesController do
       describe "before a search has been made" do
       
         it "should be successful" do
-          get :index, :search => ""
+          get :index
           response.should be_success
         end
     
         it "should have the right title" do
-          get :index, :search => ""
+          get :index
           response.should have_selector("title", :content => "All training - find a resource")
         end
     
         it "should list scheduled resource names" do
-           get :index, :search => ""
-           response.should have_selector("td", :content => "Resource")
+           get :index
+           response.should have_selector("td", :content => @scheduled_resource.name)
         end
     
         it "should list unscheduled resource names" do
-           get :index, :search => ""
+           get :index
            response.should have_selector("td", :content => "Unscheduled 1")
         end
       
         it "should list the resource vendors" do
-          get :index, :search => ""
+          get :index
           response.should have_selector("td", :content => "V Vendor")
         end
     
@@ -70,7 +70,7 @@ describe Member::ResourcesController do
                                       :vendor_id => @non_verified_vendor.id, 
                                       :category_id => @category1.id, :webpage => "webpage@example.com",
                                       :medium_id => @resource_medium.id, :description => "It's a")
-          get :index, :search => ""
+          get :index
           response.should_not have_selector("td", :content => "X Vendor")
         end
     
@@ -83,7 +83,7 @@ describe Member::ResourcesController do
                                       :vendor_id => @inactive_vendor.id, 
                                       :category_id => @category1.id, :webpage => "webpage@example.com",
                                       :medium_id => @resource_medium.id, :description => "It's a")          
-          get :index, :search => ""
+          get :index
           response.should_not have_selector("td", :content => "No longer")
         end
       
@@ -91,43 +91,43 @@ describe Member::ResourcesController do
           @hidden_resource = Factory(:resource, :name => "Hidden", :vendor_id => @verified_vendor.id, 
                                       :category_id => @category1.id, :webpage => "webpage@example.com",
                                       :medium_id => @resource_medium.id, :hidden => true)
-          get :index, :search => ""
+          get :index
           response.should_not have_selector("td", :content => "Hidden")
         end
       
         it "should indicate which resources can be ordered now" do
           @event_item = Factory(:item, :resource_id => @scheduled_resource.id)
           @resource_item = Factory(:item, :resource_id => @unscheduled_resource.id)
-          get :index, :search => ""
+          get :index
           @resources.each do |resource|
             response.should have_selector("img", :alt => "Tick_octagon")
           end
         end
       
         it "should indicate which resources cannot be ordered now" do
-          get :index, :search => ""
+          get :index
           @resources.each do |resource|
             response.should_not have_selector("img", :alt => "Tick_octagon")
           end
         end
       
         it "should list the vendor location" do
-          get :index, :search => ""
+          get :index
           response.should have_selector("td", :content => "London, ABC")
         end
     
         it "should include the resource category" do
-          get :index, :search => ""
+          get :index
           response.should have_selector("td", :content => "HR")
         end
       
         it "should include the vendor name" do
-          get :index, :search => ""
+          get :index
           response.should have_selector("td", :content => @verified_vendor.name)
         end
       
         it "should include the resource format" do
-          get :index, :search => ""
+          get :index
           response.should have_selector("td", :content => @scheduled_medium.medium)
         end
       
@@ -136,7 +136,7 @@ describe Member::ResourcesController do
         end
       
         it "should have a link to the resource 'show' form" do
-          get :index, :search => ""
+          get :index
           @resources.each do |resource|
             response.should have_selector("a", :href => member_resource_path(resource),
                                                :content => resource.name)
@@ -144,13 +144,13 @@ describe Member::ResourcesController do
         end
     
         it "should not have a link to the signup form" do
-          get :index, :search => ""
+          get :index
           response.should_not have_selector("a", :href => signup_path,
                                              :content => "Free sign-up here")
         end
     
         it "should have a search box" do
-          get :index, :search => ""
+          get :index
           response.should have_selector("input", :value => "Search")
         end
         
@@ -159,7 +159,7 @@ describe Member::ResourcesController do
         end
     
         it "should have page guidance" do
-          get :index, :search => ""
+          get :index
           response.should have_selector("h5", :content => "Guidance for this page")
         end
         
@@ -169,17 +169,17 @@ describe Member::ResourcesController do
                                   :category_id => @category1.id, :webpage => "webpage@example.com",
                                   :medium_id => @resource_medium.id)
           end
-          get :index, :search => ""
+          get :index
           response.should have_selector("div.pagination")
           response.should have_selector("span.disabled", :content => "Previous")
-          response.should have_selector("a",    :href => "/member/resources?search=&page=2",
+          response.should have_selector("a",    :href => "/member/resources?page=2",
                                                 :content => "2")
-          response.should have_selector("a",    :href => "/member/resources?search=&page=2",
+          response.should have_selector("a",    :href => "/member/resources?page=2",
                                                 :content => "Next")
         end
       
         it "should not have a 'tickets' icon if there have been no ticket issues" do
-          get :index, :search => ""
+          get :index
           response.should_not have_selector("img", :alt => "Ticket_icon")
         end
       
@@ -188,7 +188,7 @@ describe Member::ResourcesController do
           @event_item = Factory(:item, :resource_id => @scheduled_resource.id)
           @issue = Factory(:issue, :item_id => @event_item.id, :vendor_id => @verified_vendor.id, 
                                    :fee_id => @fee.id, :user_id => @vendor_user.id)
-          get :index, :search => ""
+          get :index
           response.should have_selector("img", :alt => "Ticket_icon")
         end
       
@@ -197,7 +197,7 @@ describe Member::ResourcesController do
           @event_item = Factory(:item, :resource_id => @scheduled_resource.id)
           @issue = Factory(:issue, :item_id => @event_item.id, :vendor_id => @verified_vendor.id, 
                                    :fee_id => @fee.id, :user_id => @vendor_user.id, :subscribed => true)
-          get :index, :search => ""
+          get :index
           response.should_not have_selector("img", :alt => "Ticket_icon")
         end
         

@@ -17,7 +17,7 @@ gem 'mail', '2.2.7'
 gem 'acts-as-taggable-on', '2.0.6'
 gem 'yaml_db', '0.2.0'
 gem 'pg', '0.10.1'
-#gem 'thinking-sphinx', '2.0.0', :require => 'thinking_sphinx'
+gem 'sunspot_rails', '1.2'
 
 group :development do
   gem 'rspec-rails', '2.5.0'

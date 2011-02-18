@@ -1,13 +1,14 @@
 <h1><%= @title %></h1>
 
-<%= form_tag guest_resources_path, :method => 'get' do %>
-<p>
-    <%= text_field_tag :search, params[:search], :size => 40 %> &nbsp; &nbsp; &nbsp;
-    <%= submit_button(@tag_name) %> &nbsp; &nbsp;
+<%= form_tag member_resources_path, :method => 'get' do %>
+    <%= text_field_tag :search, params[:search], :size => 40 %> &nbsp; &nbsp;
+    <%= submit_button(@tag_name) %> &nbsp;
     <%= image_tag "info.png" %><small><%= link_to "(effective searches)", "#" %></small>
-  </p>
 <% end %>
 
+<% if @search %>
+  <h5 class="loud"><%= @search.total %> results</h5>
+<% end %>
 
 <small><%= will_paginate %>
 <table>

@@ -1,10 +1,21 @@
 class Member::ResourcesController < ApplicationController
   
   def index
-    @resources = Resource.publicly_listed.paginate(:page => params[:page], :per_page => 20)
-
     @title = "All training - find a resource"
     @tag_name = "Search"
+    
+    if params[:search]
+      query = params[:search]
+      @search = Resource.search do
+        keywords query
+        with(:hidden, false)
+        paginate :page => params[:page], :per_page => 20
+      end
+      @resources = @search.results
+    else
+      @resources = Resource.publicly_listed.paginate(:page => params[:page], :per_page => 20)
+    end
+      
     @instructions = "The list shows available training resources, with the most recently-added at the top."
     @instructions_2 = "The green check-button indicates that you can place orders now - click on the 
                       resource Name for more details."
@@ -16,7 +27,7 @@ class Member::ResourcesController < ApplicationController
     @instructions_5 = "Enter a few keywords in the 'Search' box above to find the resources you want.
                      Click on the 'Effective searches' button for more guidance." 
   end
-
+  
   def show
     @resource = Resource.find(params[:id])
     @title = @resource.name
