@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20110111104631
+# Schema version: 20110222084744
 #
 # Table name: media
 #
@@ -11,11 +11,12 @@
 #  created_at        :datetime
 #  updated_at        :datetime
 #  scheduled         :boolean
+#  attendance        :boolean
 #
 
 class Medium < ActiveRecord::Base
   
-  attr_accessible :medium, :authorized, :user_id, :rejection_message, :scheduled
+  attr_accessible :medium, :authorized, :user_id, :rejection_message, :scheduled, :attendance
   
   before_destroy :has_been_rejected?
   

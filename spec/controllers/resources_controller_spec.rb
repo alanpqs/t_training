@@ -120,7 +120,7 @@ describe ResourcesController do
         @resource1.name.should_not == "Good name"
       end
       
-      it "should redirect to the login page" do
+      it "should redirect to the root path" do
         put :update, :id => @resource1, :resource => @good_attr
         response.should redirect_to root_path
       end

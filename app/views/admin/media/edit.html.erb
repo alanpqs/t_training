@@ -13,6 +13,12 @@
         <%= f.radio_button( :scheduled, :true ) %> Yes<br />
         <%= f.radio_button( :scheduled, :false ) %> No, they're available all the time  
     </div>
+    <br />
+    <div class="field">
+      <%= f.label :attendance, "Is physical attendance required?" %><br />
+        <%= f.radio_button( :attendance, :true ) %> Yes, so the training location is important<br />
+        <%= f.radio_button( :attendance, :false ) %> No, location is irrelevant for this kind of training  
+    </div>
   
   <div class="actions">
      <%= submit_button(@tag_name) %>

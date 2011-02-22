@@ -23,6 +23,7 @@ class Country < ActiveRecord::Base
   has_many      :users 
   has_many      :cities
   has_many      :vendors
+  has_many      :searchlists, :dependent => :destroy
   
   idd_regex = /[+]\d+([-])?(\d+)?$/
   

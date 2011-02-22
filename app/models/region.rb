@@ -17,6 +17,7 @@ class Region < ActiveRecord::Base
   before_destroy :check_links
     
   has_many :countries
+  has_many :searchlists, :dependent => :destroy
   
   validates :region,      :presence => true,
                           :length => { :maximum => 25 },

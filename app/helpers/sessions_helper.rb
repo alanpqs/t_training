@@ -42,17 +42,19 @@ module SessionsHelper
   
   def deny_access
     store_location
-    redirect_to login_path, :notice => "Please log in to access this page."
+    flash[:notice] = "Please log in to access this page."
+    redirect_to login_path
   end
   
   def legality_warning
-    redirect_to root_path, :notice => "Permission denied"
+    flash[:notice] = "Permission denied"
+    redirect_to root_path
   end
   
   def admin_user
     unless current_user.admin?
       flash[:notice]="Permission denied"
-      redirect_to(root_path)
+      redirect_to root_path
     end
   end
   
@@ -129,6 +131,12 @@ module SessionsHelper
       if logged_in?
         legality_warning unless current_user.admin?
       else
+        legality_warning
+      end
+    end
+    
+    def member_legality_check
+      unless logged_in?
         legality_warning
       end
     end

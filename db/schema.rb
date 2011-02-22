@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110215135406) do
+ActiveRecord::Schema.define(:version => 20110222084744) do
 
   create_table "categories", :force => true do |t|
     t.string   "category"
@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(:version => 20110215135406) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "scheduled",         :default => false
+    t.boolean  "attendance",        :default => false
   end
 
   create_table "regions", :force => true do |t|
@@ -124,6 +125,19 @@ ActiveRecord::Schema.define(:version => 20110215135406) do
     t.string   "description"
     t.string   "webpage"
     t.boolean  "hidden",      :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "searchlists", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "focus"
+    t.integer  "category_id"
+    t.string   "topics"
+    t.integer  "proximity"
+    t.integer  "country_id"
+    t.integer  "region_id"
+    t.integer  "medium_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

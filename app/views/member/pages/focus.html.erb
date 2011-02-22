@@ -1,0 +1,18 @@
+<h1><%= @title %></h1>
+
+<div class="notes">
+   You're going to build a search-list for one of the types of training you're interested in.<br />
+   But how will this training help you?  What do you want to achieve?<br />  
+   Select the best answer below, then click <i>Continue</i>.
+</div>
+<br />
+<%= form_tag new_member_searchlist_path(@user), :method => "get" do %>
+
+  <%= render "shared/focus_list" %>
+  
+  <div class="actions">
+    <%= submit_tag @tag_name, :name => nil, :class => "action_round" %>
+  </div>
+  
+<% end %>
+

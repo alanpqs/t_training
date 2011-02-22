@@ -31,6 +31,7 @@ class Category < ActiveRecord::Base
 
   belongs_to :user
   has_many   :resources
+  has_many   :searchlists
   
   validates :category,        :presence       => true,
                               :length         => { :maximum => 30 },

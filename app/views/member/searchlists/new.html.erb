@@ -1,0 +1,17 @@
+<h1><%= @title %></h1>
+
+<%= form_for [:member, @searchlist] do |f| %>
+
+  <%= render 'shared/error_messages', :object => f.object %>
+  
+  <%= render 'searchlist', :f => f %>
+  
+   
+  <div class="actions">
+    <%= submit_button(@tag_name) %>
+  </div>
+  
+  <div class="redirects">
+    <%= cancellation_link("(cancel the entry)", member_searchlists_path) %>
+  </div>
+<% end %>

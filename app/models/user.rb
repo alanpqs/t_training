@@ -32,6 +32,7 @@ class User < ActiveRecord::Base
   has_many    :media
   has_many    :issues
   has_many    :tickets
+  has_many    :searchlists, :dependent => :destroy
   
   geocoded_by :where_is
   

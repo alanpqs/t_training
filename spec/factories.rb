@@ -42,8 +42,8 @@ Factory.define :category do |category|
   category.category             'HR'
   category.target               'Job'
   category.association :user
-  #category.submitted_name       "HR"
-  #category.submitted_group      "Job"
+  category.submitted_name                'HR'
+  category.submitted_group               'Job'
 end
 
 Factory.sequence :category do |n|
@@ -112,3 +112,11 @@ Factory.define :credit do |credit|
   credit.currency                 'USD'
   credit.cents                    5000
 end
+
+Factory.define :searchlist do |searchlist|
+  searchlist.association :user
+  searchlist.focus                'Job'
+  searchlist.association :category
+  searchlist.topics               'Pay'
+end
+  

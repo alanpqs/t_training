@@ -1,5 +1,9 @@
 TTraining::Application.routes.draw do
 
+  get "searchlists/index"
+
+  get "searchlists/new"
+
   namespace "admin" do
     resources :regions, :countries, :categories, :category_approvals, :media, :fees
     resources :users,     :only => [:index, :show, :edit, :update, :destroy]
@@ -21,6 +25,7 @@ TTraining::Application.routes.draw do
   
   namespace "member" do
     resources :resources,   :only => [:index, :show]
+    resources :searchlists
   end
   #namespace "events" do
   #  resources :items
@@ -77,6 +82,7 @@ TTraining::Application.routes.draw do
   match 't4t_intro',            :to => 'business/pages#t4t_intro'
   match 'vendor_account',       :to => 'business/pages#vendor_account'
   match 'member_home',          :to => 'member/pages#home'
+  match 'member_focus',         :to => 'member/pages#focus'
   
   root :to => 'pages#home'
 

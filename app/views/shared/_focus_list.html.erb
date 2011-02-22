@@ -1,0 +1,28 @@
+
+  <div class="field">
+    <%= radio_button_tag(:group, @targets[0]) %>
+    <%= label_tag(:group_business, "Understanding a business sector") %><br />
+    <small class="indent">Training for a specific business - e.g. Banking, Healthcare, Construction</small>
+  </div>
+  <div class="field">
+    <%= radio_button_tag(:group, @targets[1]) %>
+    <%= label_tag(:group_job, "Getting better at the job") %><br />
+    <small class="indent">Job-related training for any business - e.g. Accountancy, HR, Sales</small>
+  </div>
+  <div class="field">
+    <%= radio_button_tag(:group, @targets[2]) %>
+    <%= label_tag(:group_personal, "Improving personal skills") %><br />
+    <small class="indent">Work-related, but not tied to a job or business - e.g. 
+           Foreign Languages, Time Management</small>
+  </div>
+  <div class="field">
+    <%= radio_button_tag(:group, @targets[3]) %>
+    <%= label_tag(:group_world, "Understanding world issues") %><br />
+    <small class="indent">e.g. Environment, World Trade, Employment Issues</small>
+  </div>
+  <div class="field">
+    <%= radio_button_tag(:group, @targets[4]) %>
+    <%= label_tag(:group_fun, "Having fun") %><br />
+    <small class="indent">e.g. Playing Music, Fitness Training, Gardening</small>
+  </div>
+

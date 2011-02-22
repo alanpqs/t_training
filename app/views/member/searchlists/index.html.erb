@@ -1,0 +1,35 @@
+<h1><%= @title %></h1>
+  
+<div class="notes"> 
+
+  <p>Create up to 10 custom search-lists.  The criteria you set will allow T4T to give you relevant training
+     recommendations and discounted ticket alerts.<br />
+     <small>(Note that the 'Location' filter will apply only to training where your physical attendance
+     is required)</small>
+  </p>
+  
+  <h5 class="loud"><%= pluralize(@search_count, 'search-list') %> defined out of possible 10. 
+      <% if @search_count >= 10 %>
+        <small><br />(You'll need to delete a search before you can add another)</small>
+      <% end %>
+  </h5>
+  
+  <% @searchlists.each do |s| %>
+    
+    <b>Focus/Category:</b> <%= s.focus %> - <%= s.category.category unless s.category.blank? %>
+    &nbsp; &nbsp; &nbsp; <%= link_to "(edit)", edit_member_searchlist_path(s), 
+                                        :title => "Edit this search-list" %> 
+         <%= link_to "(delete)", member_searchlist_path(s),  :method => :delete,
+                                        :confirm => "You sure?",
+                                        :title => "Delete this search-list" %>
+        <br />
+    <b>Format:</b> <%= s.format_display %> &nbsp; &nbsp; &nbsp;
+    <b>Location:</b> <%= s.location_descriptor %><br />
+    <b>Keywords:</b> <%= s.topics %>
+    <br /><hr />
+  <% end %>
+</div>
+
+<div class="actions">
+  <%= link_to @tag_name, member_focus_path, :class => "action_round" unless @search_count >= 10 %>
+</div>
