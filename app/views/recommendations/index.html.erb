@@ -1,0 +1,42 @@
+<h1><%= @title %></h1>
+
+<h5 class="loud">for <%= @searchlist.focus %> - <%= @searchlist.category.category %></h5>
+<%= form_tag searchlist_recommendations_path(@searchlist), :method => 'get' do %>
+    <div class="two_column_left">
+      <%= text_area_tag :search, @searchstring %> 
+    </div>
+    <div class="two_column_right">
+      <div class="notes">
+       <i><%= @format_delimiter %>; <%= @location_delimiter %></i>
+      </div>
+      <br />
+      <%= submit_button(@tag_name) %> &nbsp; &nbsp; 
+      <%= link_to "(edit preferences)", edit_member_searchlist_path(@searchlist) %>
+    </div
+<% end %>
+<hr />
+<% if @search %>
+  <h5 class="loud"><%= pluralize(@search.total, "result") %></h5>
+
+  <div class="notes">
+  <%= will_paginate %>
+  <br />
+  <% @recommendations.each do |r| %>
+    <strong><%= link_to r.name, "#" %></strong>: <%= r.medium.medium %> 
+          <i>(<%= pluralize(r.length, r.length_unit) %>)</i> 
+          from <%= r.vendor.name %> 
+          in <%= r.vendor.where_is %><br /> 
+
+      <div style="font-size:0.8em">
+        <%= image_tag "tick_octagon.png" if r.place_order_now? %>
+        <%= image_tag "ticket_icon.png" if r.has_current_issues? %>
+        <u>Keywords:</u> <%= r.feature_list %><br />
+        <% unless r.description.blank? %>
+          '<%= r.description %>'
+        <% end %>
+      </div>
+    <hr />
+  <% end %>
+   <%= will_paginate %>
+  </div>
+<% end %>

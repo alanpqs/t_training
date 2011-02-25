@@ -1,5 +1,7 @@
 TTraining::Application.routes.draw do
 
+  get "recommendations/index"
+
   get "searchlists/index"
 
   get "searchlists/new"
@@ -24,8 +26,9 @@ TTraining::Application.routes.draw do
   end
   
   namespace "member" do
-    resources :resources,   :only => [:index, :show]
-    resources :searchlists
+    resources :resources,       :only => [:index, :show]
+    resources :searchlists,     :except => :show
+    resources :recommendations, :only => :index  
   end
   #namespace "events" do
   #  resources :items
@@ -38,6 +41,10 @@ TTraining::Application.routes.draw do
   
   resources :vendors do
     resources :resources,   :shallow => true
+  end
+  
+  resources :searchlists do
+    resources :recommendations,   :only => :index
   end
   
   resources :resources do

@@ -299,12 +299,12 @@ describe Member::SearchlistsController do
             end
           end
           
-          it "should include a reference to the user's country" do
-            get :index
-            @now_searchlists.each do |ns|
-              response.should have_selector(".notes", :content => @user.country.name)
-            end
-          end
+          #it "should include a reference to the user's country" do
+          #  get :index
+          #  @now_searchlists.each do |ns|
+          #    response.should have_selector(".notes", :content => @user.country.name)
+          #  end
+          #end
           
           it "should include the correct distance" do
             get :index
@@ -417,10 +417,9 @@ describe Member::SearchlistsController do
                                                 :content => "Must be selected")
       end
       
-      it "should have a blank 'topics' text-field" do
+      it "should have a blank 'topics' textarea" do
         get :new, :group => "Job"
-        response.should have_selector("input", :name => "searchlist[topics]",
-                                               :type => "text")
+        response.should have_selector("textarea", :name => "searchlist[topics]")
       end
       
       it "should have a blank 'preferred format' select field" do
@@ -441,25 +440,25 @@ describe Member::SearchlistsController do
                                                 :content => "Not selected")
       end
       
-      it "should have a blank 'proximity' select field" do
+      it "should have a blank 'proximity' text field" do
         get :new, :group => "Job"
-        response.should have_selector("select", :name => "searchlist[proximity]",
-                                                :content => "Not selected")
+        response.should have_selector("input", :name => "searchlist[proximity]",
+                                               :type => "text")
       end
       
-      it "should have the correct options for 'proximity'" do
-        get :new, :group => "Job"
-        response.should have_selector("option", :value => "3",
-                                                :content => "within around 500 km")
-        response.should have_selector("option", :value => "4",
-                                                :content => "within around 150 km")
-        response.should have_selector("option", :value => "5",
-                                                :content => "within around 50 km")
-      end
+      #it "should have the correct options for 'proximity'" do
+      #  get :new, :group => "Job"
+      #  response.should have_selector("option", :value => "3",
+      #                                          :content => "within around 500 km")
+      #  response.should have_selector("option", :value => "4",
+      #                                          :content => "within around 150 km")
+      #  response.should have_selector("option", :value => "5",
+      #                                          :content => "within around 50 km")
+      #end
       
       it "should have a submission button" do
         get :new, :group => "Job"
-        response.should have_selector("input", :value => "Create the search-list")
+        response.should have_selector("input", :value => "Save your preferences - then search")
       end
       
       it "should have a 'cancellation' link" do
@@ -503,14 +502,15 @@ describe Member::SearchlistsController do
               @new_searchlist.proximity.should == nil
             end
               
-            it "should redirect to the 'index' page" do
+            it "should redirect to the 'recommendations' page" do
               post :create, :searchlist => @attributes
-              response.should redirect_to member_searchlists_path
+              @new_searchlist = Searchlist.find(:last)
+              response.should redirect_to searchlist_recommendations_path(@new_searchlist)
             end
             
             it "should display a success message" do
               post :create, :searchlist => @attributes
-              flash[:success].should =~ /Your search-list has been successfully created/
+              flash[:success].should =~ /Your search-list has been permanently saved/
             end
             
           end
@@ -536,14 +536,15 @@ describe Member::SearchlistsController do
               @new_searchlist.proximity.should == nil
             end
             
-            it "should redirect to the 'index' page" do
+            it "should redirect to the 'recommendations' page" do
               post :create, :searchlist => @attributes
-              response.should redirect_to member_searchlists_path
+              @new_searchlist = Searchlist.find(:last)
+              response.should redirect_to searchlist_recommendations_path(@new_searchlist)
             end
             
             it "should display a success message" do
               post :create, :searchlist => @attributes
-              flash[:success].should =~ /Your search-list has been successfully created/
+              flash[:success].should =~ /Your search-list has been permanently saved/
             end
             
           end
@@ -568,14 +569,15 @@ describe Member::SearchlistsController do
               @new_searchlist.proximity.should == 3
             end
             
-            it "should redirect to the 'index' page" do
+            it "should redirect to the 'recommendations' page" do
               post :create, :searchlist => @attributes
-              response.should redirect_to member_searchlists_path
+              @new_searchlist = Searchlist.find(:last)
+              response.should redirect_to searchlist_recommendations_path(@new_searchlist)
             end
             
             it "should display a success message" do
               post :create, :searchlist => @attributes
-              flash[:success].should =~ /Your search-list has been successfully created/
+              flash[:success].should =~ /Your search-list has been permanently saved/
             end
           end
         
@@ -598,14 +600,15 @@ describe Member::SearchlistsController do
               @new_searchlist.country_id.should == @user.country_id
             end
             
-            it "should redirect to the 'index' page" do
+            it "should redirect to the 'recommendations' page" do
               post :create, :searchlist => @attributes
-              response.should redirect_to member_searchlists_path
+              @new_searchlist = Searchlist.find(:last)
+              response.should redirect_to searchlist_recommendations_path(@new_searchlist)
             end
             
             it "should display a success message" do
               post :create, :searchlist => @attributes
-              flash[:success].should =~ /Your search-list has been successfully created/
+              flash[:success].should =~ /Your search-list has been permanently saved/
             end
           end
         end
@@ -633,14 +636,15 @@ describe Member::SearchlistsController do
             @new_searchlist.region_id.should == nil
           end
           
-          it "should redirect to the 'index' page" do
+          it "should redirect to the 'recommendations' page" do
             post :create, :searchlist => @attributes
-            response.should redirect_to member_searchlists_path
+            @new_searchlist = Searchlist.find(:last)
+            response.should redirect_to searchlist_recommendations_path(@new_searchlist)
           end
             
           it "should display a success message" do
             post :create, :searchlist => @attributes
-            flash[:success].should =~ /Your search-list has been successfully created/
+            flash[:success].should =~ /Your search-list has been permanently saved/
           end
         end
       end
@@ -707,11 +711,10 @@ describe Member::SearchlistsController do
                                                 :content => @searchlist.category.category)
       end
       
-      it "should have a 'topics' text-field" do
+      it "should have a 'topics' text-area" do
         get :edit, :id => @searchlist
-        response.should have_selector("input", :name => "searchlist[topics]",
-                                               :type => "text",
-                                               :value => @searchlist.topics)
+        response.should have_selector("textarea", :name => "searchlist[topics]",
+                                                  :content => @searchlist.topics)
       end
       
       it "should have a blank 'preferred format' select field" do
@@ -732,25 +735,26 @@ describe Member::SearchlistsController do
                                                 :content => "Not selected")
       end
       
-      it "should have a 'proximity' select field" do
+      it "should have a 'proximity' text field" do
         get :edit, :id => @searchlist
-        response.should have_selector("select", :name => "searchlist[proximity]",
-                                                :content => "Not selected")
+        response.should have_selector("input", :name => "searchlist[proximity]",
+                                                :type => "text",
+                                                :content => "")
       end
       
-      it "should have the correct options for 'proximity'" do
-        get :edit, :id => @searchlist
-        response.should have_selector("option", :value => "3",
-                                                :content => "within around 500 km")
-        response.should have_selector("option", :value => "4",
-                                                :content => "within around 150 km")
-        response.should have_selector("option", :value => "5",
-                                                :content => "within around 50 km")
-      end
+      #it "should have the correct options for 'proximity'" do
+      #  get :edit, :id => @searchlist
+      #  response.should have_selector("option", :value => "3",
+      #                                          :content => "within around 500 km")
+      #  response.should have_selector("option", :value => "4",
+      #                                          :content => "within around 150 km")
+      #  response.should have_selector("option", :value => "5",
+      #                                          :content => "within around 50 km")
+      #end
       
       it "should have a submission button" do
         get :edit, :id => @searchlist
-        response.should have_selector("input", :value => "Confirm changes")
+        response.should have_selector("input", :value => "Confirm changes - and search")
       end
       
       it "should have a 'cancellation' link" do
@@ -790,14 +794,14 @@ describe Member::SearchlistsController do
               @searchlist.country_id.should == searchlist.country_id
             end
             
-            it "should redirect to the index page" do
+            it "should redirect to the recommendations page" do
               put :update, :id => @searchlist, :searchlist => @attributes
-              response.should redirect_to member_searchlists_path
+              response.should redirect_to searchlist_recommendations_path(@searchlist)
             end
             
             it "should display a success message" do
               put :update, :id => @searchlist, :searchlist => @attributes
-              flash[:success].should =~ /Your search-list has been successfully updated/
+              flash[:success].should =~ /Your search-list has been updated.  Now click on 'Start search'/
             end
           end
           
@@ -818,14 +822,14 @@ describe Member::SearchlistsController do
               @searchlist.proximity.should == searchlist.proximity
             end
             
-            it "should redirect to the index page" do
+            it "should redirect to the recommendations page" do
               put :update, :id => @searchlist, :searchlist => @attributes
-              response.should redirect_to member_searchlists_path
+              response.should redirect_to searchlist_recommendations_path(@searchlist)
             end
             
             it "should display a success message" do
               put :update, :id => @searchlist, :searchlist => @attributes
-              flash[:success].should =~ /Your search-list has been successfully updated/
+              flash[:success].should =~ /Your search-list has been updated.  Now click on 'Start search'/
             end
           end
           
@@ -846,14 +850,14 @@ describe Member::SearchlistsController do
               @searchlist.proximity.should == searchlist.proximity
             end
             
-            it "should redirect to the index page" do
+            it "should redirect to the recommendations page" do
               put :update, :id => @searchlist, :searchlist => @attributes
-              response.should redirect_to member_searchlists_path
+              response.should redirect_to searchlist_recommendations_path(@searchlist)
             end
             
             it "should display a success message" do
               put :update, :id => @searchlist, :searchlist => @attributes
-              flash[:success].should =~ /Your search-list has been successfully updated/
+              flash[:success].should =~ /Your search-list has been updated.  Now click on 'Start search'/
             end
           end
           
@@ -873,14 +877,14 @@ describe Member::SearchlistsController do
               @searchlist.medium_id.should == searchlist.medium_id
             end
             
-            it "should redirect to the index page" do
+            it "should redirect to the recommendations page" do
               put :update, :id => @searchlist, :searchlist => @attributes
-              response.should redirect_to member_searchlists_path
+              response.should redirect_to searchlist_recommendations_path(@searchlist)
             end
             
             it "should display a success message" do
               put :update, :id => @searchlist, :searchlist => @attributes
-              flash[:success].should =~ /Your search-list has been successfully updated/
+              flash[:success].should =~ /Your search-list has been updated.  Now click on 'Start search'/
             end
           end
         
@@ -904,14 +908,14 @@ describe Member::SearchlistsController do
             @searchlist.medium_id.should == searchlist.medium_id
           end
             
-          it "should redirect to the index page" do
+          it "should redirect to the recommendations page" do
             put :update, :id => @searchlist, :searchlist => @attributes
-            response.should redirect_to member_searchlists_path
+            response.should redirect_to searchlist_recommendations_path(@searchlist)
           end
             
           it "should display a success message" do
             put :update, :id => @searchlist, :searchlist => @attributes
-            flash[:success].should =~ /Your search-list has been successfully updated/
+            flash[:success].should =~ /Your search-list has been updated.  Now click on 'Start search'/
           end        
         end
         

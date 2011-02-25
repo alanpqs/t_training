@@ -1,21 +1,29 @@
-  <div class="field">
-    <span class="loud">* </span>
-    <%= f.label :category_id, "Select a category" %><br />
-    <%= collection_select(:searchlist, :category_id, @categories, :id, :category, 
+  
+  <div class="two_column_left">
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :category_id, "Select a category" %><br />
+      <%= collection_select(:searchlist, :category_id, @categories, :id, :category, 
            { :include_blank => "Must be selected" } ) %>
+    </div>
   </div>
   
-  <div class="field">
-    <span class="loud">* </span>
-    <%= f.label :topics, "Fine-tune your search with up to 10 keywords" %><br />
-    <%= f.text_field :topics, :size => 50 %>
-  </div>
-  
-  <div class="field">
-    <%= f.label :medium_id, "Enter your preferred format, if any" %><br />
-    <%= collection_select(:searchlist, :medium_id, @media, :id, :medium, 
+  <div class="two_column_right">
+    <div class="field">
+      <%= f.label :medium_id, "Enter your preferred format, if any" %><br />
+      <%= collection_select(:searchlist, :medium_id, @media, :id, :medium, 
         { :include_blank => "Any format" }) %>
+    </div>
   </div>
+  
+  <div class="smallwidearea">
+    <div class="field">
+      <span class="loud">* </span>
+      <%= f.label :topics, "Fine-tune your search with up to 10 keywords" %><br />
+      <%= f.text_area :topics %>
+    </div>
+  </div>
+  
   <%= f.hidden_field :user_id %>
   <%= f.hidden_field :focus %>
   
@@ -47,11 +55,8 @@
     </div>
     
     <div class="field">
-      <%= f.label :proximity, "Define max distance in your country" %><br />
-      <%= select(:searchlist, :proximity, 
-             { "Not selected" => nil,
-               "within around 500 km" => "3", 
-               "within around 150 km" => "4",
-               "within around 50 km" => "5" }) %>
+      <%= f.label :proximity, "Max distance from you, in kilometers" %><br />
+        <small>(To apply, region and country must be 'Not selected')</small>
+      <%= f.text_field :proximity, :size => 5 %>
     </div>
   </div>

@@ -643,7 +643,7 @@ describe ResourcesController do
       
       it "should include a list of associated keywords" do
         get :show, :id => @tagged_resource1
-        response.should have_selector("div#features", :content => "good, nice, fun")
+        response.should have_selector("div#features", :content => "fun")
       end
       
       it "should not include non-associated keywords" do

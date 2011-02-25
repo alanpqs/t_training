@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20110111104631
+# Schema version: 20110222084744
 #
 # Table name: resources
 #
@@ -51,28 +51,6 @@ class Resource < ActiveRecord::Base
   #  where "hidden = false"
   #end
   
-  searchable do
-    text :name
-    text :description
-    text :category_name do
-      category.category
-    end
-    text :vendor_name do
-      vendor.name
-    end
-    text :format do
-      medium.medium
-    end
-    text :vendor_country do
-      vendor.country.name
-    end
-    text :vendor_place do
-      vendor.address
-    end
-    boolean :hidden
-    text :feature_list  
-  end
-  
   validates :name,            :presence       => true,
                               :length         => { :maximum => 50 },
                               :uniqueness     => { :scope => [:vendor_id, :category_id], 
@@ -93,8 +71,47 @@ class Resource < ActiveRecord::Base
 
   
   validates_associated :vendor, :category, :medium
-
-
+ 
+  searchable do
+    text :name
+    text :description
+    text :category_name do
+      category.category
+    end
+    text :vendor_name do
+      vendor.name
+    end
+    text :format do
+      medium.medium
+    end
+    text :vendor_country do
+      vendor.country.name
+    end
+    text :vendor_place do
+      vendor.address
+    end
+    boolean :hidden
+    text :feature_list
+    integer :region_id do
+      vendor.country.region_id
+    end
+    integer :country_id do
+      vendor.country_id
+    end
+    integer :format_id do
+      medium_id
+    end
+    boolean :vendor_verified do
+      vendor.verified
+    end 
+    double :latitude, :as => "lat" do
+      vendor.latitude
+    end
+    double :longitude, :as => "lng" do
+      vendor.longitude
+    end
+  end
+  
   def schedulable?
     self.medium.scheduled?
   end

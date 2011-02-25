@@ -35,37 +35,15 @@ describe Searchlist do
     missing_category.should_not be_valid
   end
   
-  it "should not accept a blank 'topics' field" do
-    missing_topics = Searchlist.new(@attr.merge(:topics => ""))
-    missing_topics.should_not be_valid
-  end
-  
-  it "should not accept a 'topics' field with too many characters" do
-    @long_list = "a" * 81
-    long_topics = Searchlist.new(@attr.merge(:topics => @long_list))
-    long_topics.should_not be_valid
-  end
-  
   it "should not accept a 'topics' field with too many words" do
     @wordy = "This is a topic with too many words in it now"
     wordy_topics = Searchlist.new(@attr.merge(:topics => @wordy))
     wordy_topics.should_not be_valid
   end
   
-  it "should not accept punctuation in the 'topics' field" do
-    @punctuated = "This, is, it"
-    punctuated_topics = Searchlist.new(@attr.merge(:topics => @wordy))
-    punctuated_topics.should_not be_valid
-  end
-  
   it "should accept a legal entry in the 'proximity' field" do
     ok_proximity = Searchlist.new(@attr.merge(:proximity => 4))
     ok_proximity.should be_valid
-  end
-  
-  it "should not accept an illegal entry in the 'proximity' field" do
-    illegal_proximity = Searchlist.new(@attr.merge(:proximity => 6))
-    illegal_proximity.should_not be_valid
   end
   
   it "should not accept a non-integer entry in the 'proximity' field" do

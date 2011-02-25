@@ -1,8 +1,8 @@
  <h5> <%= image_tag "info.png" %> <u>Guidance for this page</u></h5>
 
-<%= @instructions %>
+<%= image_tag "#{@image_1}" if @image_1 %> <%= @instructions %>
 <br /><br />
-<%= @instructions_2 %>
+<%= image_tag "#{@image_2}" if @image_2 %> <%= @instructions_2 %>
 <br /><br />
 <%= @instructions_3 %>
 <br /><br />

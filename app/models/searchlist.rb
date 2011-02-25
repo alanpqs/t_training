@@ -32,15 +32,12 @@ class Searchlist < ActiveRecord::Base
    validates       :focus,              :presence     => true,
                                         :inclusion    => { :in => FOCUS_TYPES }
    validates       :category_id,        :presence     => true
-   validates       :topics,             :presence     => true,
-                                        :length       => { :maximum => 80 }
-   validates       :proximity,          :inclusion    => { :in => 2..5, :allow_nil => true  },
-                                        :numericality => { :only_integer => true, :allow_nil => true }
+   validates       :proximity,          :numericality => { :only_integer => true, :allow_nil => true }
    validates_associated :country, :allow_nil => true
    validates_associated :region, :allow_nil => true
    validates_associated :medium, :allow_nil => true
    validates_length_of :topics, :maximum => 10, 
-                              :too_long => " - the maximum number of actual words you can select is 10.", 
+                              :too_long => " - the maximum number of actual words you can enter is 10.", 
                               :tokenizer => lambda {|str| str.scan(/\w+/) }
                                   
 
@@ -81,13 +78,7 @@ class Searchlist < ActiveRecord::Base
       else
         unless self.proximity.blank?
           if self.country_id == @user_country.id || self.country_id.blank?
-            if self.proximity == 3
-              str = "#{@user_country.name} - within around 500 km"
-            elsif self.proximity == 4
-              str = "#{@user_country.name} - within around 150 km"
-            else
-              str = "#{@user_country.name} - within around 50 km"
-            end
+            str = "Anywhere within around #{self.proximity} km"
           else
             str = "Anywhere in #{self.country.name}"
           end
@@ -120,6 +111,14 @@ class Searchlist < ActiveRecord::Base
       end
     else
       self.update_attributes(:country_id => nil, :proximity => nil, :region_id => nil)
+    end
+  end
+  
+  def format_string
+    if self.medium_id.blank?
+      return "Any"
+    else
+      return self.medium.medium
     end
   end
   

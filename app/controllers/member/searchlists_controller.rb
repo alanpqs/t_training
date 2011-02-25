@@ -28,7 +28,7 @@ class Member::SearchlistsController < ApplicationController
       @media = Medium.all_authorized
       @countries = Country.all
       @regions = Region.all
-      @tag_name = "Create the search-list"
+      @tag_name = "Save your preferences - then search"
     end 
   end
   
@@ -36,15 +36,15 @@ class Member::SearchlistsController < ApplicationController
     @searchlist = Searchlist.new(params[:searchlist])
     if @searchlist.save
       @searchlist.adjust_location_search
-      flash[:success] = "Your search-list has been successfully created."
-      redirect_to member_searchlists_path
+      flash[:success] = "Your search-list has been permanently saved. Now click on 'Start search'."
+      redirect_to searchlist_recommendations_path(@searchlist)
     else
       @title = "Preferences: build a search-list"
       @media = Medium.all_authorized
       @countries = Country.all
       @regions = Region.all
       @categories = Category.all_authorized_by_target(cookies[:group_name])
-      @tag_name = "Create the search-list"
+      @tag_name = "Save your preferences - then search"
       render "new"  
     end
   end
@@ -59,7 +59,7 @@ class Member::SearchlistsController < ApplicationController
       @media = Medium.all_authorized
       @countries = Country.all
       @regions = Region.all
-      @tag_name = "Confirm changes"
+      @tag_name = "Confirm changes - and search"
   end
   
   def update
@@ -67,8 +67,8 @@ class Member::SearchlistsController < ApplicationController
 
     if @searchlist.update_attributes(params[:searchlist])
       @searchlist.adjust_location_search
-      flash[:success] = "Your search-list has been successfully updated."
-      redirect_to member_searchlists_path
+      flash[:success] = "Your search-list has been updated.  Now click on 'Start search'."
+      redirect_to searchlist_recommendations_path(@searchlist)
     else
       @title = "Edit search-list"
       if @searchlist.country_id == current_user.country_id
@@ -78,7 +78,7 @@ class Member::SearchlistsController < ApplicationController
       @media = Medium.all_authorized
       @countries = Country.all
       @regions = Region.all
-      @tag_name = "Confirm changes"
+      @tag_name = "Confirm changes - and search"
       render "edit"  
     end
   end

@@ -432,16 +432,33 @@
      If no qt is defined, the requestHandler that declares default="true"
      will be used.
   -->
+  <!-- Configuration for using Spatial Solr Plugin (SSP) 2.0 -->
+	<queryParser name="spatial" class="nl.jteam.search.solrext.spatial.SpatialQParserPlugin">
+	  <str name="latField">lat</str>
+	  <str name="lngField">lng</str>
+	</queryParser>
+	 
+	<searchComponent name="geoDistance" class="nl.jteam.search.solrext.spatial.GeoDistanceComponent">
+	  <str name="latField">lat</str>
+    <str name="lngField">lng</str>
+  </searchComponent>
+
+	<!-- above section added --> 
+    
   <requestHandler name="standard" class="solr.SearchHandler" default="true">
     <!-- default values for query parameters -->
     <lst name="defaults">
       <str name="echoParams">explicit</str>
+      <str name="distanceField">distance</str>  <!-- line added -->
       <!--
        <int name="rows">10</int>
        <str name="fl">*</str>
        <str name="version">2.1</str>
         -->
     </lst>
+    <arr name="last-components">  <!-- added from here -->
+	    <str>geoDistance</str>
+	  </arr>                        <!-- to here -->
   </requestHandler>
   <!-- Please refer to http://wiki.apache.org/solr/SolrReplication for details on configuring replication -->
   <!-- remove the <lst name="master"> section if this is just a slave -->

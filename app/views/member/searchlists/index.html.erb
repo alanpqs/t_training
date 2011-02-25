@@ -22,6 +22,8 @@
          <%= link_to "(delete)", member_searchlist_path(s),  :method => :delete,
                                         :confirm => "You sure?",
                                         :title => "Delete this search-list" %>
+         <%= link_to "(search)", searchlist_recommendations_path(s), 
+                                        :title => "Find resources that match your requirements" %>
         <br />
     <b>Format:</b> <%= s.format_display %> &nbsp; &nbsp; &nbsp;
     <b>Location:</b> <%= s.location_descriptor %><br />
