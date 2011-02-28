@@ -20,6 +20,7 @@
          vendor_resources_path(@vendor) %>.
   </p>
 <% elsif Item.has_ticketable_events?(@vendor) %>
+  <div class="notes">
   <table>
     <tr>
       <th>Ref</th>
@@ -50,6 +51,7 @@
     </tr>
     <% end %>
   </table>
+  </div>
 <% end %>
 <br />
 <%= link_to "Return to Tickets menu", tickets_menu_path %>

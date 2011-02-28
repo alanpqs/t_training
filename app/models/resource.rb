@@ -103,7 +103,10 @@ class Resource < ActiveRecord::Base
     end
     boolean :vendor_verified do
       vendor.verified
-    end 
+    end
+    
+    boolean :current_issues
+ 
     double :latitude, :as => "lat" do
       vendor.latitude
     end
@@ -242,4 +245,13 @@ class Resource < ActiveRecord::Base
     nmbr > 0
   end
   
+  def current_issues  #for Solr
+    nmbr = self.issues.count(:conditions => ["expiry_date >=? and subscribed =?", Date.today, false])
+    nmbr > 0
+  end
+  
+  def self.all_current_by_vendor(vendor)
+    self.find(:all, :joins => :category, :conditions => ["vendor_id = ? and hidden =?", vendor.id, false],
+                    :order => "categories.target, categories.category, resources.name")
+  end
 end

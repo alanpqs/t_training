@@ -1,0 +1,54 @@
+<h1><%= @title %>
+  <span class="h_tag"> &nbsp; 
+    <%= link_to "( full resource details )", guest_resource_path(@resource) %>
+  </span>
+  <br /><span class="h_tag">( starting <%= display_date(@item.start) %>
+    <%= image_tag "ticket_icon.png" if @item.has_current_issues? %> )
+  </span>
+</h1>
+
+<div class="reduced_notes">
+  <%= render "shared/resource_intro_short" %>
+  <hr />
+</div>
+
+<div class="notes">
+  <div class="two_column_left">
+    <h5>SCHEDULE & PRICING</h5>
+    <%= render 'shared/item_schedule' %>
+    <br />
+  </div>
+  
+  <div class="two_column_right">
+    <%= render 'shared/item_pricing' %>
+  </div>
+  <hr />
+  
+  <div class="two_column_left">
+    <h5>CONTACTS</h5>
+    <b>Phone:</b>&nbsp;<%= @vendor.phone_with_code %><br /><br />
+    <b>Email:</b><br /><%= @vendor.email %><br /><br />
+    <% unless @vendor.website.blank? %>
+      <b>Company website:</b><br /><%= link_to @vendor.website, @vendor.website, :target => "_blank" %>
+    <% end %>
+  </div>
+  
+  <% if @item.has_current_issues? %>
+    <div class="two_column_right">
+      <h5>T4T TICKETS
+        <span class="reduced_notes">
+          <i>( exclusive discounts for T4T members - <%= link_to "sign up", signup_path %> to apply )</i>
+        </span>
+      </h5>
+      <% @item.issues.each do |issue| %>
+        <b>Price:</b> <%= issue.formatted_ticket_price(@vendor) %> 
+           &nbsp; <i>( <%= display_decimals(issue.discount, 0) %>% discount )</i><br />
+        <b>Expiry date:</b> <%= display_date(issue.expiry_date) %><br />
+        <% if issue.tickets_remaining <= 3 %>
+          <span class="loud">ONLY <%= issue.tickets_remaining %> REMAINING!</span><br />
+        <% end %>
+        <br /><hr />
+      <% end %>
+    </div>
+  <% end %>    
+</div>  

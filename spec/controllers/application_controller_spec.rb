@@ -82,9 +82,9 @@ describe ApplicationController do
     
     it "should include the offer discount" do
       discount_1 = (@item1.cents.to_f - @issue1.cents.to_f) / @item1.cents.to_f * 100
-      formatted_discount = sprintf("%.2f", discount_1)
+      formatted_discount = sprintf("%.0f", discount_1)
       get :index
-      response.should have_selector(".rounded_right", :content => "#{formatted_discount}% DISCOUNT") 
+      response.should have_selector(".rounded_right", :content => "#{formatted_discount}% T4T DISCOUNT") 
     end
     
     it "should include the expiry date" do

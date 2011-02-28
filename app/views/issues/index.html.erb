@@ -27,7 +27,7 @@
 <hr />    
 <div class="notes" style= "clear:both">
   Click on <b>Offer #</b> to view or edit the details.
-</div>
+
 <table>
   <tr>
     <th>Offer #</th>
@@ -35,6 +35,7 @@
     <th>Ticket price</th>
     <th>Applications</th>
     <th>Offer expiry</th>
+    <th>Secret code</th>
   </tr>
   
   <% @issues.each do |issue| %>
@@ -44,7 +45,9 @@
     <td><%= issue.formatted_ticket_price(@vendor) %></td>
     <td></td>
     <td><%= display_date(issue.expiry_date) %></td>
+    <td><%= issue.secret_number %>
   </tr>
   <% end %>
 </table>
+</div>
 <%= link_to "Return to Tickets menu", tickets_menu_path %>

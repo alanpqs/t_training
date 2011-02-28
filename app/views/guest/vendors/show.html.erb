@@ -1,0 +1,68 @@
+<h1> <%= gravatar_for @vendor %><%= @title %>
+  <% if session[:return_to_resource].nil? %>
+    <span class="header_link"><%= link_to "( back to search results )", session[:return_to_search] %></span>
+  <% else %>
+    <span class="header_link"><%= link_to "( back to resource details )", session[:return_to_resource] %></span>
+  <% end %> 
+</h1>
+
+<div class="notes">
+  <div class="two_column_left">
+    <p style ="padding-left:60px"><%= @vendor.address %><br />
+       <%= @vendor.country.name %>
+    </p>  
+    <p><strong>Website:</strong>
+      <% unless @vendor.website.blank? %>   
+        <br />
+        <%= link_to @vendor.website, @vendor.website, :target => "_blank" unless @vendor.website.blank? %>
+      <% end %>
+    </p>  
+    <p><strong>Email:</strong><br />
+    <%= @vendor.email %></p>
+    <p><strong>Phone:</strong>
+      <% unless @vendor.phone.blank? %>
+        <br />(<%= @vendor.country.phone_code %>) <%= @vendor.phone unless @vendor.phone.blank? %>
+      <% end %>
+    </p>
+  </div>
+  <div class="two_column_right">
+    <strong>Profile:</strong><br />
+    <div class="description">
+      <%= @vendor.description %></p>
+    </div>
+    <br />
+    <strong>Rating:</strong><br />
+    Awaiting user ratings 
+    <br /> 
+  </div>  
+
+  <hr />
+  <b>RESOURCES AVAILABLE</b>
+  <br /><br />
+  <%= will_paginate(@resources) %>
+
+  <table>
+    <tr>
+      <th>Focus</th>
+      <th>Category</th>
+      <th>Title</th>
+      <th>Format</th>
+      <th>Length</th>
+      <th></th>
+      <th></th>
+    </tr>
+    <% @resources.each do |resource| %>      
+    <tr>
+      <td><%= resource.category.in_group %></td> 
+      <td><%= resource.category.category %></td>
+      <td><%= link_to resource.name, guest_resource_path(resource), :title => "View details" %></td>
+      <td><%= resource.medium.medium %></td>
+      <td><%= pluralize(resource.length, resource.length_unit.downcase) %></td>
+      <td><%= image_tag "tick_octagon.png" if resource.place_order_now? %></td>
+      <td><%= image_tag "ticket_icon.png" if resource.has_current_issues? %></td>
+    </tr>
+    <% end %>
+  </table>
+  <%= will_paginate(@resources) %>
+
+</div>

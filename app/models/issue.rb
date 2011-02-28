@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20110215135406
+# Schema version: 20110227191007
 #
 # Table name: issues
 #
@@ -18,11 +18,12 @@
 #  user_id        :integer
 #  credits        :integer         default(1)
 #  subscribed     :boolean
+#  secret_number  :string(255)
 #
 
 class Issue < ActiveRecord::Base
   
-  attr_accessible :item_id, :vendor_id, :event, :cents, :currency, 
+  attr_accessible :item_id, :vendor_id, :event, :cents, :currency, :secret_number,
                   :no_of_tickets, :contact_method, :fee_id, :expiry_date, :user_id, :credits, :subscribed
   
   attr_accessor :ticket_price     
@@ -40,6 +41,7 @@ class Issue < ActiveRecord::Base
   belongs_to :fee
   belongs_to :user
   has_many   :tickets
+  belongs_to :resource
   
   
   validates :vendor_id,         :presence       => true
@@ -122,6 +124,10 @@ class Issue < ActiveRecord::Base
     self.tickets.sum(:quantity) > 0
   end
   
+  def tickets_remaining
+    self.no_of_tickets - ticket_applications
+  end
+  
   def ticket_confirmations
     self.tickets.sum(:quantity, :conditions => ["tickets.confirmed = ?", true])
   end
@@ -141,5 +147,13 @@ class Issue < ActiveRecord::Base
     original_price = self.item.cents
     difference = original_price - ticket_price
     difference.to_f / original_price.to_f * 100
-  end                                                          
+  end 
+  
+  def generated_secret_code
+    a = ('A'..'Z').to_a.shuffle[0..1].join
+    b = (0..9).to_a.shuffle[0..2].join
+    c = (a + " " + b)
+    #d = c.split('')
+    #s_code = d.join
+  end                                                         
 end

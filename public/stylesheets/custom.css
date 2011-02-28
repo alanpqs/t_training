@@ -27,12 +27,13 @@ section {
 }
 
 section h1 {
-  font-size: 175%;
+  font-size: 125%;
   color: #dc0800;
+  padding-bottom: 10px;
 }
 
 section h1 .h_tag {
-  font-size: 0.5em; 
+  font-size: 0.6em; 
   color: #666;       
 }
 
@@ -52,7 +53,7 @@ section h5 .h_tag {
 }
 
 .header_link {
-  font-size: 0.5em; 
+  font-size: 0.6em; 
   padding-left: 10px;
   color: #666;  
 }
@@ -372,6 +373,12 @@ td.sidebar {
 .notes {
   font-size: 0.9em;
   line-height: 130%;  
+}
+
+.reduced_notes {
+  font-size: 0.8em;
+  line-height: 120%;
+  color: #777
 }
 
 .mail_quote  {

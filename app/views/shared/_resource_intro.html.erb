@@ -1,8 +1,13 @@
     <%= @resource.medium.medium %> from<br /> 
-    <%= @vendor.name.upcase %><br />
+    <% if logged_in? %>
+      <%= link_to @vendor.name.upcase, member_vendor_path(@vendor) %>
+    <% else %>
+      <%= link_to @vendor.name.upcase, guest_vendor_path(@vendor) %>
+    <% end %>
+    <br />
     <%= @vendor.address %>, <%= @vendor.country.name %>
     <br /><br />
-    <strong>Group - Category:</strong><br />
+    <strong>Focus - Category:</strong><br />
      <%= @resource.category.in_group %> - <%= @resource.category.category %>
     <br /><br />
     <strong>Length:</strong> <%= pluralize(@resource.length, @resource.length_unit.downcase) %>

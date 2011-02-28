@@ -5,6 +5,10 @@ class PagesController < ApplicationController
   
   def home
     @title = "Home"
+    
+    clear_return_to
+    clear_search_sessions
+    
     unless current_user.nil?
       if current_user.admin?
         redirect_to admin_home_path

@@ -801,7 +801,7 @@ describe Member::SearchlistsController do
             
             it "should display a success message" do
               put :update, :id => @searchlist, :searchlist => @attributes
-              flash[:success].should =~ /Your search-list has been updated.  Now click on 'Start search'/
+              flash[:success].should =~ /Your search-list has been updated/
             end
           end
           
@@ -829,7 +829,7 @@ describe Member::SearchlistsController do
             
             it "should display a success message" do
               put :update, :id => @searchlist, :searchlist => @attributes
-              flash[:success].should =~ /Your search-list has been updated.  Now click on 'Start search'/
+              flash[:success].should =~ /Your search-list has been updated/
             end
           end
           
@@ -857,7 +857,7 @@ describe Member::SearchlistsController do
             
             it "should display a success message" do
               put :update, :id => @searchlist, :searchlist => @attributes
-              flash[:success].should =~ /Your search-list has been updated.  Now click on 'Start search'/
+              flash[:success].should =~ /Your search-list has been updated/
             end
           end
           
@@ -884,7 +884,7 @@ describe Member::SearchlistsController do
             
             it "should display a success message" do
               put :update, :id => @searchlist, :searchlist => @attributes
-              flash[:success].should =~ /Your search-list has been updated.  Now click on 'Start search'/
+              flash[:success].should =~ /Your search-list has been updated/
             end
           end
         
@@ -915,7 +915,7 @@ describe Member::SearchlistsController do
             
           it "should display a success message" do
             put :update, :id => @searchlist, :searchlist => @attributes
-            flash[:success].should =~ /Your search-list has been updated.  Now click on 'Start search'/
+            flash[:success].should =~ /Your search-list has been updated/
           end        
         end
         

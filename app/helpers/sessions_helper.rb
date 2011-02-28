@@ -91,12 +91,25 @@ module SessionsHelper
     session[:return_to] = request.fullpath
   end
   
+  def store_resource
+    session[:return_to_resource] = request.fullpath
+  end
+  
+  def store_search
+    session[:return_to_search] = request.fullpath
+  end
+  
   def redirect_back_or(default)
     redirect_to(session[:return_to] || default)
   end
   
   def clear_return_to
     session[:return_to] = nil
+  end
+  
+  def clear_search_sessions
+    session[:return_to_search] = nil
+    session[:return_to_resource] = nil
   end
   
   def select_home_path

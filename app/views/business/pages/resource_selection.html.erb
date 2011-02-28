@@ -17,6 +17,7 @@
 <% if !Item.any_ticketable?(@vendor) %>
   <p>First you need to set up some future training events or permanent training resources.</p>
 <% else %>
+  <div class="notes">
   <table>
     <tr>
       <th>Ref</th>
@@ -43,6 +44,7 @@
     </tr>
     <% end %>
   </table>
+  </div>
 <% end %>
 <br />
 <%= link_to "Return to Tickets menu", tickets_menu_path %>

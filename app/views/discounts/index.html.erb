@@ -1,0 +1,56 @@
+<h1><%= @title %></h1>
+
+<h5 class="loud">for <%= @searchlist.focus %> - <%= @searchlist.category.category %></h5>
+<%= form_tag searchlist_discounts_path(@searchlist), :method => 'get' do %>
+    <div class="two_column_left">
+      <%= text_area_tag :search, @searchstring %> 
+    </div>
+    <div class="two_column_right">
+      <div class="notes">
+       <i><%= @format_delimiter %>; <%= @location_delimiter %></i>
+       
+      </div>
+      <br />
+      <%= submit_button(@tag_name) %><br /> 
+ 
+      &nbsp; &nbsp; &nbsp; <%= link_to "(edit your saved preferences)", edit_member_searchlist_path(@searchlist) %>
+
+    </div>
+<% end %>
+<hr />
+<% if @search %>
+  <h5 class="loud"><%= pluralize(@search.total, "result") %></h5>
+ 
+  <div class="notes">
+  <%= will_paginate %>
+  <br />
+  <% @discounts.each do |d| %>
+    <strong><%= link_to d.name, member_resource_path(d) %></strong>: <%= d.medium.medium %> 
+          <i>(<%= pluralize(d.length, d.length_unit) %>)</i> 
+          from <%= link_to d.vendor.name, member_vendor_path(d.vendor_id) %>
+          in <%= d.vendor.where_is %><br /> 
+
+      <div style="font-size:0.8em">
+        <u>Keywords:</u> <%= d.feature_list %><br />
+        <% unless d.description.blank? %>
+          '<%= d.description %>'
+        <% end %>
+      </div>
+      
+      <br />
+      <% d.issues.each do |i| %>
+        <%= image_tag "ticket_icon.png" %>
+        <span style = "color:#777; font-weight:bold">
+          <%= display_decimals(i.discount,0) %>% T4T discount till <%= display_date(i.expiry_date) %>
+          <% if i.tickets_remaining <= 3 %>
+            - ONLY <%= i.tickets_remaining %> LEFT!
+          <% end %>
+        </span>
+        &nbsp; &nbsp; <%= link_to "Full details and ticket application here", "#" %>
+        <br />
+      <% end %>
+    <hr />
+  <% end %>
+   <%= will_paginate %> 
+  </div>
+<% end %>

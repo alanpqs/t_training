@@ -1,10 +1,8 @@
 TTraining::Application.routes.draw do
 
-  get "recommendations/index"
+  get "vendors/show"
 
-  get "searchlists/index"
-
-  get "searchlists/new"
+  get "items/show"
 
   namespace "admin" do
     resources :regions, :countries, :categories, :category_approvals, :media, :fees
@@ -22,13 +20,18 @@ TTraining::Application.routes.draw do
   end
   
   namespace "guest" do
-    resources :resources,   :only => [:index, :show]  
+    resources :resources,   :only => [:index, :show] 
+    resources :items,       :only => :show 
+    resources :vendors,     :only => :show
   end
   
   namespace "member" do
     resources :resources,       :only => [:index, :show]
     resources :searchlists,     :except => :show
-    resources :recommendations, :only => :index  
+    resources :recommendations, :only => :index
+    resources :discounts,       :only => :index 
+    resources :vendors,         :only => :show
+    resources :items,           :only => :show 
   end
   #namespace "events" do
   #  resources :items
@@ -45,6 +48,7 @@ TTraining::Application.routes.draw do
   
   resources :searchlists do
     resources :recommendations,   :only => :index
+    resources :discounts,         :only => :index
   end
   
   resources :resources do

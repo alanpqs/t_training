@@ -1,0 +1,26 @@
+    <div id = "details">  
+      <strong>
+        <% if logged_in? %>
+          <%= link_to r.name, member_resource_path(r) %>
+        <% else %>
+          <%= link_to r.name, guest_resource_path(r) %>
+        <% end %>
+      </strong>: <%= r.medium.medium %> 
+          <i>(<%= pluralize(r.length, r.length_unit) %>)</i> 
+          from 
+          <% if logged_in? %>
+            <%= link_to r.vendor.name, member_vendor_path(r.vendor_id) %>
+          <% else %>
+            <%= link_to r.vendor.name, guest_vendor_path(r.vendor_id) %>
+          <% end %>
+          in <%= r.vendor.where_is %><br /> 
+
+      <div style="font-size:0.8em">
+        <%= image_tag "tick_octagon.png" if r.place_order_now? %>
+        <%= image_tag "ticket_icon.png" if r.has_current_issues? %>
+        <u>Keywords:</u> <%= r.feature_list %><br />
+        <% unless r.description.blank? %>
+          '<%= r.description %>'
+        <% end %>
+      </div>
+    </div>

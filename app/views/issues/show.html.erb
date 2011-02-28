@@ -28,6 +28,7 @@
       <span class="indent"><i><%= doll_conversion %></i></span>  
     <br /><br />
     <b>No of tickets issued:</b> <%= @issue.no_of_tickets %><br />
+    <b>Secret code:</b> <%= @issue.secret_number %><br />
     <b>Offer expiry date:</b> <%= display_date(@issue.expiry_date) %><br />
     <b>Applications by <%= @issue.contact_method.downcase %> to:</b><br />
       <% if @issue.contact_method == "Email" %>

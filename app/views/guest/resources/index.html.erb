@@ -1,39 +1,22 @@
 <h1><%= @title %></h1>
 
 <%= form_tag guest_resources_path, :method => 'get' do %>
-<p>
-    <%= text_field_tag :search, params[:search] %> &nbsp; &nbsp; &nbsp;
+    <%= text_field_tag :search, params[:search], :size => 40 %> &nbsp; &nbsp; &nbsp;
     <%= submit_button(@tag_name) %>
     <%= image_tag "info.png" %><small><%= link_to "(effective searches)", "#" %></small>
-  </p>
 <% end %>
 
-
-<small><%= will_paginate %>
-<table>
-  <tr>
-    <th>Name</th>
-    <th></th>
-    <th></th>
-    <th>Category</th>
-    <th>Vendor</th>
-    <th>Location</th>
-    <th>Format</th>
-    <th>Rating</th>
-    <th></th>
-  </tr>
+<% if @search %>
+  <h5 class="loud"><%= pluralize(@search.total, "result") %></h5>
+<% end %>
+<br />
+<div class="notes">
+  <%= will_paginate %>
+  
   <% @resources.each do |resource| %>
-  <tr>
-    <td><%= link_to resource.name, guest_resource_path(resource) %></td>
-    <td><%= image_tag "tick_octagon.png" if resource.place_order_now? %></td>
-    <td><%= image_tag "ticket_icon.png" if resource.has_current_issues? %></td>
-    <td><%= resource.category.category %></td> 
-    <td><%= resource.vendor.name %></td>
-    <td><%= resource.vendor.where_is %></td>
-    <td><%= resource.medium.medium %></td>
-    <td></td>
-  </tr>
+    <%= render "shared/resource_outline", :r => resource %>
+    <hr />
   <% end %>
  
-</table>
-<%= will_paginate %></small>
+  <%= will_paginate %>
+</div>

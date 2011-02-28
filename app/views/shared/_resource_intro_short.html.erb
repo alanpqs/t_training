@@ -1,0 +1,13 @@
+  <div class="two_column_left">  
+    <%= @resource.medium.medium %> from<br /> 
+    <%= @vendor.name.upcase %><br />
+    <%= @vendor.address %>, <%= @vendor.country.name %>
+    <br /><br />
+  </div>
+  <div class="two_column_right">
+    <strong>Focus - Category:</strong><br />
+     <%= @resource.category.in_group %> - <%= @resource.category.category %>
+    <br /><br />
+    <strong>Length:</strong> <%= pluralize(@resource.length, @resource.length_unit.downcase) %>
+    <br /><br />
+  </div>

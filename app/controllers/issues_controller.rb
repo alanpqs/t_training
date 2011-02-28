@@ -47,7 +47,8 @@ class IssuesController < ApplicationController
     
     if @issue.save
       @fee = Fee.find_by_band(@issue.fee_band)
-      @issue.update_attributes(:fee_id => @fee.id, :credits => @issue.credits_charged)
+      @secret = @issue.generated_secret_code
+      @issue.update_attributes(:fee_id => @fee.id, :credits => @issue.credits_charged, :secret_number => @secret)
       if @issue.cents == 0
         flash[:notice] = "You've set the price to 0.00.  Are you sure that's correct?"
       elsif @vendor.credits_available < 0

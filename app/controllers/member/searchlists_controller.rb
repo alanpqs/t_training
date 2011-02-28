@@ -36,7 +36,7 @@ class Member::SearchlistsController < ApplicationController
     @searchlist = Searchlist.new(params[:searchlist])
     if @searchlist.save
       @searchlist.adjust_location_search
-      flash[:success] = "Your search-list has been permanently saved. Now click on 'Start search'."
+      flash[:success] = "Your search-list has been permanently saved."
       redirect_to searchlist_recommendations_path(@searchlist)
     else
       @title = "Preferences: build a search-list"
@@ -67,7 +67,7 @@ class Member::SearchlistsController < ApplicationController
 
     if @searchlist.update_attributes(params[:searchlist])
       @searchlist.adjust_location_search
-      flash[:success] = "Your search-list has been updated.  Now click on 'Start search'."
+      flash[:success] = "Your search-list has been updated."
       redirect_to searchlist_recommendations_path(@searchlist)
     else
       @title = "Edit search-list"

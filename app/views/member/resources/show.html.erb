@@ -1,4 +1,6 @@
-<h1><u><%= @title %></u></h1>
+<h1><u><%= @title %></u>
+    <span class="header_link"><%= link_to "( back to search results )", session[:return_to_search] %></span>
+</h1>
 
 <div class="notes">
 
@@ -25,14 +27,19 @@
  
   <% if @resource.schedulable? %> 
     <% if @resource.has_current_and_scheduled_events? %>
-      <b class="loud">Scheduled events</b> &nbsp; &nbsp;
-        <small>( <%= image_tag("ticket_icon.png") %> shows tickets are now available at a price lower than
-                listed here.  Click for details.) 
-        </small>
+      <b class="loud">Scheduled events</b> 
+      <i><span class="reduced_notes">( click on Ref # or Start for full details )</span></i>
       <%= render "coming_events", :collection => @scheduled_events %>
     <% else %>
       <b>No events currently scheduled</b>
+      <br /><hr />   
+      
+      <div class="two_column_left">
+        <%= render "vendors/shared/contact_info" %>
+      </div>
+   
     <% end %>
+    
   <% else %>
     <div class="two_column_left">
       <h5>PRICING AND AVAILABILITY</h5>   
@@ -58,16 +65,31 @@
         <br /><br />
       <% end %>
     </div>
-    <div class="two_column_right">
-      <h5>CONTACTS</h5>
-        
-      <b>Phone:</b>&nbsp;<%= @vendor.phone_with_code %><br /><br />
-      <b>Email:</b><br /><%= @vendor.email %><br /><br />
-      <% unless @vendor.website.blank? %>
-        <b>Company website:</b><br /><%= link_to @vendor.website, @vendor.website, :target => "_blank" %>
+    <div class ="two_column_right">
+      <% unless @resource.requires_setup? %>  
+        <% if @item.has_current_issues? %>
+          <h5>T4T TICKETS</h5>
+          <% @item.issues.each do |issue| %>
+            <%= image_tag "ticket_icon.png" %>
+            <b>Price:</b> <%= issue.formatted_ticket_price(@vendor) %> 
+               &nbsp; <i>( <%= display_decimals(issue.discount, 0) %>% discount )</i><br />
+            <b>Expiry date:</b> <%= display_date(issue.expiry_date) %><br />
+            <% if issue.tickets_remaining <= 3 %>
+              <span class="loud">ONLY <%= issue.tickets_remaining %> REMAINING!</span><br />
+            <% end %>
+            <%= link_to "Apply for ticket", "#" %>
+            <br /><br />
+          <% end %>
+        <% end %>
       <% end %>
-      
     </div>
+    <br /><hr />
+    
+    <div class="two_column_left">
+      <%= render "vendors/shared/contact_info" %>
+    </div>
+    
+   
   <% end %>   
-  <hr />
+
 </div>  

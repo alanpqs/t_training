@@ -1,0 +1,7 @@
+        <h5>CONTACTS</h5>
+        
+        <b>Phone:</b>&nbsp;<%= @vendor.phone_with_code %><br /><br />
+        <b>Email:</b><br /><%= @vendor.email %><br /><br />
+        <% unless @vendor.website.blank? %>
+          <b>Company website:</b><br /><%= link_to @vendor.website, @vendor.website, :target => "_blank" %>
+        <% end %>

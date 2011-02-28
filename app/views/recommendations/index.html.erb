@@ -8,11 +8,12 @@
     <div class="two_column_right">
       <div class="notes">
        <i><%= @format_delimiter %>; <%= @location_delimiter %></i>
+       
       </div>
       <br />
-      <%= submit_button(@tag_name) %> &nbsp; &nbsp; 
-      <%= link_to "(edit preferences)", edit_member_searchlist_path(@searchlist) %>
-    </div
+      <%= submit_button(@tag_name) %> <br />
+      &nbsp; &nbsp; &nbsp; <%= link_to "(edit your saved preferences)", edit_member_searchlist_path(@searchlist) %>   
+    </div>
 <% end %>
 <hr />
 <% if @search %>
@@ -22,7 +23,9 @@
   <%= will_paginate %>
   <br />
   <% @recommendations.each do |r| %>
-    <strong><%= link_to r.name, "#" %></strong>: <%= r.medium.medium %> 
+  
+    <%= render "shared/resource_outline", :r => r %>
+    <!--<strong><%= link_to r.name, "#" %></strong>: <%= r.medium.medium %> 
           <i>(<%= pluralize(r.length, r.length_unit) %>)</i> 
           from <%= r.vendor.name %> 
           in <%= r.vendor.where_is %><br /> 
@@ -34,7 +37,7 @@
         <% unless r.description.blank? %>
           '<%= r.description %>'
         <% end %>
-      </div>
+      </div> -->
     <hr />
   <% end %>
    <%= will_paginate %>

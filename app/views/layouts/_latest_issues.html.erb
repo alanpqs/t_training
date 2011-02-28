@@ -3,7 +3,9 @@
   <b><%= i.item.resource.category.category.upcase %></b><br />
   <u>'<%= i.item.resource.name %>'</u>
   <br />
-  <%= i.item.resource.medium.medium %> from <%= i.vendor.name %>, <%= i.vendor.where_is %>.<br />
-  <%= display_decimals(i.discount, 2) %>% DISCOUNT till <%= default_date(i.expiry_date) %>
+  <%= i.item.resource.medium.medium %> from <%= i.vendor.name %>, <%= i.vendor.where_is %>.<br /><br />
+  <%= display_decimals(i.discount, 0) %>% T4T DISCOUNT till <%= default_date(i.expiry_date) %>
+  <br>
+  <%= link_to "Details and application", "#" if logged_in? %>
   <hr />
 <% end %>

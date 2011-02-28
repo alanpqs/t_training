@@ -11,8 +11,8 @@
         </tr>
         <% @scheduled_events.each do |event| %>
           <tr>
-            <td><%= event.ref %></td>
-            <td><%= display_date(event.start) %></td>
+            <td><%= link_to event.ref, member_item_path(event) %></td>
+            <td><%= link_to display_date(event.start), member_item_path(event) %></td>
             <td><%= display_date(event.finish) %></td>
             <td><%= event.days %> - <%= event.time_of_day %></td>
             <td><%= event.venue %></td>

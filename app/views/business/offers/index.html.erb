@@ -6,7 +6,7 @@
           <b>resource title</b>. 
    </div>
 </h4>
-
+<div class="notes">
 <table>
   <tr>
     <th>Ref</th>
@@ -15,6 +15,7 @@
     <th style ="text-align:center">Applications</th>
     <th style ="text-align:center">Confirmed</th>
     <th>Offer expiry</th>
+    <th>Secret code</th>
     <th></th>
   </tr>
   
@@ -32,6 +33,7 @@
     <td style ="text-align:center"><%= issue.ticket_applications %></td>
     <td style ="text-align:center"><%= issue.ticket_confirmations %></td>
     <td><%= display_date(issue.expiry_date) %></td>
+    <td><%= issue.secret_number %></td>
     <td>
       <% if issue.ticket_applications == 0 %>
       <small>
@@ -44,4 +46,5 @@
   </tr>
   <% end %>
 </table>
+</div>
 <%= link_to "Return to Tickets menu", tickets_menu_path %>
